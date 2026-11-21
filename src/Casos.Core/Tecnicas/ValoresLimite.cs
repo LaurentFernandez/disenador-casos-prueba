@@ -1,3 +1,5 @@
+using Casos.Core.Modelo;
+
 namespace Casos.Core.Tecnicas;
 
 /// <summary>
@@ -28,4 +30,12 @@ public static class ValoresLimite
             .Order()
             .ToArray();
     }
+
+    /// <summary>
+    /// Devuelve las longitudes a probar para un campo de texto, sin longitudes negativas.
+    /// </summary>
+    public static IReadOnlyList<long> GenerarLongitudes(CampoTexto campo) =>
+        Generar(campo.LongitudMinima, campo.LongitudMaxima)
+            .Where(longitud => longitud >= 0)
+            .ToArray();
 }
