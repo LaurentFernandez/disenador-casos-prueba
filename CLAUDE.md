@@ -14,7 +14,7 @@ Es un proyecto de portafolio de Laurent Andrés Fernandez (ingeniero de software
 - **Interfaz en español e inglés**, con `IStringLocalizer` y archivos `.resx` (Fase 2).
 - **Código en español:** clases, métodos, variables y nombres de pruebas, igual que los demás proyectos de Laurent.
 - **El motor (`Casos.Core`) no depende de la interfaz.** Toda la lógica vive y se prueba ahí; `Casos.Web` solo presenta.
-- **Repositorio:** `github.com/LaurentFernandez/disenador-casos-prueba`, rama `main`. Todavía no se ha creado en GitHub.
+- **Repositorio:** `github.com/LaurentFernandez/disenador-casos-prueba`, rama `main`. Público.
 - La interfaz actual es la plantilla de Blazor con Bootstrap; el diseño visual se decide en la Fase 2.
 
 ## Estructura
@@ -46,11 +46,8 @@ dotnet run --project src/Casos.Web
 
 ## Estado actual
 
-- **Fase 0 en curso.** Esqueleto creado: solución, motor, interfaz PWA, proyecto de pruebas y CI. Como primera pieza para probar el circuito completo, `Tecnicas/ValoresLimite.Generar` (valores límite de tres valores) está implementado con 5 pruebas.
-- **Pendiente para cerrar la Fase 0:**
-  1. Laurent escribe las primeras historias de usuario (hay una de ejemplo, HU-01).
-  2. Primer commit, crear el repositorio público en GitHub y hacer push. Requiere confirmación de Laurent.
-- **Siguiente:** Fase 1, el modelo de campos y la partición de equivalencia, según las historias que escriba Laurent.
+- **Fase 0 terminada.** Solución, motor, interfaz PWA, pruebas y CI publicados en GitHub, con la CI en verde. `Tecnicas/ValoresLimite.Generar` (valores límite de tres valores) está implementado con 5 pruebas. Las historias HU-01 a HU-12 están escritas y aprobadas por Laurent.
+- **Siguiente:** Fase 1, empezando por HU-02 (definir campos) y HU-03 (clases de equivalencia).
 
 ## Fases
 
