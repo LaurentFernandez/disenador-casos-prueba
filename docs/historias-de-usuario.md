@@ -127,7 +127,7 @@ Escenario: Campo de lista de opciones
 ```
 
 **Prioridad:** Alta
-**Estado:** Pendiente
+**Estado:** En desarrollo (hecha en el motor; falta la interfaz)
 
 ### HU-04. Generar los valores límite de la longitud de un texto
 
