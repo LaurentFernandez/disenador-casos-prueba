@@ -46,4 +46,16 @@ public class HistoriaTests
 
         Assert.Equal(new[] { "nombre", "edad" }, historia.Campos.Select(campo => campo.Nombre));
     }
+
+    [Theory]
+    [InlineData("edad")]
+    [InlineData("Edad")]
+    public void AgregarCampo_NombreRepetido_LanzaExcepcionYNoLoAgrega(string nombreRepetido)
+    {
+        var historia = new Historia("Registro de usuario");
+        historia.AgregarCampo(new CampoEntero("edad", true, 18, 65));
+
+        Assert.Throws<ArgumentException>(() => historia.AgregarCampo(new CampoTexto(nombreRepetido, true, 1, 3)));
+        Assert.Single(historia.Campos);
+    }
 }

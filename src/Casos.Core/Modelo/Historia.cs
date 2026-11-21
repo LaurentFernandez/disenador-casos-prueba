@@ -14,5 +14,16 @@ public class Historia(string nombre)
     /// </summary>
     public IReadOnlyList<Campo> Campos => _campos.AsReadOnly();
 
-    public void AgregarCampo(Campo campo) => _campos.Add(campo);
+    /// <summary>
+    /// Agrega el campo al final. El nombre no puede repetirse, sin importar mayúsculas.
+    /// </summary>
+    public void AgregarCampo(Campo campo)
+    {
+        if (_campos.Any(existente => string.Equals(existente.Nombre, campo.Nombre, StringComparison.OrdinalIgnoreCase)))
+        {
+            throw new ArgumentException($"Ya existe un campo con el nombre \"{campo.Nombre}\".", nameof(campo));
+        }
+
+        _campos.Add(campo);
+    }
 }

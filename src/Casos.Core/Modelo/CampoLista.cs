@@ -7,4 +7,10 @@ namespace Casos.Core.Modelo;
 /// La igualdad del record compara <see cref="Opciones"/> por referencia, no por contenido.
 /// </remarks>
 public sealed record CampoLista(string Nombre, bool Obligatorio, IReadOnlyList<string> Opciones)
-    : Campo(Nombre, Obligatorio);
+    : Campo(Nombre, Obligatorio)
+{
+    // Propiedad sin init para que una expresión with no pueda saltarse la validación.
+    public IReadOnlyList<string> Opciones { get; } = Opciones.Count > 0
+        ? Opciones
+        : throw new ArgumentException("La lista necesita al menos una opción.", nameof(Opciones));
+}
