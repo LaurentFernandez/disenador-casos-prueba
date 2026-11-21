@@ -1,4 +1,3 @@
-using System.Globalization;
 using Casos.Core.Modelo;
 
 namespace Casos.Core.Tecnicas;
@@ -11,7 +10,6 @@ public static class ParticionEquivalencia
 {
     private const string ValorNoNumerico = "abc";
     private const decimal ParteDecimal = 0.5m;
-    private const char CaracterDeRelleno = 'a';
 
     // shortcut: si una opción de la lista se llama igual, este ejemplo no sería inválido; generar uno distinto si llega a pasar.
     private const string ValorFueraDeLista = "Opción no válida";
@@ -38,11 +36,11 @@ public static class ParticionEquivalencia
         long minimo = campo.Minimo;
         long maximo = campo.Maximo;
 
-        yield return Valida(TipoClase.DentroDelRango, Numero(minimo + (maximo - minimo) / 2));
-        yield return Invalida(TipoClase.MenorQueMinimo, Numero(minimo - 1));
-        yield return Invalida(TipoClase.MayorQueMaximo, Numero(maximo + 1));
+        yield return Valida(TipoClase.DentroDelRango, Ejemplos.Numero(minimo + (maximo - minimo) / 2));
+        yield return Invalida(TipoClase.MenorQueMinimo, Ejemplos.Numero(minimo - 1));
+        yield return Invalida(TipoClase.MayorQueMaximo, Ejemplos.Numero(maximo + 1));
         // Dentro del rango, para que lo único inválido sea el decimal.
-        yield return Invalida(TipoClase.ConDecimales, (minimo + ParteDecimal).ToString(CultureInfo.InvariantCulture));
+        yield return Invalida(TipoClase.ConDecimales, Ejemplos.Numero(minimo + ParteDecimal));
         yield return Invalida(TipoClase.NoEsNumero, ValorNoNumerico);
     }
 
@@ -51,15 +49,15 @@ public static class ParticionEquivalencia
         int minimo = campo.LongitudMinima;
         int maximo = campo.LongitudMaxima;
 
-        yield return Valida(TipoClase.DentroDelRango, TextoDe(minimo + (maximo - minimo) / 2));
+        yield return Valida(TipoClase.DentroDelRango, Ejemplos.TextoDe(minimo + (maximo - minimo) / 2));
 
         // Con mínimo 0 o 1 no hay un texto más corto que no sea vacío.
         if (minimo > 1)
         {
-            yield return Invalida(TipoClase.MenorQueMinimo, TextoDe(minimo - 1));
+            yield return Invalida(TipoClase.MenorQueMinimo, Ejemplos.TextoDe(minimo - 1));
         }
 
-        yield return Invalida(TipoClase.MayorQueMaximo, TextoDe(maximo + 1));
+        yield return Invalida(TipoClase.MayorQueMaximo, Ejemplos.TextoDe(maximo + 1));
     }
 
     private static IEnumerable<ClaseEquivalencia> ClasesDeLista(CampoLista campo) =>
@@ -70,8 +68,4 @@ public static class ParticionEquivalencia
     private static ClaseEquivalencia Valida(TipoClase tipo, string valor) => new(tipo, true, valor);
 
     private static ClaseEquivalencia Invalida(TipoClase tipo, string valor) => new(tipo, false, valor);
-
-    private static string Numero(long valor) => valor.ToString(CultureInfo.InvariantCulture);
-
-    private static string TextoDe(int longitud) => new(CaracterDeRelleno, longitud);
 }
