@@ -1,0 +1,111 @@
+using Casos.Core.Modelo;
+using static Casos.Core.Modelo.Tecnica;
+using static Casos.Core.Modelo.TipoClase;
+
+namespace Casos.Core.Tests;
+
+public class GeneradorCasosTests
+{
+    private static readonly string NombreValido = new('a', 26);
+
+    [Fact]
+    public void Generar_UnCampoEntero_DevuelveLosCasosEnOrdenConCodigosConsecutivos()
+    {
+        var casos = GeneradorCasos.Generar(HistoriaCon(new CampoEntero("edad", true, 18, 65)));
+
+        Assert.Equal(new (string, Tecnica, string, TipoClase?, bool)[]
+        {
+            ("CP-001", ParticionEquivalencia, "41", null, true),
+            ("CP-002", ParticionEquivalencia, "17", MenorQueMinimo, false),
+            ("CP-003", ParticionEquivalencia, "66", MayorQueMaximo, false),
+            ("CP-004", ParticionEquivalencia, "18.5", ConDecimales, false),
+            ("CP-005", ParticionEquivalencia, "abc", NoEsNumero, false),
+            ("CP-006", ParticionEquivalencia, "", Vacio, false),
+            ("CP-007", ValoresLimite, "17", MenorQueMinimo, false),
+            ("CP-008", ValoresLimite, "18", DentroDelRango, true),
+            ("CP-009", ValoresLimite, "19", DentroDelRango, true),
+            ("CP-010", ValoresLimite, "64", DentroDelRango, true),
+            ("CP-011", ValoresLimite, "65", DentroDelRango, true),
+            ("CP-012", ValoresLimite, "66", MayorQueMaximo, false),
+        }, casos.Select(caso => (caso.Codigo, caso.Tecnica, caso.Datos["edad"], caso.ClaseProbada, caso.EsValido)));
+    }
+
+    [Fact]
+    public void Generar_ValorInvalido_UsaUnNombreValidoYRechazaLaEdad()
+    {
+        var casos = GeneradorCasos.Generar(HistoriaConEdadYNombre());
+
+        var casosConEdad17 = casos.Where(caso => caso.Datos["edad"] == "17").ToList();
+
+        Assert.Equal(2, casosConEdad17.Count);
+        Assert.All(casosConEdad17, caso =>
+        {
+            Assert.Equal(NombreValido, caso.Datos["nombre"]);
+            Assert.Equal("edad", caso.CampoProbado?.Nombre);
+            Assert.False(caso.EsValido);
+        });
+    }
+
+    [Fact]
+    public void Generar_CadaCaso_CambiaSoloElCampoProbado()
+    {
+        var casos = GeneradorCasos.Generar(HistoriaConEdadYNombre());
+        var porDefecto = casos[0].Datos;
+
+        Assert.All(casos, caso =>
+            Assert.All(caso.Datos.Where(dato => dato.Key != caso.CampoProbado?.Nombre), dato =>
+                Assert.Equal(porDefecto[dato.Key], dato.Value)));
+    }
+
+    [Fact]
+    public void Generar_PrimerCaso_TieneTodosLosValoresPorDefectoYEsValido()
+    {
+        var primero = GeneradorCasos.Generar(HistoriaConEdadYNombre())[0];
+
+        Assert.Equal(ParticionEquivalencia, primero.Tecnica);
+        Assert.Null(primero.CampoProbado);
+        Assert.True(primero.EsValido);
+        Assert.Equal("41", primero.Datos["edad"]);
+        Assert.Equal(NombreValido, primero.Datos["nombre"]);
+    }
+
+    [Fact]
+    public void Generar_OpcionQueNoEsLaPorDefecto_TieneSuPropioCasoValido()
+    {
+        var casos = GeneradorCasos.Generar(HistoriaCon(new CampoLista("tipo de cliente", true, ["Persona", "Empresa"])));
+
+        var empresa = Assert.Single(casos, caso => caso.Datos["tipo de cliente"] == "Empresa");
+        Assert.Equal(Opcion, empresa.ClaseProbada);
+        Assert.True(empresa.EsValido);
+    }
+
+    [Fact]
+    public void Generar_TextoDeLongitudCero_ElValorLimiteSeTrataComoVacio()
+    {
+        var casos = GeneradorCasos.Generar(HistoriaCon(new CampoTexto("comentario", false, 0, 10)));
+
+        var vacio = Assert.Single(casos, caso => caso.Tecnica == ValoresLimite && caso.Datos["comentario"] == "");
+        Assert.Equal(Vacio, vacio.ClaseProbada);
+        Assert.True(vacio.EsValido);
+    }
+
+    [Fact]
+    public void Generar_HistoriaSinCampos_NoDevuelveCasos()
+    {
+        Assert.Empty(GeneradorCasos.Generar(new Historia("Registro de usuario")));
+    }
+
+    private static Historia HistoriaCon(params Campo[] campos)
+    {
+        var historia = new Historia("Registro de usuario");
+        foreach (var campo in campos)
+        {
+            historia.AgregarCampo(campo);
+        }
+
+        return historia;
+    }
+
+    private static Historia HistoriaConEdadYNombre() =>
+        HistoriaCon(new CampoEntero("edad", true, 18, 65), new CampoTexto("nombre", true, 3, 50));
+}
