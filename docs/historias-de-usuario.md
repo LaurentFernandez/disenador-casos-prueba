@@ -149,7 +149,7 @@ Escenario: Longitud mínima de cero
 ```
 
 **Prioridad:** Media
-**Estado:** Pendiente
+**Estado:** En desarrollo (hecha en el motor; falta la interfaz)
 
 ## Fase 2. Interfaz
 

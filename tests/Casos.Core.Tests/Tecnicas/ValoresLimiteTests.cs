@@ -1,3 +1,4 @@
+using Casos.Core.Modelo;
 using Casos.Core.Tecnicas;
 
 namespace Casos.Core.Tests.Tecnicas;
@@ -41,5 +42,21 @@ public class ValoresLimiteTests
     public void Generar_MinimoMayorQueMaximo_LanzaExcepcion()
     {
         Assert.Throws<ArgumentException>(() => ValoresLimite.Generar(10, 1));
+    }
+
+    [Fact]
+    public void GenerarLongitudes_LongitudConMinimoYMaximo_DevuelveCadaBordeConSusVecinos()
+    {
+        var longitudes = ValoresLimite.GenerarLongitudes(new CampoTexto("nombre", true, 3, 50));
+
+        Assert.Equal(new long[] { 2, 3, 4, 49, 50, 51 }, longitudes);
+    }
+
+    [Fact]
+    public void GenerarLongitudes_LongitudMinimaCero_NoDevuelveLongitudesNegativas()
+    {
+        var longitudes = ValoresLimite.GenerarLongitudes(new CampoTexto("comentario", false, 0, 10));
+
+        Assert.Equal(new long[] { 0, 1, 9, 10, 11 }, longitudes);
     }
 }
