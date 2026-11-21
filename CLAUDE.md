@@ -14,6 +14,7 @@ Es un proyecto de portafolio de Laurent Andrés Fernandez (ingeniero de software
 - **Interfaz en español e inglés**, con `IStringLocalizer` y archivos `.resx` (Fase 2).
 - **Código en español:** clases, métodos, variables y nombres de pruebas, igual que los demás proyectos de Laurent.
 - **El motor (`Casos.Core`) no depende de la interfaz.** Toda la lógica vive y se prueba ahí; `Casos.Web` solo presenta.
+- **El motor no devuelve textos para mostrar:** devuelve tipos (por ejemplo, el enum `TipoClase`) y la interfaz arma la descripción en español o inglés.
 - **Repositorio:** `github.com/LaurentFernandez/disenador-casos-prueba`, rama `main`. Público.
 - La interfaz actual es la plantilla de Blazor con Bootstrap; el diseño visual se decide en la Fase 2.
 
@@ -21,7 +22,7 @@ Es un proyecto de portafolio de Laurent Andrés Fernandez (ingeniero de software
 
 ```
 DisenadorCasosPrueba.slnx
-src/Casos.Core/          motor (técnicas en Tecnicas/)
+src/Casos.Core/          motor (modelo en Modelo/, técnicas en Tecnicas/)
 src/Casos.Web/           interfaz Blazor WebAssembly + PWA
 tests/Casos.Core.Tests/  pruebas xUnit del motor
 docs/plan.md             objetivo, técnicas, arquitectura y fases
@@ -46,8 +47,8 @@ dotnet run --project src/Casos.Web
 
 ## Estado actual
 
-- **Fase 0 terminada.** Solución, motor, interfaz PWA, pruebas y CI publicados en GitHub, con la CI en verde. `Tecnicas/ValoresLimite.Generar` (valores límite de tres valores) está implementado con 5 pruebas. Las historias HU-01 a HU-12 están escritas y aprobadas por Laurent.
-- **Siguiente:** Fase 1, empezando por HU-02 (definir campos) y HU-03 (clases de equivalencia).
+- **Fases 0 y 1 terminadas.** El motor tiene el modelo de campos con sus validaciones (`Modelo/`), la partición de equivalencia (`Tecnicas/ParticionEquivalencia`) y los valores límite de enteros y de longitud de texto (`Tecnicas/ValoresLimite`), con 24 pruebas. HU-01 a HU-04 están hechas en el motor y les falta la interfaz; por eso los issues de HU-02 a HU-04 (#1, #2 y #5) siguen abiertos.
+- **Siguiente:** Fase 2, la interfaz. Primero hay que decidir el diseño visual. La tabla de casos (HU-05) necesita además, en el motor, la generación de casos: código, datos y resultado esperado, con un solo valor inválido por caso.
 
 ## Fases
 

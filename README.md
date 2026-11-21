@@ -4,7 +4,7 @@
 
 Aplicación web que genera casos de prueba a partir de historias de usuario aplicando técnicas formales de diseño de pruebas (ISTQB): partición de equivalencia, valores límite, tablas de decisión y combinatoria por pares. Muestra cada caso con la técnica que lo originó, lo convierte a Gherkin y lo exporta a CSV, Markdown y `.feature`.
 
-> **Estado:** en construcción. Fase 0 terminada; sigue la Fase 1 (motor). Ver el [plan](docs/plan.md) y las [historias de usuario](docs/historias-de-usuario.md).
+> **Estado:** en construcción. Fases 0 y 1 terminadas: el motor ya genera clases de equivalencia y valores límite. Sigue la Fase 2 (interfaz). Ver el [plan](docs/plan.md) y las [historias de usuario](docs/historias-de-usuario.md).
 
 *English:* a web app that generates test cases from user stories using formal black-box test design techniques (equivalence partitioning, boundary value analysis, decision tables and pairwise testing). Work in progress.
 
