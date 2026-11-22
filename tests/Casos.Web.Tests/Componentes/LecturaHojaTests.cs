@@ -5,19 +5,37 @@ namespace Casos.Web.Tests.Componentes;
 
 public class LecturaHojaTests
 {
+    private const string Historia = "Registro de usuario";
+
     [Fact]
     public void Leer_FilasValidas_ArmaLaHistoriaSinAvisos()
     {
-        var lectura = LecturaHoja.Leer([Entero("edad", 18, 65), Texto("nombre", 3, 50)]);
+        var lectura = LecturaHoja.Leer([Entero("edad", 18, 65), Texto("nombre", 3, 50)], Historia);
 
         Assert.Empty(lectura.Avisos);
         Assert.Equal(new[] { "edad", "nombre" }, lectura.Historia.Campos.Select(campo => campo.Nombre));
     }
 
     [Fact]
+    public void Leer_NombreDeLaHistoria_SeGuardaSinEspaciosSobrantes()
+    {
+        var lectura = LecturaHoja.Leer([], "  Registro de usuario  ");
+
+        Assert.Equal("Registro de usuario", lectura.Historia.Nombre);
+    }
+
+    [Fact]
+    public void Leer_HistoriaSinNombre_UsaElNombrePorDefecto()
+    {
+        var lectura = LecturaHoja.Leer([], " ");
+
+        Assert.Equal(LecturaHoja.NombrePorDefecto, lectura.Historia.Nombre);
+    }
+
+    [Fact]
     public void Leer_FilaVacia_NoAvisaNiAgregaCampos()
     {
-        var lectura = LecturaHoja.Leer([new FilaCampo()]);
+        var lectura = LecturaHoja.Leer([new FilaCampo()], Historia);
 
         Assert.Empty(lectura.Avisos);
         Assert.Empty(lectura.Historia.Campos);
@@ -28,7 +46,7 @@ public class LecturaHojaTests
     {
         var repetida = Entero("Edad", 1, 2);
 
-        var lectura = LecturaHoja.Leer([Entero("edad", 18, 65), repetida]);
+        var lectura = LecturaHoja.Leer([Entero("edad", 18, 65), repetida], Historia);
 
         Assert.Single(lectura.Avisos);
         Assert.Equal(MensajesCampo.De(ErrorCampo.NombreRepetido), lectura.Avisos[repetida]);
@@ -42,7 +60,7 @@ public class LecturaHojaTests
     {
         var fila = new FilaCampo { Nombre = "precio", Tipo = tipo };
 
-        var lectura = LecturaHoja.Leer([fila]);
+        var lectura = LecturaHoja.Leer([fila], Historia);
 
         Assert.Equal(aviso, lectura.Avisos[fila]);
     }
@@ -52,7 +70,7 @@ public class LecturaHojaTests
     {
         var fila = new FilaCampo { Minimo = 1, Maximo = 2 };
 
-        var lectura = LecturaHoja.Leer([fila]);
+        var lectura = LecturaHoja.Leer([fila], Historia);
 
         Assert.Equal(MensajesCampo.FaltaNombre, lectura.Avisos[fila]);
     }
