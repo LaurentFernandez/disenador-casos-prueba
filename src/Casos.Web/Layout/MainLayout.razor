@@ -1,16 +1,10 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://github.com/LaurentFernandez/disenador-casos-prueba" target="_blank" rel="noopener noreferrer">GitHub</a>
-        </div>
+<header class="cabecera">
+    <p class="marca">Diseñador de casos de prueba</p>
+    <a href="https://github.com/LaurentFernandez/disenador-casos-prueba" target="_blank" rel="noopener noreferrer">Código en GitHub</a>
+</header>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+<main class="principal">
+    @Body
+</main>
