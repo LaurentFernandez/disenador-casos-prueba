@@ -21,6 +21,30 @@ public class Historia(string nombre)
     public IReadOnlyList<ReglaObligatorio> Reglas => _reglas.AsReadOnly();
 
     /// <summary>
+    /// Si los casos incluyen las combinaciones por pares de los campos de lista. Solo cambia a través de <see cref="CombinarPorPares"/>.
+    /// </summary>
+    public bool PorPares { get; private set; }
+
+    /// <summary>
+    /// Para hablar de parejas hacen falta al menos dos campos de lista.
+    /// </summary>
+    public bool PuedeCombinarPorPares => _campos.OfType<CampoLista>().Skip(1).Any();
+
+    /// <summary>
+    /// Agrega a los casos las combinaciones por pares de los campos de lista. Si no hay al menos dos, lanza
+    /// <see cref="InvalidOperationException"/>; la interfaz lo comprueba antes con <see cref="PuedeCombinarPorPares"/>.
+    /// </summary>
+    public void CombinarPorPares()
+    {
+        if (!PuedeCombinarPorPares)
+        {
+            throw new InvalidOperationException("Se necesitan al menos dos campos de lista para combinar por pares.");
+        }
+
+        PorPares = true;
+    }
+
+    /// <summary>
     /// Agrega el campo al final. El nombre no puede repetirse, sin importar mayúsculas.
     /// </summary>
     public void AgregarCampo(Campo campo)

@@ -147,6 +147,37 @@ public class GeneradorCasosTests
     }
 
     [Fact]
+    public void Generar_PorPares_AgregaAlFinalLasCombinacionesValidasConCodigosConsecutivos()
+    {
+        var sinPares = GeneradorCasos.Generar(HistoriaDeHU12());
+        var historia = HistoriaDeHU12();
+        historia.CombinarPorPares();
+
+        var casos = GeneradorCasos.Generar(historia);
+
+        var pares = casos.Skip(sinPares.Count).ToList();
+        Assert.Equal(6, pares.Count);
+        Assert.Equal(
+            Enumerable.Range(sinPares.Count + 1, 6).Select(numero => $"CP-{numero:000}"),
+            pares.Select(caso => caso.Codigo));
+        Assert.All(pares, caso =>
+        {
+            Assert.Equal(Pares, caso.Tecnica);
+            Assert.True(caso.EsValido);
+            Assert.Null(caso.CampoProbado);
+            Assert.Equal(new[] { "navegador", "sistema", "idioma" }, caso.CamposCombinados!.Select(campo => campo.Nombre));
+            Assert.Equal("41", caso.Datos["edad"]);
+        });
+        Assert.Equal(6, pares.Select(caso => (caso.Datos["navegador"], caso.Datos["sistema"])).Distinct().Count());
+    }
+
+    [Fact]
+    public void Generar_SinPedirPares_NoAgregaCombinaciones()
+    {
+        Assert.DoesNotContain(GeneradorCasos.Generar(HistoriaDeHU12()), caso => caso.Tecnica == Pares);
+    }
+
+    [Fact]
     public void Generar_HistoriaSinCampos_NoDevuelveCasos()
     {
         Assert.Empty(GeneradorCasos.Generar(new Historia("Registro de usuario")));
@@ -165,6 +196,13 @@ public class GeneradorCasosTests
 
     private static Historia HistoriaConEdadYNombre() =>
         HistoriaCon(new CampoEntero("edad", true, 18, 65), new CampoTexto("nombre", true, 3, 50));
+
+    private static Historia HistoriaDeHU12() =>
+        HistoriaCon(
+            new CampoEntero("edad", true, 18, 65),
+            new CampoLista("navegador", true, ["Chrome", "Firefox", "Edge"]),
+            new CampoLista("sistema", true, ["Windows", "macOS"]),
+            new CampoLista("idioma", true, ["español", "inglés"]));
 
     private static Historia HistoriaConClienteYNit() =>
         HistoriaCon(
