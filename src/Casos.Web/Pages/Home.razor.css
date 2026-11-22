@@ -1,0 +1,4 @@
+.titulo {
+    margin: var(--espacio-6) 0 var(--espacio-3);
+    font-size: var(--tamano-titulo);
+}

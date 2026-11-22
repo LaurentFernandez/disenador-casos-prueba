@@ -5,9 +5,11 @@ namespace Casos.Core.Tests.Modelo;
 public class CamposTests
 {
     [Fact]
-    public void CampoEntero_MinimoMayorQueMaximo_LanzaExcepcion()
+    public void CampoEntero_MinimoMayorQueMaximo_IndicaRangoInvalido()
     {
-        Assert.Throws<ArgumentException>(() => new CampoEntero("edad", true, Minimo: 10, Maximo: 1));
+        var excepcion = Assert.Throws<CampoInvalidoException>(() => new CampoEntero("edad", true, Minimo: 10, Maximo: 1));
+
+        Assert.Equal(ErrorCampo.RangoInvalido, excepcion.Error);
     }
 
     [Fact]
@@ -20,14 +22,18 @@ public class CamposTests
     }
 
     [Fact]
-    public void CampoTexto_LongitudMinimaMayorQueMaxima_LanzaExcepcion()
+    public void CampoTexto_LongitudMinimaMayorQueMaxima_IndicaLongitudInvalida()
     {
-        Assert.Throws<ArgumentException>(() => new CampoTexto("nombre", true, LongitudMinima: 10, LongitudMaxima: 5));
+        var excepcion = Assert.Throws<CampoInvalidoException>(() => new CampoTexto("nombre", true, LongitudMinima: 10, LongitudMaxima: 5));
+
+        Assert.Equal(ErrorCampo.LongitudInvalida, excepcion.Error);
     }
 
     [Fact]
-    public void CampoLista_SinOpciones_LanzaExcepcion()
+    public void CampoLista_SinOpciones_IndicaListaSinOpciones()
     {
-        Assert.Throws<ArgumentException>(() => new CampoLista("tipo de cliente", true, []));
+        var excepcion = Assert.Throws<CampoInvalidoException>(() => new CampoLista("tipo de cliente", true, []));
+
+        Assert.Equal(ErrorCampo.ListaSinOpciones, excepcion.Error);
     }
 }
