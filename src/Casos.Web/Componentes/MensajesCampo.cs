@@ -19,6 +19,8 @@ public static class MensajesCampo
         ErrorCampo.NombreRepetido => "Ya hay otro campo con este nombre.",
         ErrorCampo.ListaSinOpciones => "Escribe al menos una opción; sepáralas con comas.",
         ErrorCampo.LongitudInvalida => "La longitud mínima no puede ser mayor que la máxima.",
+        ErrorCampo.LongitudNegativa => "La longitud no puede ser negativa.",
+        ErrorCampo.LongitudExcesiva => $"La longitud máxima no puede pasar de {CampoTexto.LongitudMaximaPermitida} caracteres.",
         ErrorCampo.RangoInvalido => "El mínimo no puede ser mayor que el máximo.",
         _ => throw new ArgumentOutOfRangeException(nameof(error), error, null),
     };

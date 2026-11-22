@@ -30,6 +30,30 @@ public class CamposTests
     }
 
     [Fact]
+    public void CampoTexto_LongitudMinimaNegativa_IndicaLongitudNegativa()
+    {
+        var excepcion = Assert.Throws<CampoInvalidoException>(() => new CampoTexto("nombre", true, LongitudMinima: -1, LongitudMaxima: 5));
+
+        Assert.Equal(ErrorCampo.LongitudNegativa, excepcion.Error);
+    }
+
+    [Fact]
+    public void CampoTexto_LongitudMaximaSobreElTope_IndicaLongitudExcesiva()
+    {
+        var excepcion = Assert.Throws<CampoInvalidoException>(() => new CampoTexto("comentario", false, 0, CampoTexto.LongitudMaximaPermitida + 1));
+
+        Assert.Equal(ErrorCampo.LongitudExcesiva, excepcion.Error);
+    }
+
+    [Fact]
+    public void CampoTexto_LongitudMaximaEnElTope_SeCrea()
+    {
+        var campo = new CampoTexto("comentario", false, 0, CampoTexto.LongitudMaximaPermitida);
+
+        Assert.Equal(CampoTexto.LongitudMaximaPermitida, campo.LongitudMaxima);
+    }
+
+    [Fact]
     public void CampoLista_SinOpciones_IndicaListaSinOpciones()
     {
         var excepcion = Assert.Throws<CampoInvalidoException>(() => new CampoLista("tipo de cliente", true, []));
