@@ -8,4 +8,5 @@ public enum Tecnica
     ParticionEquivalencia,
     ValoresLimite,
     TablaDecision,
+    Pares,
 }

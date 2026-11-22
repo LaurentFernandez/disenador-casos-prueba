@@ -119,6 +119,27 @@ public class HistoriaTests
         Assert.Empty(historia.Reglas);
     }
 
+    [Fact]
+    public void CombinarPorPares_DosCamposDeLista_LoActiva()
+    {
+        var historia = HistoriaConClienteYNit();
+        historia.AgregarCampo(new CampoLista("canal", true, ["Web", "Tienda"]));
+
+        historia.CombinarPorPares();
+
+        Assert.True(historia.PorPares);
+    }
+
+    [Fact]
+    public void CombinarPorPares_UnSoloCampoDeLista_NoSePuedeComoEnHU12()
+    {
+        var historia = HistoriaConClienteYNit();
+
+        Assert.False(historia.PuedeCombinarPorPares);
+        Assert.Throws<InvalidOperationException>(historia.CombinarPorPares);
+        Assert.False(historia.PorPares);
+    }
+
     private static Historia HistoriaConClienteYNit()
     {
         var historia = new Historia("Registro de cliente");

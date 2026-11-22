@@ -14,6 +14,8 @@ namespace Casos.Core.Modelo;
 /// <param name="Datos">El valor de cada campo por su nombre, en el orden de la historia.</param>
 /// <param name="Regla">La regla que origina el caso; solo en los casos de tabla de decisión, que además cambian
 /// el valor del campo de su condición.</param>
+/// <param name="CamposCombinados">Los campos de lista cuyas opciones combina el caso; solo en los casos por pares,
+/// que no tienen un único campo probado.</param>
 public sealed record CasoPrueba(
     string Codigo,
     Tecnica Tecnica,
@@ -22,4 +24,5 @@ public sealed record CasoPrueba(
     PosicionLimite? Posicion,
     bool EsValido,
     IReadOnlyDictionary<string, string> Datos,
-    ReglaObligatorio? Regla = null);
+    ReglaObligatorio? Regla = null,
+    IReadOnlyList<CampoLista>? CamposCombinados = null);
