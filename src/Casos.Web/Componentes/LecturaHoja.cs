@@ -1,4 +1,5 @@
 using Casos.Core.Modelo;
+using Casos.Web.Recursos;
 
 namespace Casos.Web.Componentes;
 
@@ -8,7 +9,7 @@ namespace Casos.Web.Componentes;
 public sealed record LecturaHoja(Historia Historia, IReadOnlyDictionary<FilaCampo, string> Avisos)
 {
     // Sin un nombre escrito, la historia igual necesita uno para el Gherkin y la exportación.
-    public const string NombrePorDefecto = "Historia sin nombre";
+    public static string NombrePorDefecto => Textos.De("Historia.SinNombre");
 
     public static LecturaHoja Leer(IEnumerable<FilaCampo> filas, string nombreHistoria)
     {

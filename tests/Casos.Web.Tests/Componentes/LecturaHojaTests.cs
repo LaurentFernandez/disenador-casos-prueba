@@ -3,7 +3,7 @@ using Casos.Web.Componentes;
 
 namespace Casos.Web.Tests.Componentes;
 
-public class LecturaHojaTests
+public class LecturaHojaTests() : PruebaEnIdioma("es")
 {
     private const string Historia = "Registro de usuario";
 
@@ -29,7 +29,7 @@ public class LecturaHojaTests
     {
         var lectura = LecturaHoja.Leer([], " ");
 
-        Assert.Equal(LecturaHoja.NombrePorDefecto, lectura.Historia.Nombre);
+        Assert.Equal("Historia sin nombre", lectura.Historia.Nombre);
     }
 
     [Fact]
@@ -54,8 +54,8 @@ public class LecturaHojaTests
     }
 
     [Theory]
-    [InlineData(TipoCampo.Entero, MensajesCampo.FaltaRango)]
-    [InlineData(TipoCampo.Texto, MensajesCampo.FaltaLongitud)]
+    [InlineData(TipoCampo.Entero, "Escribe el mínimo y el máximo.")]
+    [InlineData(TipoCampo.Texto, "Escribe la longitud mínima y la máxima.")]
     public void Leer_SinMinimoNiMaximo_AvisaQueFaltan(TipoCampo tipo, string aviso)
     {
         var fila = new FilaCampo { Nombre = "precio", Tipo = tipo };

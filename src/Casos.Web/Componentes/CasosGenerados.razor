@@ -5,31 +5,31 @@
 <p class="resumen">@TextosCaso.Resumen(Casos)</p>
 
 <div class="barra-vistas">
-    <div class="segmentos" role="tablist" aria-label="Vista de los casos">
+    <div class="segmentos" role="tablist" aria-label="@Textos.De("Casos.Vistas")">
         @foreach (var opcion in Enum.GetValues<VistaCasos>())
         {
             <button type="button" role="tab" id="@IdPestana(opcion)" aria-controls="panel-casos"
-                    aria-selected="@(Vista == opcion ? "true" : "false")" @onclick="() => Elegir(opcion)">@opcion</button>
+                    aria-selected="@(Vista == opcion ? "true" : "false")" @onclick="() => Elegir(opcion)">@Textos.De($"Vista.{opcion}")</button>
         }
     </div>
 
     @if (Vista != VistaCasos.Gherkin)
     {
-        <ul class="leyenda" aria-label="Leyenda">
-            <li><span class="muestra muestra--valida" aria-hidden="true"></span>Válido</li>
-            <li><span class="muestra muestra--invalida" aria-hidden="true"></span>Inválido</li>
-            <li><span class="icono icono--particion" aria-hidden="true"></span>Partición de equivalencia</li>
-            <li><span class="icono icono--limite" aria-hidden="true"></span>Valor límite</li>
+        <ul class="leyenda" aria-label="@Textos.De("Leyenda.Titulo")">
+            <li><span class="muestra muestra--valida" aria-hidden="true"></span>@Textos.De("Leyenda.Valido")</li>
+            <li><span class="muestra muestra--invalida" aria-hidden="true"></span>@Textos.De("Leyenda.Invalido")</li>
+            <li><span class="icono icono--particion" aria-hidden="true"></span>@TextosCaso.NombreLargoTecnica(Tecnica.ParticionEquivalencia)</li>
+            <li><span class="icono icono--limite" aria-hidden="true"></span>@Textos.De("Leyenda.Limite")</li>
         </ul>
     }
 
-    <div class="exportar" role="group" aria-label="Exportar los casos">
-        <span class="exportar__etiqueta" aria-hidden="true">Exportar</span>
-        <button type="button" class="boton boton--pequeno" aria-label="Descargar en CSV"
+    <div class="exportar" role="group" aria-label="@Textos.De("Exportar.Grupo")">
+        <span class="exportar__etiqueta" aria-hidden="true">@Textos.De("Exportar.Etiqueta")</span>
+        <button type="button" class="boton boton--pequeno" aria-label="@Textos.De("Exportar.Descargar", "CSV")"
                 @onclick="() => Descargar(ExportacionCasos.Csv(Historia, Casos))">CSV</button>
-        <button type="button" class="boton boton--pequeno" aria-label="Descargar en Markdown"
+        <button type="button" class="boton boton--pequeno" aria-label="@Textos.De("Exportar.Descargar", "Markdown")"
                 @onclick="() => Descargar(ExportacionCasos.Markdown(Historia, Casos))">Markdown</button>
-        <button type="button" class="boton boton--pequeno" aria-label="Descargar en .feature"
+        <button type="button" class="boton boton--pequeno" aria-label="@Textos.De("Exportar.Descargar", ".feature")"
                 @onclick="() => Descargar(ExportacionCasos.Feature(Historia, Casos))">.feature</button>
     </div>
 </div>
@@ -44,7 +44,7 @@
             <VistaRecta Campos="Historia.Campos" Casos="Casos" />
             break;
         default:
-            <p class="ayuda ayuda--arriba">Un texto se describe por su longitud, por ejemplo «un texto de 26 caracteres», para que el escenario se pueda leer.</p>
+            <p class="ayuda ayuda--arriba">@Textos.De("Gherkin.Ayuda")</p>
             <pre class="codigo"><code>@GherkinCasos.Caracteristica(Historia, Casos)</code></pre>
             break;
     }

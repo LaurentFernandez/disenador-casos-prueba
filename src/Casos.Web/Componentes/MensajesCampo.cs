@@ -1,27 +1,27 @@
 using Casos.Core.Modelo;
+using Casos.Web.Recursos;
 
 namespace Casos.Web.Componentes;
 
-// shortcut: los avisos solo están en español; pasarlos a archivos .resx con el cambio de idioma (HU-08).
 /// <summary>
 /// Avisos que la hoja de campos muestra en una fila con problemas.
 /// </summary>
 public static class MensajesCampo
 {
-    public const string FaltaNombre = "Escribe el nombre del campo.";
+    public static string FaltaNombre => Textos.De("Aviso.FaltaNombre");
 
-    public const string FaltaRango = "Escribe el mínimo y el máximo.";
+    public static string FaltaRango => Textos.De("Aviso.FaltaRango");
 
-    public const string FaltaLongitud = "Escribe la longitud mínima y la máxima.";
+    public static string FaltaLongitud => Textos.De("Aviso.FaltaLongitud");
 
     public static string De(ErrorCampo error) => error switch
     {
-        ErrorCampo.NombreRepetido => "Ya hay otro campo con este nombre.",
-        ErrorCampo.ListaSinOpciones => "Escribe al menos una opción; sepáralas con comas.",
-        ErrorCampo.LongitudInvalida => "La longitud mínima no puede ser mayor que la máxima.",
-        ErrorCampo.LongitudNegativa => "La longitud no puede ser negativa.",
-        ErrorCampo.LongitudExcesiva => $"La longitud máxima no puede pasar de {CampoTexto.LongitudMaximaPermitida} caracteres.",
-        ErrorCampo.RangoInvalido => "El mínimo no puede ser mayor que el máximo.",
+        ErrorCampo.NombreRepetido => Textos.De("Aviso.NombreRepetido"),
+        ErrorCampo.ListaSinOpciones => Textos.De("Aviso.ListaSinOpciones"),
+        ErrorCampo.LongitudInvalida => Textos.De("Aviso.LongitudInvalida"),
+        ErrorCampo.LongitudNegativa => Textos.De("Aviso.LongitudNegativa"),
+        ErrorCampo.LongitudExcesiva => Textos.De("Aviso.LongitudExcesiva", CampoTexto.LongitudMaximaPermitida),
+        ErrorCampo.RangoInvalido => Textos.De("Aviso.RangoInvalido"),
         _ => throw new ArgumentOutOfRangeException(nameof(error), error, null),
     };
 }

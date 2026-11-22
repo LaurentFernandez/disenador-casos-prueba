@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Cabecera y página -->
+  <data name="Marca" xml:space="preserve"><value>Test case designer</value></data>
+  <data name="CodigoEnGitHub" xml:space="preserve"><value>Code on GitHub</value></data>
+  <data name="Pagina.CamposDeLaHistoria" xml:space="preserve"><value>Story fields</value></data>
+  <data name="Pagina.NombreDeLaHistoria" xml:space="preserve"><value>Story name</value></data>
+  <data name="Pagina.EjemploHistoria" xml:space="preserve"><value>Example: User sign-up</value></data>
+  <data name="Pagina.CasosGenerados" xml:space="preserve"><value>Generated cases</value></data>
+  <data name="Pagina.CorrigeAvisos" xml:space="preserve"><value>Fix the warnings in the sheet to see the cases.</value></data>
+  <data name="Pagina.AgregaCampo" xml:space="preserve"><value>Add a field to the sheet to see its cases.</value></data>
+  <data name="NoEncontrada.Titulo" xml:space="preserve"><value>Page not found</value></data>
+  <data name="NoEncontrada.Texto" xml:space="preserve"><value>This address does not exist in the designer.</value></data>
+  <data name="NoEncontrada.Volver" xml:space="preserve"><value>Back to home</value></data>
+
+  <!-- Hoja de campos -->
+  <data name="Hoja.Campo" xml:space="preserve"><value>Field</value></data>
+  <data name="Hoja.Tipo" xml:space="preserve"><value>Type</value></data>
+  <data name="Hoja.Obligatorio" xml:space="preserve"><value>Required</value></data>
+  <data name="Hoja.Minimo" xml:space="preserve"><value>Minimum</value></data>
+  <data name="Hoja.Maximo" xml:space="preserve"><value>Maximum</value></data>
+  <data name="Hoja.Opciones" xml:space="preserve"><value>Options</value></data>
+  <data name="Hoja.Acciones" xml:space="preserve"><value>Actions</value></data>
+  <data name="Hoja.NombreDelCampo" xml:space="preserve"><value>Field {0} name</value></data>
+  <data name="Hoja.TipoDelCampo" xml:space="preserve"><value>Field {0} type</value></data>
+  <data name="Hoja.CampoObligatorio" xml:space="preserve"><value>Field {0} required</value></data>
+  <data name="Hoja.NoAplica" xml:space="preserve"><value>Not applicable</value></data>
+  <data name="Hoja.EjemploOpciones" xml:space="preserve"><value>Example: Individual, Company</value></data>
+  <data name="Hoja.OpcionesDelCampo" xml:space="preserve"><value>Field {0} options, separated by commas</value></data>
+  <data name="Hoja.MinimoDelCampo" xml:space="preserve"><value>Field {0} minimum</value></data>
+  <data name="Hoja.MaximoDelCampo" xml:space="preserve"><value>Field {0} maximum</value></data>
+  <data name="Hoja.QuitarElCampo" xml:space="preserve"><value>Remove field {0}</value></data>
+  <data name="Hoja.Quitar" xml:space="preserve"><value>Remove</value></data>
+  <data name="Hoja.SinCampos" xml:space="preserve"><value>There are no fields. Add the first one with “Add field”.</value></data>
+  <data name="Hoja.Ayuda" xml:space="preserve"><value>For text fields, minimum and maximum are the length in characters. Separate the options of a list with commas.</value></data>
+  <data name="Hoja.AgregarCampo" xml:space="preserve"><value>Add field</value></data>
+  <data name="Tipo.Entero" xml:space="preserve"><value>Integer</value></data>
+  <data name="Tipo.Texto" xml:space="preserve"><value>Text</value></data>
+  <data name="Tipo.Lista" xml:space="preserve"><value>List</value></data>
+
+  <!-- Avisos de la hoja -->
+  <data name="Aviso.FaltaNombre" xml:space="preserve"><value>Enter the field name.</value></data>
+  <data name="Aviso.FaltaRango" xml:space="preserve"><value>Enter the minimum and the maximum.</value></data>
+  <data name="Aviso.FaltaLongitud" xml:space="preserve"><value>Enter the minimum and the maximum length.</value></data>
+  <data name="Aviso.NombreRepetido" xml:space="preserve"><value>Another field already has this name.</value></data>
+  <data name="Aviso.ListaSinOpciones" xml:space="preserve"><value>Enter at least one option; separate them with commas.</value></data>
+  <data name="Aviso.LongitudInvalida" xml:space="preserve"><value>The minimum length cannot be greater than the maximum.</value></data>
+  <data name="Aviso.LongitudNegativa" xml:space="preserve"><value>The length cannot be negative.</value></data>
+  <data name="Aviso.LongitudExcesiva" xml:space="preserve"><value>The maximum length cannot exceed {0} characters.</value></data>
+  <data name="Aviso.RangoInvalido" xml:space="preserve"><value>The minimum cannot be greater than the maximum.</value></data>
+  <data name="Historia.SinNombre" xml:space="preserve"><value>Untitled story</value></data>
+
+  <!-- Vistas de los casos -->
+  <data name="Casos.Vistas" xml:space="preserve"><value>Case view</value></data>
+  <data name="Vista.Matriz" xml:space="preserve"><value>Matrix</value></data>
+  <data name="Vista.Recta" xml:space="preserve"><value>Line</value></data>
+  <data name="Vista.Gherkin" xml:space="preserve"><value>Gherkin</value></data>
+  <data name="Leyenda.Titulo" xml:space="preserve"><value>Legend</value></data>
+  <data name="Leyenda.Valido" xml:space="preserve"><value>Valid</value></data>
+  <data name="Leyenda.Invalido" xml:space="preserve"><value>Invalid</value></data>
+  <data name="Leyenda.Limite" xml:space="preserve"><value>Boundary value</value></data>
+  <data name="Exportar.Grupo" xml:space="preserve"><value>Export the cases</value></data>
+  <data name="Exportar.Etiqueta" xml:space="preserve"><value>Export</value></data>
+  <data name="Exportar.Descargar" xml:space="preserve"><value>Download as {0}</value></data>
+  <data name="Exportar.NombreSinLetras" xml:space="preserve"><value>cases</value></data>
+  <data name="Columna.Codigo" xml:space="preserve"><value>ID</value></data>
+  <data name="Columna.Descripcion" xml:space="preserve"><value>Description</value></data>
+  <data name="Columna.Tecnica" xml:space="preserve"><value>Technique</value></data>
+  <data name="Columna.ValorProbado" xml:space="preserve"><value>Tested value</value></data>
+  <data name="Columna.Resultado" xml:space="preserve"><value>Expected result</value></data>
+  <data name="Matriz.Ayuda" xml:space="preserve"><value>Each row changes a single field: the highlighted cell is the value under test and the others keep their default value.</value></data>
+  <data name="Matriz.Titulo" xml:space="preserve"><value>Test cases with the value of each field</value></data>
+  <data name="Matriz.ValorProbado" xml:space="preserve"><value>tested value</value></data>
+  <data name="Recta.Titulo" xml:space="preserve"><value>Test cases</value></data>
+  <data name="Recta.FueraDeLaRecta" xml:space="preserve"><value>Off the line:</value></data>
+  <data name="Recta.ListaSinRango" xml:space="preserve"><value>A list has no range: each option is a class.</value></data>
+  <data name="Recta.AyudaEscala" xml:space="preserve"><value>The lines are not to scale. For a text, the line is the length in characters.</value></data>
+  <data name="Recta.AyudaCasos" xml:space="preserve"><value>Each case changes a single field. Hover over or focus a case to see it on its line.</value></data>
+  <data name="Recta.Descripcion" xml:space="preserve"><value>Line for {0}: {1}. Partition values: {2}. Boundary values: {3}.</value></data>
+  <data name="Gherkin.Ayuda" xml:space="preserve"><value>A text is described by its length, for example “a text of 26 characters”, so that the scenario stays readable.</value></data>
+
+  <!-- Textos de los casos -->
+  <data name="Caso.TodosValidos" xml:space="preserve"><value>All values valid</value></data>
+  <data name="Caso.Rechaza" xml:space="preserve"><value>Rejects the {0} value</value></data>
+  <data name="Caso.Acepta" xml:space="preserve"><value>Accepts the data</value></data>
+  <data name="Caso.ValoresPorDefecto" xml:space="preserve"><value>Default values</value></data>
+  <data name="Tecnica.Particion" xml:space="preserve"><value>Partition</value></data>
+  <data name="Tecnica.Limite" xml:space="preserve"><value>Boundary</value></data>
+  <data name="Tecnica.ParticionLarga" xml:space="preserve"><value>Equivalence partitioning</value></data>
+  <data name="Tecnica.LimiteLarga" xml:space="preserve"><value>Boundary values</value></data>
+  <data name="Resumen" xml:space="preserve"><value>{0} cases: {1} and {2}.</value></data>
+  <data name="Resumen.AceptadoUno" xml:space="preserve"><value>{0} accepted</value></data>
+  <data name="Resumen.AceptadoVarios" xml:space="preserve"><value>{0} accepted</value></data>
+  <data name="Resumen.RechazadoUno" xml:space="preserve"><value>{0} rejected</value></data>
+  <data name="Resumen.RechazadoVarios" xml:space="preserve"><value>{0} rejected</value></data>
+  <data name="Valor.Vacio" xml:space="preserve"><value>empty</value></data>
+  <data name="Clase.Valida" xml:space="preserve"><value>valid</value></data>
+  <data name="Clase.Invalida" xml:space="preserve"><value>invalid</value></data>
+  <data name="Clase.TextoCorto" xml:space="preserve"><value>{0} with {1}</value></data>
+  <data name="Clase.TextoLargo" xml:space="preserve"><value>{0} with {1} characters</value></data>
+  <data name="Clase.ConDecimales" xml:space="preserve"><value>{0} with decimals</value></data>
+  <data name="Clase.NoEsNumero" xml:space="preserve"><value>{0} that is not a number</value></data>
+  <data name="Clase.FueraDeLista" xml:space="preserve"><value>{0} not in the list</value></data>
+  <data name="Clase.Vacio" xml:space="preserve"><value>{0} with no value</value></data>
+  <data name="Limite.Entero.DebajoDelMinimo" xml:space="preserve"><value>{0} just below the minimum</value></data>
+  <data name="Limite.Entero.EnElMinimo" xml:space="preserve"><value>{0} at the minimum</value></data>
+  <data name="Limite.Entero.EncimaDelMinimo" xml:space="preserve"><value>{0} just above the minimum</value></data>
+  <data name="Limite.Entero.DebajoDelMaximo" xml:space="preserve"><value>{0} just below the maximum</value></data>
+  <data name="Limite.Entero.EnElMaximo" xml:space="preserve"><value>{0} at the maximum</value></data>
+  <data name="Limite.Entero.EncimaDelMaximo" xml:space="preserve"><value>{0} just above the maximum</value></data>
+  <data name="Limite.Texto.DebajoDelMinimo" xml:space="preserve"><value>{0} just below the minimum length</value></data>
+  <data name="Limite.Texto.EnElMinimo" xml:space="preserve"><value>{0} at the minimum length</value></data>
+  <data name="Limite.Texto.EncimaDelMinimo" xml:space="preserve"><value>{0} just above the minimum length</value></data>
+  <data name="Limite.Texto.DebajoDelMaximo" xml:space="preserve"><value>{0} just below the maximum length</value></data>
+  <data name="Limite.Texto.EnElMaximo" xml:space="preserve"><value>{0} at the maximum length</value></data>
+  <data name="Limite.Texto.EncimaDelMaximo" xml:space="preserve"><value>{0} just above the maximum length</value></data>
+  <data name="Reglas.Obligatorio" xml:space="preserve"><value>required</value></data>
+  <data name="Reglas.Opcional" xml:space="preserve"><value>optional</value></data>
+  <data name="Reglas.Entero" xml:space="preserve"><value>Integer, {0}, {1}</value></data>
+  <data name="Reglas.Texto" xml:space="preserve"><value>Text, {0}, {1} characters</value></data>
+  <data name="Reglas.Lista" xml:space="preserve"><value>List, {0}, with {1}</value></data>
+  <data name="Rango.MenorQue" xml:space="preserve"><value>less than {0}</value></data>
+  <data name="Rango.MayorQue" xml:space="preserve"><value>greater than {0}</value></data>
+  <data name="Rango.MasDe" xml:space="preserve"><value>more than {0}</value></data>
+  <data name="Rango.DeA" xml:space="preserve"><value>{0} to {1}</value></data>
+  <data name="Rango.Caracteres" xml:space="preserve"><value>{0} to {1}</value></data>
+  <data name="Caracteres.Uno" xml:space="preserve"><value>1 character</value></data>
+  <data name="Caracteres.Varios" xml:space="preserve"><value>{0} characters</value></data>
+  <data name="Opciones.Una" xml:space="preserve"><value>1 option</value></data>
+  <data name="Opciones.Varias" xml:space="preserve"><value>{0} options</value></data>
+
+  <!-- Gherkin -->
+  <data name="Gherkin.Idioma" xml:space="preserve"><value>en</value></data>
+  <data name="Gherkin.Caracteristica" xml:space="preserve"><value>Feature</value></data>
+  <data name="Gherkin.Escenario" xml:space="preserve"><value>Scenario</value></data>
+  <data name="Gherkin.Dado" xml:space="preserve"><value>Given</value></data>
+  <data name="Gherkin.Cuando" xml:space="preserve"><value>When</value></data>
+  <data name="Gherkin.Y" xml:space="preserve"><value>And</value></data>
+  <data name="Gherkin.Entonces" xml:space="preserve"><value>Then</value></data>
+  <data name="Gherkin.Formulario" xml:space="preserve"><value>the form "{0}"</value></data>
+  <data name="Gherkin.Ingreso" xml:space="preserve"><value>I enter "{0}" in {1}</value></data>
+  <data name="Gherkin.IngresoTexto" xml:space="preserve"><value>I enter a text of {0} in {1}</value></data>
+  <data name="Gherkin.Elijo" xml:space="preserve"><value>I choose "{0}" in {1}</value></data>
+  <data name="Gherkin.Dejo" xml:space="preserve"><value>I leave {0} empty</value></data>
+  <data name="Gherkin.Sistema" xml:space="preserve"><value>the system {0}</value></data>
+</root>

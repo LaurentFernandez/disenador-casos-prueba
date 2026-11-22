@@ -1,7 +1,7 @@
 ﻿@page "/"
 @using Casos.Core
 
-<PageTitle>Diseñador de casos de prueba</PageTitle>
+<PageTitle>@Textos.De("Marca")</PageTitle>
 
 @{
     var lectura = LecturaHoja.Leer(filas, nombreHistoria);
@@ -10,23 +10,23 @@
 }
 
 <section class="seccion" aria-labelledby="campos-titulo">
-    <h1 class="titulo" id="campos-titulo">Campos de la historia</h1>
+    <h1 class="titulo" id="campos-titulo">@Textos.De("Pagina.CamposDeLaHistoria")</h1>
     <p class="nombre-historia">
-        <label for="nombre-historia">Nombre de la historia</label>
-        <input id="nombre-historia" @bind="nombreHistoria" placeholder="Ejemplo: Registro de usuario" />
+        <label for="nombre-historia">@Textos.De("Pagina.NombreDeLaHistoria")</label>
+        <input id="nombre-historia" @bind="nombreHistoria" placeholder="@Textos.De("Pagina.EjemploHistoria")" />
     </p>
     <HojaCampos Filas="filas" Avisos="lectura.Avisos" CambioFilas="StateHasChanged" />
 </section>
 
 <section class="seccion" aria-labelledby="casos-titulo">
-    <h2 class="titulo" id="casos-titulo">Casos generados</h2>
+    <h2 class="titulo" id="casos-titulo">@Textos.De("Pagina.CasosGenerados")</h2>
     @if (lectura.Avisos.Count > 0)
     {
-        <p class="estado">Corrige los avisos de la hoja para ver los casos.</p>
+        <p class="estado">@Textos.De("Pagina.CorrigeAvisos")</p>
     }
     else if (casos.Count == 0)
     {
-        <p class="estado">Agrega un campo a la hoja para ver sus casos.</p>
+        <p class="estado">@Textos.De("Pagina.AgregaCampo")</p>
     }
     else
     {

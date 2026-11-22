@@ -16,6 +16,12 @@
     padding-bottom: var(--espacio-4);
 }
 
+.cabecera__acciones {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-4);
+}
+
 .cabecera a {
     color: var(--tenue);
     font-size: var(--tamano-pequeno);

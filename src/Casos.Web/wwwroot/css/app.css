@@ -131,6 +131,32 @@ a {
     margin: 0 0 var(--espacio-2);
 }
 
+/* Botones segmentados: el selector de idioma y las pestañas de las vistas. */
+.segmentos {
+    display: inline-flex;
+    overflow: hidden;
+    border: var(--grosor-control) solid var(--tinta);
+    border-radius: var(--radio-control);
+}
+
+.segmentos button {
+    padding: var(--espacio-1) var(--espacio-4);
+    background: var(--superficie);
+    border: 0;
+    cursor: pointer;
+}
+
+.segmentos button + button {
+    border-left: var(--grosor-control) solid var(--tinta);
+}
+
+.segmentos [aria-selected="true"],
+.segmentos [aria-pressed="true"] {
+    background: var(--tinta);
+    color: var(--superficie);
+    font-weight: 600;
+}
+
 /* Íconos y celdas que comparten la leyenda y las vistas de los casos. */
 .icono,
 .muestra {

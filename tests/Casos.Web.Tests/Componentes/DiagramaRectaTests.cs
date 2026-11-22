@@ -4,7 +4,7 @@ using Casos.Web.Componentes;
 
 namespace Casos.Web.Tests.Componentes;
 
-public class DiagramaRectaTests
+public class DiagramaRectaTests() : PruebaEnIdioma("es")
 {
     [Fact]
     public void Crear_CampoEntero_DibujaUnaBandaPorClase()
