@@ -51,3 +51,15 @@
     align-items: center;
     gap: var(--espacio-2);
 }
+
+.codigo {
+    margin: 0;
+    padding: var(--espacio-3) var(--espacio-4);
+    overflow-x: auto;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    font-family: var(--fuente-codigo);
+    font-size: var(--tamano-pequeno);
+    line-height: 1.6;
+}

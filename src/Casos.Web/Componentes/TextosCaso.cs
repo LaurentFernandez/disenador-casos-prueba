@@ -117,7 +117,7 @@ public static class TextosCaso
     private static string RangoDeCaracteres(int desde, int hasta) =>
         desde == hasta ? Caracteres(desde) : $"{desde} a {Caracteres(hasta)}";
 
-    private static string Caracteres(int cantidad) => Cantidad(cantidad, "carácter", "caracteres");
+    public static string Caracteres(int cantidad) => Cantidad(cantidad, "carácter", "caracteres");
 
     private static string Cantidad(int cantidad, string singular, string plural) =>
         cantidad == 1 ? $"1 {singular}" : $"{cantidad} {plural}";

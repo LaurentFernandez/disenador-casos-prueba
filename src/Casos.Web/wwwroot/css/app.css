@@ -33,6 +33,7 @@
 
     --fuente-titulos: "Barlow", "Segoe UI", system-ui, sans-serif;
     --fuente-texto: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    --fuente-codigo: "Cascadia Mono", Consolas, ui-monospace, monospace;
     --tamano-pequeno: 13px;
     --tamano-base: 15px;
     --tamano-marca: 17px;
