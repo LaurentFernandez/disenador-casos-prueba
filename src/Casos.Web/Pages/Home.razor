@@ -5,9 +5,8 @@
 <PageTitle>@Textos.De("Marca")</PageTitle>
 
 @{
-    var lectura = LecturaHoja.Leer(filas, nombreHistoria);
-    // Con avisos en la hoja no se generan casos, para que ningún campo quede fuera sin que se note.
-    var casos = lectura.Avisos.Count == 0 ? GeneradorCasos.Generar(lectura.Historia) : [];
+    var lectura = LecturaHoja.Leer(filas, nombreHistoria, reglas);
+    var casos = lectura.TieneAvisos ? [] : GeneradorCasos.Generar(lectura.Historia);
 }
 
 <section class="seccion" aria-labelledby="campos-titulo">
@@ -26,9 +25,14 @@
     <HojaCampos Filas="filas" Avisos="lectura.Avisos" CambioFilas="MarcarCambio" />
 </section>
 
+<section class="seccion" aria-labelledby="reglas-titulo">
+    <h2 class="titulo" id="reglas-titulo">@Textos.De("Reglas.Titulo")</h2>
+    <HojaReglas Reglas="reglas" Filas="filas" Avisos="lectura.AvisosReglas" CambioReglas="MarcarCambio" />
+</section>
+
 <section class="seccion" aria-labelledby="casos-titulo">
     <h2 class="titulo" id="casos-titulo">@Textos.De("Pagina.CasosGenerados")</h2>
-    @if (lectura.Avisos.Count > 0)
+    @if (lectura.TieneAvisos)
     {
         <p class="estado">@Textos.De("Pagina.CorrigeAvisos")</p>
     }
@@ -44,13 +48,15 @@
 
 @code {
     private readonly List<FilaCampo> filas = [new()];
+    private readonly List<FilaRegla> reglas = [];
     private string nombreHistoria = "";
     private VistaCasos vista;
 
     // Si se escribió algo desde que se abrió la página o se cargó el último ejemplo.
     private bool hayCambiosPropios;
 
-    private bool HayDatos => !string.IsNullOrWhiteSpace(nombreHistoria) || filas.Any(fila => !fila.EstaVacia);
+    private bool HayDatos =>
+        !string.IsNullOrWhiteSpace(nombreHistoria) || filas.Any(fila => !fila.EstaVacia) || reglas.Any(regla => !regla.EstaVacia);
 
     private void MarcarCambio() => hayCambiosPropios = true;
 
@@ -65,6 +71,7 @@
         nombreHistoria = ejemplo.Historia;
         filas.Clear();
         filas.AddRange(ejemplo.Filas);
+        reglas.Clear();
         hayCambiosPropios = false;
     }
 }

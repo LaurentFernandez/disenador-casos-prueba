@@ -1,0 +1,30 @@
+.reglas {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.regla + .regla {
+    border-top: 1px solid var(--borde);
+}
+
+.regla__frase {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--espacio-2);
+    margin: 0;
+    padding: var(--espacio-2) var(--espacio-3);
+}
+
+.regla__quitar {
+    margin-left: auto;
+}
+
+.regla__aviso {
+    margin: 0;
+    padding: var(--espacio-2) var(--espacio-3);
+    background: var(--trama-invalida);
+    color: var(--invalido);
+    font-weight: 600;
+}

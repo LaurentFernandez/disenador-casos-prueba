@@ -91,6 +91,17 @@ public class TextosTests() : PruebaEnIdioma("en")
         Assert.EndsWith("And I leave tax ID empty\n    Then the system rejects the tax ID value", GherkinCasos.Escenario(conRegla, companySinTaxId));
     }
 
+    [Fact]
+    public void AvisoDeRegla_EnIngles_NombraElCampoQueNoExiste()
+    {
+        var regla = new FilaRegla { CampoCondicion = "customer type", Opcion = "Company", CampoObligatorio = "tax ID" };
+        var tipo = new FilaCampo { Nombre = "customer type", Tipo = TipoCampo.Lista, Opciones = "Individual, Company" };
+
+        var lectura = LecturaHoja.Leer([tipo], "", [regla]);
+
+        Assert.Equal("The field “tax ID” does not exist.", lectura.AvisosReglas[regla]);
+    }
+
     private static IEnumerable<string> ClavesDe(ResourceManager recursos, CultureInfo cultura) =>
         recursos.GetResourceSet(cultura, createIfNotExists: true, tryParents: false)!
             .Cast<DictionaryEntry>()
