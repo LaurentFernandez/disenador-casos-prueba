@@ -1,0 +1,81 @@
+@using Casos.Core.Modelo
+
+@{
+    var validos = Casos.Count(caso => caso.EsValido);
+}
+
+<div class="vista-matriz">
+    <p class="resumen">@Casos.Count casos: @validos se aceptan y @(Casos.Count - validos) se rechazan.</p>
+
+    <ul class="leyenda" aria-label="Leyenda">
+        <li><span class="muestra muestra--valida" aria-hidden="true"></span>Válido</li>
+        <li><span class="muestra muestra--invalida" aria-hidden="true"></span>Inválido</li>
+        <li><span class="icono icono--particion" aria-hidden="true"></span>Partición de equivalencia</li>
+        <li><span class="icono icono--limite" aria-hidden="true"></span>Valor límite</li>
+    </ul>
+
+    <p class="ayuda ayuda--arriba">Cada fila cambia un solo campo: la celda resaltada es el valor que se prueba y las demás llevan su valor por defecto.</p>
+
+    <div class="panel desplazable">
+        <table class="matriz">
+            <caption class="visualmente-oculto">Casos de prueba con el valor de cada campo</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Código</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Técnica</th>
+                    @foreach (var campo in Campos)
+                    {
+                        <th scope="col">@campo.Nombre</th>
+                    }
+                    <th scope="col">Resultado esperado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var caso in Casos)
+                {
+                    <tr>
+                        <th scope="row">@caso.Codigo</th>
+                        <td>@TextosCaso.Descripcion(caso)</td>
+                        <td>
+                            <span class="tecnica">
+                                <span class="icono icono--@(caso.Tecnica == Tecnica.ParticionEquivalencia ? "particion" : "limite")" aria-hidden="true"></span>
+                                @TextosCaso.NombreTecnica(caso.Tecnica)
+                            </span>
+                        </td>
+                        @foreach (var campo in Campos)
+                        {
+                            var valor = caso.Datos[campo.Nombre];
+                            // El caso con todos los valores por defecto prueba todos los campos a la vez.
+                            var probado = caso.CampoProbado is null || caso.CampoProbado == campo;
+                            <td class="@ClaseDeValor(probado, caso.EsValido)">
+                                <span class="@(valor.Length == 0 ? "vacio" : null)">@TextosCaso.Valor(valor)</span>
+                                @if (probado)
+                                {
+                                    <span class="visualmente-oculto">, valor probado</span>
+                                }
+                            </td>
+                        }
+                        <td>
+                            <span class="resultado resultado--@(caso.EsValido ? "acepta" : "rechaza")">
+                                <span aria-hidden="true">@(caso.EsValido ? "✓" : "✕")</span>
+                                @TextosCaso.Resultado(caso)
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public IReadOnlyList<Campo> Campos { get; set; } = [];
+
+    [Parameter, EditorRequired]
+    public IReadOnlyList<CasoPrueba> Casos { get; set; } = [];
+
+    private static string ClaseDeValor(bool probado, bool valido) =>
+        !probado ? "valor" : valido ? "valor valor--valido" : "valor valor--invalido";
+}
