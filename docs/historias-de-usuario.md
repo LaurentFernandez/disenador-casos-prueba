@@ -399,4 +399,4 @@ Escenario: Menos de dos campos
 ```
 
 **Prioridad:** Media
-**Estado:** Pendiente
+**Estado:** Hecha
