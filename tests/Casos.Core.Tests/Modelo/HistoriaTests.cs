@@ -62,16 +62,15 @@ public class HistoriaTests
     }
 
     [Theory]
-    [InlineData("NIT")]
-    [InlineData("nit")]
-    public void AgregarRegla_ReglaQueTieneSentido_QuedaEnLaHistoria(string campoObligatorio)
+    [InlineData("tipo de cliente", "NIT")]
+    [InlineData("Tipo de Cliente", "nit")]
+    public void AgregarRegla_ReglaQueTieneSentido_QuedaConLosNombresDeLaHistoria(string campoCondicion, string campoObligatorio)
     {
         var historia = HistoriaConClienteYNit();
-        var regla = new ReglaObligatorio("tipo de cliente", "Empresa", campoObligatorio);
 
-        historia.AgregarRegla(regla);
+        historia.AgregarRegla(new ReglaObligatorio(campoCondicion, "Empresa", campoObligatorio));
 
-        Assert.Equal(regla, Assert.Single(historia.Reglas));
+        Assert.Equal(new ReglaObligatorio("tipo de cliente", "Empresa", "NIT"), Assert.Single(historia.Reglas));
     }
 
     [Theory]

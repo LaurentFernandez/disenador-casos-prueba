@@ -36,6 +36,7 @@ public class Historia(string nombre)
     /// <summary>
     /// Agrega la regla si tiene sentido para los campos que ya están: la condición es una opción de un campo de lista
     /// y el campo que hace obligatorio es otro, opcional. Si no, lanza <see cref="ReglaInvalidaException"/>.
+    /// La regla se guarda con los nombres de los campos tal como están en la historia, para buscarlos en los datos de un caso.
     /// </summary>
     public void AgregarRegla(ReglaObligatorio regla)
     {
@@ -64,7 +65,7 @@ public class Historia(string nombre)
             throw new ReglaInvalidaException(ErrorRegla.CampoYaObligatorio, nameof(regla));
         }
 
-        _reglas.Add(regla);
+        _reglas.Add(regla with { CampoCondicion = condicion.Nombre, CampoObligatorio = obligatorio.Nombre });
     }
 
     /// <summary>
