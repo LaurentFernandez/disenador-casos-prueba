@@ -3,6 +3,19 @@
     font-size: var(--tamano-titulo);
 }
 
+.ejemplos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--espacio-2);
+    margin: 0 0 var(--espacio-3);
+}
+
+.ejemplos__etiqueta {
+    color: var(--tenue);
+    font-size: var(--tamano-pequeno);
+}
+
 .nombre-historia {
     --ancho-nombre-historia: 32rem;
 

@@ -78,6 +78,8 @@
   <data name="Ejemplo.Carrito.Cupon" xml:space="preserve"><value>coupon</value></data>
   <data name="Ejemplo.Carrito.MedioPago" xml:space="preserve"><value>payment method</value></data>
   <data name="Ejemplo.Carrito.Opciones" xml:space="preserve"><value>Card, Bank transfer, Cash on delivery</value></data>
+  <data name="Ejemplos.Titulo" xml:space="preserve"><value>Examples</value></data>
+  <data name="Ejemplos.Confirmar" xml:space="preserve"><value>The example will replace the story and the fields you wrote. Do you want to continue?</value></data>
 
   <!-- Vistas de los casos -->
   <data name="Casos.Vistas" xml:space="preserve"><value>Case view</value></data>

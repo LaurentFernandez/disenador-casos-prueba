@@ -78,6 +78,8 @@
   <data name="Ejemplo.Carrito.Cupon" xml:space="preserve"><value>cupón</value></data>
   <data name="Ejemplo.Carrito.MedioPago" xml:space="preserve"><value>medio de pago</value></data>
   <data name="Ejemplo.Carrito.Opciones" xml:space="preserve"><value>Tarjeta, Transferencia, Contraentrega</value></data>
+  <data name="Ejemplos.Titulo" xml:space="preserve"><value>Ejemplos</value></data>
+  <data name="Ejemplos.Confirmar" xml:space="preserve"><value>El ejemplo reemplazará la historia y los campos que escribiste. ¿Quieres continuar?</value></data>
 
   <!-- Vistas de los casos -->
   <data name="Casos.Vistas" xml:space="preserve"><value>Vista de los casos</value></data>
