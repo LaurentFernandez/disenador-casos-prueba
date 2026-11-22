@@ -14,16 +14,16 @@ Es un proyecto de portafolio de Laurent Andrés Fernandez (ingeniero de software
 - **Interfaz en español e inglés**, con `IStringLocalizer` y archivos `.resx` (Fase 2).
 - **Código en español:** clases, métodos, variables y nombres de pruebas, igual que los demás proyectos de Laurent.
 - **El motor (`Casos.Core`) no depende de la interfaz.** Toda la lógica vive y se prueba ahí; `Casos.Web` solo presenta.
-- **El motor no devuelve textos para mostrar:** devuelve tipos (por ejemplo, el enum `TipoClase`) y la interfaz arma la descripción en español o inglés.
+- **El motor no devuelve textos para mostrar:** devuelve tipos (por ejemplo, los enums `TipoClase` y `ErrorCampo`) y la interfaz arma la descripción o el aviso en español o inglés.
 - **Repositorio:** `github.com/LaurentFernandez/disenador-casos-prueba`, rama `main`. Público.
-- **Diseño visual:** está en `docs/diseno/maqueta.html`. Los campos se editan en una hoja tipo cuadrícula. Los casos se ven en tres vistas a elección del usuario: Matriz (una columna por campo, con el valor probado resaltado), Recta (el diagrama de partición de cada campo) y Gherkin. El estilo es el mismo en todas: títulos en Bahnschrift, azul tinta, lo válido en azul verdoso y lo inválido rayado en naranja. Hasta construirlo, la interfaz sigue siendo la plantilla de Blazor con Bootstrap.
+- **Diseño visual:** está en `docs/diseno/maqueta.html`. Los campos se editan en una hoja tipo cuadrícula. Los casos se ven en tres vistas a elección del usuario: Matriz (una columna por campo, con el valor probado resaltado), Recta (el diagrama de partición de cada campo) y Gherkin. El estilo es el mismo en todas: títulos en Barlow (incluida en el proyecto, licencia OFL), azul tinta, lo válido en azul verdoso y lo inválido rayado en naranja. Colores, tamaños y espaciados son variables CSS en `wwwroot/css/app.css`; no se usa Bootstrap.
 
 ## Estructura
 
 ```
 DisenadorCasosPrueba.slnx
 src/Casos.Core/          motor (modelo en Modelo/, técnicas en Tecnicas/)
-src/Casos.Web/           interfaz Blazor WebAssembly + PWA
+src/Casos.Web/           interfaz Blazor WebAssembly + PWA (componentes en Componentes/)
 tests/Casos.Core.Tests/  pruebas xUnit del motor
 docs/plan.md             objetivo, técnicas, arquitectura y fases
 docs/historias-de-usuario.md   requerimientos (los escribe Laurent)
@@ -48,8 +48,10 @@ dotnet run --project src/Casos.Web
 
 ## Estado actual
 
-- **Fases 0 y 1 terminadas.** El motor tiene el modelo de campos con sus validaciones (`Modelo/`), la partición de equivalencia (`Tecnicas/ParticionEquivalencia`) y los valores límite de enteros y de longitud de texto (`Tecnicas/ValoresLimite`), con 24 pruebas. HU-01 a HU-04 están hechas en el motor y les falta la interfaz; por eso los issues de HU-02 a HU-04 (#1, #2 y #5) siguen abiertos.
-- **Siguiente:** Fase 2, la interfaz, según la maqueta. La generación de casos en el motor ya está hecha (HU-05; #7 sigue abierto hasta tener la tabla). Lo próximo es la hoja de campos (HU-02). Falta elegir una fuente libre parecida a Bahnschrift para incluirla en el proyecto, porque Bahnschrift solo viene con Windows.
+- **Fases 0 y 1 terminadas.** El motor tiene el modelo de campos con sus validaciones (`Modelo/`), la partición de equivalencia (`Tecnicas/ParticionEquivalencia`) y los valores límite de enteros y de longitud de texto (`Tecnicas/ValoresLimite`).
+- **Fase 2 en curso.** Ya están la generación de casos en el motor (`GeneradorCasos`), el estilo base de la maqueta y la hoja de campos (`Componentes/HojaCampos.razor`). El motor tiene 31 pruebas; la interfaz todavía no tiene pruebas automáticas (bUnit llega en la Fase 3).
+- **Historias:** HU-02 está hecha y su issue (#1) cerrado. HU-01, HU-03, HU-04 y HU-05 están hechas en el motor y les falta la interfaz; sus issues (#2, #5 y #7) siguen abiertos. HU-01 no tiene issue porque se hizo antes de crear el repositorio.
+- **Siguiente:** el botón "Generar casos" y la vista Matriz de HU-05 (#7).
 
 ## Fases
 
