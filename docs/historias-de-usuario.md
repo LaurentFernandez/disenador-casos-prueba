@@ -377,7 +377,7 @@ Escenario: Regla sobre un campo que no existe
 ```
 
 **Prioridad:** Media
-**Estado:** Pendiente
+**Estado:** Hecha
 
 ### HU-12. Reducir combinaciones con la técnica por pares (pairwise)
 
