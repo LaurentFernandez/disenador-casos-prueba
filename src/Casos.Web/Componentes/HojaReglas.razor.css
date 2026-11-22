@@ -20,11 +20,3 @@
 .regla__quitar {
     margin-left: auto;
 }
-
-.regla__aviso {
-    margin: 0;
-    padding: var(--espacio-2) var(--espacio-3);
-    background: var(--trama-invalida);
-    color: var(--invalido);
-    font-weight: 600;
-}

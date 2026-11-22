@@ -144,7 +144,8 @@
     {
         Tecnica.ParticionEquivalencia => "particion",
         Tecnica.ValoresLimite => "limite",
-        _ => "decision",
+        Tecnica.TablaDecision => "decision",
+        _ => "pares",
     };
 
     private static double X(double posicion) => MargenLateral + posicion * (Ancho - 2 * MargenLateral);

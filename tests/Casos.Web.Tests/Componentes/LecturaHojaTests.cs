@@ -109,6 +109,27 @@ public class LecturaHojaTests() : PruebaEnIdioma("es")
         Assert.Empty(lectura.Historia.Reglas);
     }
 
+    [Fact]
+    public void Leer_PorParesConDosListas_LoActivaSinAvisos()
+    {
+        List<FilaCampo> filas = [.. FilasDeCliente(), new() { Nombre = "canal", Tipo = TipoCampo.Lista, Opciones = "Web, Tienda" }];
+
+        var lectura = LecturaHoja.Leer(filas, Historia, porPares: true);
+
+        Assert.False(lectura.TieneAvisos);
+        Assert.True(lectura.Historia.PorPares);
+    }
+
+    [Fact]
+    public void Leer_PorParesConUnaSolaLista_AvisaYOcultaLosCasosComoEnHU12()
+    {
+        var lectura = LecturaHoja.Leer(FilasDeCliente(), Historia, porPares: true);
+
+        Assert.True(lectura.TieneAvisos);
+        Assert.Equal("Se necesitan al menos dos campos de lista para combinar por pares.", lectura.AvisoPares);
+        Assert.False(lectura.Historia.PorPares);
+    }
+
     private static List<FilaCampo> FilasDeCliente() =>
     [
         Entero("edad", 18, 65),

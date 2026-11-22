@@ -38,10 +38,10 @@ public sealed record DiagramaRecta(
     {
         var puntos = new List<(long Valor, Tecnica Tecnica, string Codigo)>();
         var fichas = new List<(string Texto, bool Valida, string Codigo)>();
-        // El caso con todos los valores por defecto también prueba este campo. Los de una tabla de decisión cambian
-        // dos campos a la vez y no son un punto de la recta de ninguno.
+        // El caso con todos los valores por defecto también prueba este campo. Los de una tabla de decisión y los de
+        // pares cambian varios campos a la vez y no son un punto de la recta de ninguno.
         foreach (var caso in casos.Where(caso =>
-            caso.Tecnica != Tecnica.TablaDecision && (caso.CampoProbado is null || caso.CampoProbado == campo)))
+            caso.Tecnica is not (Tecnica.TablaDecision or Tecnica.Pares) && (caso.CampoProbado is null || caso.CampoProbado == campo)))
         {
             var valor = caso.Datos[campo.Nombre];
             if (ValorEnRecta(campo, valor) is { } numero)

@@ -20,7 +20,7 @@
   <data name="Pagina.NombreDeLaHistoria" xml:space="preserve"><value>Story name</value></data>
   <data name="Pagina.EjemploHistoria" xml:space="preserve"><value>Example: User sign-up</value></data>
   <data name="Pagina.CasosGenerados" xml:space="preserve"><value>Generated cases</value></data>
-  <data name="Pagina.CorrigeAvisos" xml:space="preserve"><value>Fix the warnings in the fields and rules to see the cases.</value></data>
+  <data name="Pagina.CorrigeAvisos" xml:space="preserve"><value>Fix the warnings above to see the cases.</value></data>
   <data name="Pagina.AgregaCampo" xml:space="preserve"><value>Add a field to the sheet to see its cases.</value></data>
   <data name="NoEncontrada.Titulo" xml:space="preserve"><value>Page not found</value></data>
   <data name="NoEncontrada.Texto" xml:space="preserve"><value>This address does not exist in the designer.</value></data>
@@ -67,6 +67,7 @@
   <data name="Aviso.OpcionInexistente" xml:space="preserve"><value>The option is not in the field's list.</value></data>
   <data name="Aviso.MismoCampo" xml:space="preserve"><value>Choose a required field other than the condition field.</value></data>
   <data name="Aviso.CampoYaObligatorio" xml:space="preserve"><value>That field is already required; mark it as optional to use it in the rule.</value></data>
+  <data name="Aviso.ParesSinListas" xml:space="preserve"><value>At least two list fields are needed to combine in pairs.</value></data>
 
   <!-- Reglas de negocio -->
   <data name="Reglas.Titulo" xml:space="preserve"><value>Business rules</value></data>
@@ -81,6 +82,12 @@
   <data name="Reglas.Opcion" xml:space="preserve"><value>Rule {0} option</value></data>
   <data name="Reglas.CampoObligatorio" xml:space="preserve"><value>Rule {0} required field</value></data>
   <data name="Reglas.Quitar" xml:space="preserve"><value>Remove rule {0}</value></data>
+
+  <!-- Combinación por pares -->
+  <data name="Pares.Titulo" xml:space="preserve"><value>Pairwise combination</value></data>
+  <data name="Pares.Combinar" xml:space="preserve"><value>Combine list fields in pairs</value></data>
+  <data name="Pares.Ayuda" xml:space="preserve"><value>Adds the fewest cases in which each option of a list field appears with each option of the others, instead of testing every combination.</value></data>
+  <data name="Pares.Total" xml:space="preserve"><value>Pairwise combinations: {0} of {1:N0} possible.</value></data>
   <data name="Historia.SinNombre" xml:space="preserve"><value>Untitled story</value></data>
 
   <!-- Ejemplos listos -->
@@ -119,7 +126,7 @@
   <data name="Columna.Tecnica" xml:space="preserve"><value>Technique</value></data>
   <data name="Columna.ValorProbado" xml:space="preserve"><value>Tested value</value></data>
   <data name="Columna.Resultado" xml:space="preserve"><value>Expected result</value></data>
-  <data name="Matriz.Ayuda" xml:space="preserve"><value>Each row changes a single field, or the two fields of a rule: the highlighted cells are the values under test and the others keep their default value.</value></data>
+  <data name="Matriz.Ayuda" xml:space="preserve"><value>Each row changes a single field, the two fields of a rule or the list fields it combines in pairs: the highlighted cells are the values under test and the others keep their default value.</value></data>
   <data name="Matriz.Titulo" xml:space="preserve"><value>Test cases with the value of each field</value></data>
   <data name="Matriz.ValorProbado" xml:space="preserve"><value>tested value</value></data>
   <data name="Recta.Titulo" xml:space="preserve"><value>Test cases</value></data>
@@ -141,6 +148,8 @@
   <data name="Tecnica.LimiteLarga" xml:space="preserve"><value>Boundary values</value></data>
   <data name="Tecnica.Decision" xml:space="preserve"><value>Decision</value></data>
   <data name="Tecnica.DecisionLarga" xml:space="preserve"><value>Decision table</value></data>
+  <data name="Tecnica.Pares" xml:space="preserve"><value>Pairwise</value></data>
+  <data name="Tecnica.ParesLarga" xml:space="preserve"><value>Pairwise combination</value></data>
   <data name="Decision.SinValor" xml:space="preserve"><value>{0}: {1} and {2} with no value</value></data>
   <data name="Decision.ConValor" xml:space="preserve"><value>{0}: {1} and {2} with a value</value></data>
   <data name="Resumen" xml:space="preserve"><value>{0} cases: {1} and {2}.</value></data>

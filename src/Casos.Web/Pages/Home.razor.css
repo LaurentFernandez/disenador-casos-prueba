@@ -39,6 +39,23 @@
     border-radius: var(--radio-control);
 }
 
+.casilla {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-2);
+    margin: 0 0 var(--espacio-2);
+}
+
+.casilla input {
+    width: var(--espacio-4);
+    height: var(--espacio-4);
+    accent-color: var(--tinta);
+}
+
+.casilla label {
+    font-weight: 600;
+}
+
 .seccion + .seccion {
     margin-top: var(--espacio-6);
 }

@@ -102,6 +102,22 @@ public class TextosTests() : PruebaEnIdioma("en")
         Assert.Equal("The field “tax ID” does not exist.", lectura.AvisosReglas[regla]);
     }
 
+    [Fact]
+    public void Pares_EnIngles_DaElAvisoElTotalYElNombreDeLaTecnica()
+    {
+        var tipo = new FilaCampo { Nombre = "customer type", Tipo = TipoCampo.Lista, Opciones = "Individual, Company" };
+        var canal = new FilaCampo { Nombre = "channel", Tipo = TipoCampo.Lista, Opciones = "Web, Store, Phone" };
+
+        var unaLista = LecturaHoja.Leer([tipo], "", porPares: true);
+        var dosListas = LecturaHoja.Leer([tipo, canal], "", porPares: true);
+
+        Assert.Equal("At least two list fields are needed to combine in pairs.", unaLista.AvisoPares);
+        Assert.Equal(
+            "Pairwise combinations: 6 of 6 possible.",
+            TextosCaso.TotalPares(dosListas.Historia, GeneradorCasos.Generar(dosListas.Historia)));
+        Assert.Equal("Pairwise combination", TextosCaso.NombreLargoTecnica(Tecnica.Pares));
+    }
+
     private static IEnumerable<string> ClavesDe(ResourceManager recursos, CultureInfo cultura) =>
         recursos.GetResourceSet(cultura, createIfNotExists: true, tryParents: false)!
             .Cast<DictionaryEntry>()

@@ -43,6 +43,59 @@ public class TextosCasoTests() : PruebaEnIdioma("es")
         Assert.Equal("Tabla de decisión", TextosCaso.NombreLargoTecnica(Tecnica.TablaDecision));
     }
 
+    [Fact]
+    public void Descripcion_CasoDePares_JuntaLasOpcionesQueCombina()
+    {
+        Assert.Equal("Chrome · Windows · español", TextosCaso.Descripcion(CasosPorPares()[0]));
+    }
+
+    [Fact]
+    public void ValorProbado_CasoDePares_MuestraCadaCampoCombinado()
+    {
+        Assert.Equal("navegador: Chrome · sistema: Windows · idioma: español", TextosCaso.ValorProbado(CasosPorPares()[0]));
+    }
+
+    [Fact]
+    public void NombreTecnica_Pares_TieneSuNombreCortoYLargo()
+    {
+        Assert.Equal("Pares", TextosCaso.NombreTecnica(Tecnica.Pares));
+        Assert.Equal("Combinación por pares", TextosCaso.NombreLargoTecnica(Tecnica.Pares));
+    }
+
+    [Fact]
+    public void TotalPares_TresCamposDeHU12_DiceSeisDeDoce()
+    {
+        var historia = HistoriaPorPares();
+
+        Assert.Equal("Combinaciones por pares: 6 de 12 posibles.", TextosCaso.TotalPares(historia, GeneradorCasos.Generar(historia)));
+    }
+
+    [Fact]
+    public void TotalPares_VeinteListasDeDiezOpciones_MuestraElTotalQueNoCabeEnUnLong()
+    {
+        var historia = new Historia("Configuración");
+        foreach (var numero in Enumerable.Range(1, 20))
+        {
+            historia.AgregarCampo(new CampoLista($"opción {numero}", true, Enumerable.Range(0, 10).Select(valor => $"{valor}").ToList()));
+        }
+
+        Assert.Equal("Combinaciones por pares: 0 de 100.000.000.000.000.000.000 posibles.", TextosCaso.TotalPares(historia, []));
+    }
+
+    private static IReadOnlyList<CasoPrueba> CasosPorPares() =>
+        GeneradorCasos.Generar(HistoriaPorPares()).Where(caso => caso.Tecnica == Tecnica.Pares).ToList();
+
+    private static Historia HistoriaPorPares()
+    {
+        var historia = new Historia("Compatibilidad");
+        historia.AgregarCampo(new CampoEntero("edad", true, 18, 65));
+        historia.AgregarCampo(new CampoLista("navegador", true, ["Chrome", "Firefox", "Edge"]));
+        historia.AgregarCampo(new CampoLista("sistema", true, ["Windows", "macOS"]));
+        historia.AgregarCampo(new CampoLista("idioma", true, ["español", "inglés"]));
+        historia.CombinarPorPares();
+        return historia;
+    }
+
     private static IReadOnlyList<CasoPrueba> CasosDeLaRegla()
     {
         var historia = new Historia("Registro de cliente");
