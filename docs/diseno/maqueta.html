@@ -53,7 +53,8 @@
     .ayuda { margin: 8px 0 0; color: var(--tenue); font-size: 13px; }
     .ayuda--arriba { margin: 0 0 8px; }
     .panel { background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio); }
-    .desplazable { overflow-x: auto; }
+    /* position: relative contiene a los textos ocultos; sin él estiran la página en el celular. */
+    .desplazable { position: relative; overflow-x: auto; }
 
     /* ========== Botones y selectores ========== */
     .boton {
