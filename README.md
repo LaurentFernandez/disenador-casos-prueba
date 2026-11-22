@@ -4,7 +4,9 @@
 
 Aplicación web que genera casos de prueba a partir de historias de usuario aplicando técnicas formales de diseño de pruebas (ISTQB): partición de equivalencia, valores límite, tablas de decisión y combinatoria por pares. Muestra cada caso con la técnica que lo originó, lo convierte a Gherkin y lo exporta a CSV, Markdown y `.feature`.
 
-> **Estado:** en construcción. Fases 0 y 1 terminadas: el motor ya genera clases de equivalencia y valores límite. Sigue la Fase 2 (interfaz). Ver el [plan](docs/plan.md) y las [historias de usuario](docs/historias-de-usuario.md).
+**Demo:** [laurentfernandez.github.io/disenador-casos-prueba](https://laurentfernandez.github.io/disenador-casos-prueba/)
+
+> **Estado:** en construcción. Ya define los campos de una historia, genera sus casos por partición de equivalencia y valores límite, los muestra como matriz, recta o Gherkin y los exporta. Faltan el cambio de idioma, las tablas de decisión y pairwise. Ver el [plan](docs/plan.md) y las [historias de usuario](docs/historias-de-usuario.md).
 
 *English:* a web app that generates test cases from user stories using formal black-box test design techniques (equivalence partitioning, boundary value analysis, decision tables and pairwise testing). Work in progress.
 
@@ -12,7 +14,7 @@ Aplicación web que genera casos de prueba a partir de historias de usuario apli
 
 - .NET 10 y Blazor WebAssembly (aplicación instalable como PWA, sin servidor)
 - xUnit para las pruebas
-- GitHub Actions para compilar y probar en cada cambio
+- GitHub Actions para compilar y probar en cada cambio, y publicar en GitHub Pages lo que llega a `main`
 
 ## Estructura
 
@@ -22,6 +24,7 @@ src/
   Casos.Web/         interfaz web (Blazor WebAssembly, PWA)
 tests/
   Casos.Core.Tests/  pruebas unitarias del motor
+  Casos.Web.Tests/   pruebas unitarias de la lógica de la interfaz
 docs/                plan e historias de usuario
 ```
 

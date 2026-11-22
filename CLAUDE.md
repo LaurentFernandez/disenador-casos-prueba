@@ -31,7 +31,7 @@ tests/Casos.Web.Tests/   pruebas xUnit de la lógica de la interfaz
 docs/plan.md             objetivo, técnicas, arquitectura y fases
 docs/historias-de-usuario.md   requerimientos (los escribe Laurent)
 docs/diseno/maqueta.html       maqueta de la interfaz (se abre en el navegador)
-.github/workflows/ci.yml compila y prueba en cada push a main y en cada PR
+.github/workflows/ci.yml compila y prueba en cada push a main y en cada PR; publica en GitHub Pages lo que llega a main
 ```
 
 ## Comandos
