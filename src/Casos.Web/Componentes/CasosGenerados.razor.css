@@ -1,0 +1,21 @@
+.resumen {
+    margin: 0 0 var(--espacio-2);
+    color: var(--tenue);
+}
+
+.leyenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-1) var(--espacio-4);
+    margin: 0 0 var(--espacio-2);
+    padding: 0;
+    list-style: none;
+    color: var(--tenue);
+    font-size: var(--tamano-pequeno);
+}
+
+.leyenda li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-2);
+}
