@@ -14,6 +14,12 @@ public enum ErrorCampo
     /// <summary>La longitud mínima de un texto es mayor que la máxima.</summary>
     LongitudInvalida,
 
+    /// <summary>La longitud mínima de un texto es negativa.</summary>
+    LongitudNegativa,
+
+    /// <summary>La longitud máxima de un texto supera <see cref="CampoTexto.LongitudMaximaPermitida"/>.</summary>
+    LongitudExcesiva,
+
     /// <summary>El mínimo de un entero es mayor que el máximo.</summary>
     RangoInvalido,
 }

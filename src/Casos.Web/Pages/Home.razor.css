@@ -2,3 +2,12 @@
     margin: var(--espacio-6) 0 var(--espacio-3);
     font-size: var(--tamano-titulo);
 }
+
+.seccion + .seccion {
+    margin-top: var(--espacio-6);
+}
+
+.estado {
+    margin: 0;
+    color: var(--tenue);
+}

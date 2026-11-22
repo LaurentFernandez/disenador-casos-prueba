@@ -1,7 +1,35 @@
 ﻿@page "/"
+@using Casos.Core
 
 <PageTitle>Diseñador de casos de prueba</PageTitle>
 
-<h1 class="titulo">Campos de la historia</h1>
+@{
+    var lectura = LecturaHoja.Leer(filas);
+    // Con avisos en la hoja no se generan casos, para que ningún campo quede fuera sin que se note.
+    var casos = lectura.Avisos.Count == 0 ? GeneradorCasos.Generar(lectura.Historia) : [];
+}
 
-<HojaCampos />
+<section class="seccion" aria-labelledby="campos-titulo">
+    <h1 class="titulo" id="campos-titulo">Campos de la historia</h1>
+    <HojaCampos Filas="filas" Avisos="lectura.Avisos" CambioFilas="StateHasChanged" />
+</section>
+
+<section class="seccion" aria-labelledby="casos-titulo">
+    <h2 class="titulo" id="casos-titulo">Casos generados</h2>
+    @if (lectura.Avisos.Count > 0)
+    {
+        <p class="estado">Corrige los avisos de la hoja para ver los casos.</p>
+    }
+    else if (casos.Count == 0)
+    {
+        <p class="estado">Agrega un campo a la hoja para ver sus casos.</p>
+    }
+    else
+    {
+        <VistaMatriz Campos="lectura.Historia.Campos" Casos="casos" />
+    }
+</section>
+
+@code {
+    private readonly List<FilaCampo> filas = [new()];
+}

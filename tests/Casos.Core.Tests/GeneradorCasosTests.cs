@@ -1,4 +1,5 @@
 using Casos.Core.Modelo;
+using static Casos.Core.Modelo.PosicionLimite;
 using static Casos.Core.Modelo.Tecnica;
 using static Casos.Core.Modelo.TipoClase;
 
@@ -28,6 +29,27 @@ public class GeneradorCasosTests
             ("CP-011", ValoresLimite, "65", DentroDelRango, true),
             ("CP-012", ValoresLimite, "66", MayorQueMaximo, false),
         }, casos.Select(caso => (caso.Codigo, caso.Tecnica, caso.Datos["edad"], caso.ClaseProbada, caso.EsValido)));
+    }
+
+    [Fact]
+    public void Generar_CasosDeValoresLimite_IndicanDondeCaeElValor()
+    {
+        var casos = GeneradorCasos.Generar(HistoriaCon(new CampoEntero("edad", true, 18, 65)));
+
+        Assert.Equal(
+            new PosicionLimite?[] { DebajoDelMinimo, EnElMinimo, EncimaDelMinimo, DebajoDelMaximo, EnElMaximo, EncimaDelMaximo },
+            casos.Where(caso => caso.Tecnica == ValoresLimite).Select(caso => caso.Posicion));
+        Assert.All(casos.Where(caso => caso.Tecnica == ParticionEquivalencia), caso => Assert.Null(caso.Posicion));
+    }
+
+    [Fact]
+    public void Generar_RangoDeUnSoloValor_ElValorQuedaEnElMinimo()
+    {
+        var casos = GeneradorCasos.Generar(HistoriaCon(new CampoEntero("cantidad", true, 5, 5)));
+
+        Assert.Equal(
+            new PosicionLimite?[] { DebajoDelMinimo, EnElMinimo, EncimaDelMaximo },
+            casos.Where(caso => caso.Tecnica == ValoresLimite).Select(caso => caso.Posicion));
     }
 
     [Fact]

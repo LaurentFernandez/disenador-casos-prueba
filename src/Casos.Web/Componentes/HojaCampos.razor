@@ -1,9 +1,3 @@
-@using Casos.Core.Modelo
-
-@{
-    var avisos = CalcularAvisos();
-}
-
 <div class="panel desplazable">
     <table class="hoja">
         <caption class="visualmente-oculto">Campos de la historia</caption>
@@ -28,45 +22,45 @@
             </tr>
         </thead>
         <tbody>
-            @for (var indice = 0; indice < filas.Count; indice++)
+            @for (var indice = 0; indice < Filas.Count; indice++)
             {
-                var fila = filas[indice];
+                var fila = Filas[indice];
                 var numero = indice + 1;
-                var aviso = avisos.GetValueOrDefault(fila);
+                var aviso = Avisos.GetValueOrDefault(fila);
                 var idAviso = aviso is null ? null : $"aviso-campo-{numero}";
 
                 <tr @key="fila">
                     <td>
-                        <input class="celda" @bind="fila.Nombre" aria-label="Nombre del campo @numero"
+                        <input class="celda" @bind="fila.Nombre" @bind:after="AvisarCambio" aria-label="Nombre del campo @numero"
                                aria-invalid="@(aviso is null ? null : "true")" aria-describedby="@idAviso" />
                     </td>
                     <td>
-                        <select class="celda" @bind="fila.Tipo" aria-label="Tipo del campo @numero">
+                        <select class="celda" @bind="fila.Tipo" @bind:after="AvisarCambio" aria-label="Tipo del campo @numero">
                             <option value="@TipoCampo.Entero">Entero</option>
                             <option value="@TipoCampo.Texto">Texto</option>
                             <option value="@TipoCampo.Lista">Lista</option>
                         </select>
                     </td>
                     <td class="centrado">
-                        <input type="checkbox" @bind="fila.Obligatorio" aria-label="Campo @numero obligatorio" />
+                        <input type="checkbox" @bind="fila.Obligatorio" @bind:after="AvisarCambio" aria-label="Campo @numero obligatorio" />
                     </td>
                     @if (fila.Tipo == TipoCampo.Lista)
                     {
                         <td class="no-aplica"><span class="visualmente-oculto">No aplica</span></td>
                         <td class="no-aplica"><span class="visualmente-oculto">No aplica</span></td>
                         <td>
-                            <input class="celda" @bind="fila.Opciones" placeholder="Ejemplo: Persona, Empresa"
+                            <input class="celda" @bind="fila.Opciones" @bind:after="AvisarCambio" placeholder="Ejemplo: Persona, Empresa"
                                    aria-label="Opciones del campo @numero, separadas por comas" />
                         </td>
                     }
                     else
                     {
-                        <td><input type="number" class="celda celda--numero" @bind="fila.Minimo" aria-label="Mínimo del campo @numero" /></td>
-                        <td><input type="number" class="celda celda--numero" @bind="fila.Maximo" aria-label="Máximo del campo @numero" /></td>
+                        <td><input type="number" class="celda celda--numero" @bind="fila.Minimo" @bind:after="AvisarCambio" aria-label="Mínimo del campo @numero" /></td>
+                        <td><input type="number" class="celda celda--numero" @bind="fila.Maximo" @bind:after="AvisarCambio" aria-label="Máximo del campo @numero" /></td>
                         <td class="no-aplica"><span class="visualmente-oculto">No aplica</span></td>
                     }
                     <td class="centrado">
-                        <button type="button" class="quitar" aria-label="Quitar el campo @numero" @onclick="() => filas.Remove(fila)">Quitar</button>
+                        <button type="button" class="quitar" aria-label="Quitar el campo @numero" @onclick="() => Quitar(fila)">Quitar</button>
                     </td>
                 </tr>
 
@@ -78,7 +72,7 @@
                 }
             }
 
-            @if (filas.Count == 0)
+            @if (Filas.Count == 0)
             {
                 <tr>
                     <td colspan="7" class="sin-campos">No hay campos. Agrega el primero con «Agregar campo».</td>
@@ -90,50 +84,32 @@
 
 <p class="ayuda">En los campos de texto, mínimo y máximo son la longitud en caracteres. Separa las opciones de una lista con comas.</p>
 
-<button type="button" class="boton agregar" @onclick="() => filas.Add(new FilaCampo())">Agregar campo</button>
+<button type="button" class="boton agregar" @onclick="Agregar">Agregar campo</button>
 
 @code {
-    // La historia solo sirve para que el motor detecte los nombres repetidos; su nombre no se muestra.
-    private const string NombreHistoriaDeValidacion = "Validación de la hoja";
+    [Parameter, EditorRequired]
+    public List<FilaCampo> Filas { get; set; } = [];
 
-    private readonly List<FilaCampo> filas = [new()];
+    [Parameter, EditorRequired]
+    public IReadOnlyDictionary<FilaCampo, string> Avisos { get; set; } = new Dictionary<FilaCampo, string>();
 
-    private Dictionary<FilaCampo, string> CalcularAvisos()
+    /// <summary>
+    /// Avisa a la página que la hoja cambió, para que la vuelva a leer.
+    /// </summary>
+    [Parameter]
+    public EventCallback CambioFilas { get; set; }
+
+    private Task AvisarCambio() => CambioFilas.InvokeAsync();
+
+    private Task Agregar()
     {
-        var avisos = new Dictionary<FilaCampo, string>();
-        var historia = new Historia(NombreHistoriaDeValidacion);
-        foreach (var fila in filas)
-        {
-            if (!fila.EstaVacia && AvisoDe(fila, historia) is { } aviso)
-            {
-                avisos[fila] = aviso;
-            }
-        }
-
-        return avisos;
+        Filas.Add(new FilaCampo());
+        return AvisarCambio();
     }
 
-    private static string? AvisoDe(FilaCampo fila, Historia historia)
+    private Task Quitar(FilaCampo fila)
     {
-        if (string.IsNullOrWhiteSpace(fila.Nombre))
-        {
-            return MensajesCampo.FaltaNombre;
-        }
-
-        try
-        {
-            var campo = fila.ACampo();
-            if (campo is null)
-            {
-                return fila.Tipo == TipoCampo.Texto ? MensajesCampo.FaltaLongitud : MensajesCampo.FaltaRango;
-            }
-
-            historia.AgregarCampo(campo);
-            return null;
-        }
-        catch (CampoInvalidoException excepcion)
-        {
-            return MensajesCampo.De(excepcion.Error);
-        }
+        Filas.Remove(fila);
+        return AvisarCambio();
     }
 }

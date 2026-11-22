@@ -8,6 +8,7 @@ namespace Casos.Core.Modelo;
 /// <param name="Tecnica">Técnica que originó el caso.</param>
 /// <param name="CampoProbado">Campo cuyo valor cambia en este caso; null en el caso con todos los valores por defecto.</param>
 /// <param name="ClaseProbada">Clase a la que pertenece el valor probado; null en el caso con todos los valores por defecto.</param>
+/// <param name="Posicion">Dónde cae el valor probado respecto al rango; solo en los casos de valores límite.</param>
 /// <param name="EsValido">Si el sistema debería aceptar los datos.</param>
 /// <param name="Datos">El valor de cada campo por su nombre, en el orden de la historia.</param>
 public sealed record CasoPrueba(
@@ -15,5 +16,6 @@ public sealed record CasoPrueba(
     Tecnica Tecnica,
     Campo? CampoProbado,
     TipoClase? ClaseProbada,
+    PosicionLimite? Posicion,
     bool EsValido,
     IReadOnlyDictionary<string, string> Datos);

@@ -23,6 +23,8 @@
     --cabecera: #F3F5F8;
     --tinta: #16213E;
     --tenue: #55607A;
+    --valido: #256A80;
+    --valido-fondo: #D5EBF1;
     --invalido: #A24A16;
     --invalido-trama: rgba(162, 74, 22, 0.16);
     --trama-invalida: repeating-linear-gradient(45deg, var(--invalido-trama) 0 2px, transparent 2px 7px);

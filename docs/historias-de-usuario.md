@@ -75,6 +75,14 @@ Escenario: Lista sin opciones
 Escenario: Longitud inválida
   Cuando intento agregar un campo de texto con longitud mínima 10 y máxima 5
   Entonces la herramienta avisa que la longitud mínima no puede ser mayor que la máxima
+
+Escenario: Longitud negativa
+  Cuando intento agregar un campo de texto con longitud mínima -1 y máxima 5
+  Entonces la herramienta avisa que la longitud no puede ser negativa
+
+Escenario: Longitud mayor que la permitida
+  Cuando intento agregar un campo de texto con longitud máxima 10001
+  Entonces la herramienta avisa que la longitud máxima no puede pasar de 10000 caracteres
 ```
 
 **Fuera de alcance:** campos decimales y de fecha; se evaluarán en una historia aparte.
@@ -190,7 +198,7 @@ Escenario: Caso con todos los valores válidos
 ```
 
 **Prioridad:** Alta
-**Estado:** En desarrollo (hecha en el motor; falta la interfaz)
+**Estado:** Hecha
 
 ### HU-06. Ver cada caso como escenario Gherkin
 
