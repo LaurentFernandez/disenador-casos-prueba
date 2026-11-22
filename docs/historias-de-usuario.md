@@ -190,7 +190,7 @@ Escenario: Caso con todos los valores válidos
 ```
 
 **Prioridad:** Alta
-**Estado:** Pendiente
+**Estado:** En desarrollo (hecha en el motor; falta la interfaz)
 
 ### HU-06. Ver cada caso como escenario Gherkin
 
