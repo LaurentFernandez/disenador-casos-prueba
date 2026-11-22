@@ -9,7 +9,7 @@ public sealed record CampoTexto(string Nombre, bool Obligatorio, int LongitudMin
     // Propiedades sin init para que una expresión with no pueda saltarse la validación.
     public int LongitudMinima { get; } = LongitudMinima <= LongitudMaxima
         ? LongitudMinima
-        : throw new ArgumentException("La longitud mínima no puede ser mayor que la máxima.", nameof(LongitudMinima));
+        : throw new CampoInvalidoException(ErrorCampo.LongitudInvalida, nameof(LongitudMinima));
 
     public int LongitudMaxima { get; } = LongitudMaxima;
 }

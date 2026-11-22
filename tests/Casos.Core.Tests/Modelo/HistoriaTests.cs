@@ -50,12 +50,14 @@ public class HistoriaTests
     [Theory]
     [InlineData("edad")]
     [InlineData("Edad")]
-    public void AgregarCampo_NombreRepetido_LanzaExcepcionYNoLoAgrega(string nombreRepetido)
+    public void AgregarCampo_NombreRepetido_IndicaNombreRepetidoYNoLoAgrega(string nombreRepetido)
     {
         var historia = new Historia("Registro de usuario");
         historia.AgregarCampo(new CampoEntero("edad", true, 18, 65));
 
-        Assert.Throws<ArgumentException>(() => historia.AgregarCampo(new CampoTexto(nombreRepetido, true, 1, 3)));
+        var excepcion = Assert.Throws<CampoInvalidoException>(() => historia.AgregarCampo(new CampoTexto(nombreRepetido, true, 1, 3)));
+
+        Assert.Equal(ErrorCampo.NombreRepetido, excepcion.Error);
         Assert.Single(historia.Campos);
     }
 }

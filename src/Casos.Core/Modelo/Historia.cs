@@ -21,7 +21,7 @@ public class Historia(string nombre)
     {
         if (_campos.Any(existente => string.Equals(existente.Nombre, campo.Nombre, StringComparison.OrdinalIgnoreCase)))
         {
-            throw new ArgumentException($"Ya existe un campo con el nombre \"{campo.Nombre}\".", nameof(campo));
+            throw new CampoInvalidoException(ErrorCampo.NombreRepetido, nameof(campo));
         }
 
         _campos.Add(campo);
