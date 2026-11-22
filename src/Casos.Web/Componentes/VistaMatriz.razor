@@ -25,15 +25,15 @@
                     <td>@TextosCaso.Descripcion(caso)</td>
                     <td>
                         <span class="tecnica">
-                            <span class="icono icono--@(caso.Tecnica == Tecnica.ParticionEquivalencia ? "particion" : "limite")" aria-hidden="true"></span>
+                            <span class="icono icono--@ClaseIcono(caso.Tecnica)" aria-hidden="true"></span>
                             @TextosCaso.NombreTecnica(caso.Tecnica)
                         </span>
                     </td>
                     @foreach (var campo in Campos)
                     {
                         var valor = caso.Datos[campo.Nombre];
-                        // El caso con todos los valores por defecto prueba todos los campos a la vez.
-                        var probado = caso.CampoProbado is null || caso.CampoProbado == campo;
+                        // El caso con todos los valores por defecto prueba todos los campos a la vez; el de una regla, sus dos campos.
+                        var probado = caso.CampoProbado is null || caso.CampoProbado == campo || caso.Regla?.CampoCondicion == campo.Nombre;
                         <td class="@ClaseDeValor(probado, caso.EsValido)">
                             <span class="@(valor.Length == 0 ? "vacio" : null)">@TextosCaso.Valor(valor)</span>
                             @if (probado)
@@ -60,6 +60,13 @@
 
     [Parameter, EditorRequired]
     public IReadOnlyList<CasoPrueba> Casos { get; set; } = [];
+
+    private static string ClaseIcono(Tecnica tecnica) => tecnica switch
+    {
+        Tecnica.ParticionEquivalencia => "particion",
+        Tecnica.ValoresLimite => "limite",
+        _ => "decision",
+    };
 
     private static string ClaseDeValor(bool probado, bool valido) =>
         !probado ? "valor" : valido ? "valor valor--valido" : "valor valor--invalido";

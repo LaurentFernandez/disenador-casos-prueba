@@ -1,0 +1,92 @@
+@if (Reglas.Count > 0)
+{
+    <ol class="panel reglas">
+        @for (var indice = 0; indice < Reglas.Count; indice++)
+        {
+            var regla = Reglas[indice];
+            var numero = indice + 1;
+            var aviso = Avisos.GetValueOrDefault(regla);
+            var idAviso = aviso is null ? null : $"aviso-regla-{numero}";
+
+            <li @key="regla" class="regla">
+                <p class="regla__frase">
+                    <span>@Textos.De("Reglas.Si")</span>
+                    <ListaRegla @bind-Valor="regla.CampoCondicion" @bind-Valor:after="() => ElegirCondicion(regla)"
+                                Opciones="CamposDeLista()" Etiqueta="@Textos.De("Reglas.CampoCondicion", numero)" IdAviso="@idAviso" />
+                    <span>@Textos.De("Reglas.Es")</span>
+                    <ListaRegla @bind-Valor="regla.Opcion" @bind-Valor:after="AvisarCambio"
+                                Opciones="OpcionesDe(regla.CampoCondicion)" Etiqueta="@Textos.De("Reglas.Opcion", numero)" IdAviso="@idAviso" />
+                    <span>@Textos.De("Reglas.Entonces")</span>
+                    <ListaRegla @bind-Valor="regla.CampoObligatorio" @bind-Valor:after="AvisarCambio"
+                                Opciones="CamposMenos(regla.CampoCondicion)" Etiqueta="@Textos.De("Reglas.CampoObligatorio", numero)" IdAviso="@idAviso" />
+                    <span>@Textos.De("Reglas.EsObligatorio")</span>
+                    <button type="button" class="quitar regla__quitar" aria-label="@Textos.De("Reglas.Quitar", numero)"
+                            @onclick="() => Quitar(regla)">@Textos.De("Hoja.Quitar")</button>
+                </p>
+                @if (aviso is not null)
+                {
+                    <p class="regla__aviso" id="@idAviso">@aviso</p>
+                }
+            </li>
+        }
+    </ol>
+}
+
+<p class="ayuda">@Textos.De("Reglas.Ayuda")</p>
+
+<button type="button" class="boton agregar" @onclick="Agregar">@Textos.De("Reglas.Agregar")</button>
+
+@code {
+    [Parameter, EditorRequired]
+    public List<FilaRegla> Reglas { get; set; } = [];
+
+    /// <summary>
+    /// Las filas de la hoja de campos, de donde salen los campos y las opciones que se pueden elegir.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public IReadOnlyList<FilaCampo> Filas { get; set; } = [];
+
+    [Parameter, EditorRequired]
+    public IReadOnlyDictionary<FilaRegla, string> Avisos { get; set; } = new Dictionary<FilaRegla, string>();
+
+    /// <summary>
+    /// Avisa a la página que las reglas cambiaron, para que las vuelva a leer.
+    /// </summary>
+    [Parameter]
+    public EventCallback CambioReglas { get; set; }
+
+    private Task AvisarCambio() => CambioReglas.InvokeAsync();
+
+    private static IEnumerable<string> Nombres(IEnumerable<FilaCampo> filas) =>
+        filas.Where(fila => !string.IsNullOrWhiteSpace(fila.Nombre))
+            .Select(fila => fila.Nombre.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase);
+
+    private IEnumerable<string> CamposDeLista() => Nombres(Filas.Where(fila => fila.Tipo == TipoCampo.Lista));
+
+    private IEnumerable<string> CamposMenos(string condicion) =>
+        Nombres(Filas).Where(nombre => !string.Equals(nombre, condicion, StringComparison.OrdinalIgnoreCase));
+
+    private IEnumerable<string> OpcionesDe(string campo) =>
+        Filas.FirstOrDefault(fila => fila.Tipo == TipoCampo.Lista && string.Equals(fila.Nombre.Trim(), campo, StringComparison.OrdinalIgnoreCase))
+            ?.OpcionesSeparadas() ?? [];
+
+    // Al cambiar el campo de la condición, su primera opción reemplaza a la anterior, que era de otra lista.
+    private Task ElegirCondicion(FilaRegla regla)
+    {
+        regla.Opcion = OpcionesDe(regla.CampoCondicion).FirstOrDefault() ?? "";
+        return AvisarCambio();
+    }
+
+    private Task Agregar()
+    {
+        Reglas.Add(new FilaRegla());
+        return AvisarCambio();
+    }
+
+    private Task Quitar(FilaRegla regla)
+    {
+        Reglas.Remove(regla);
+        return AvisarCambio();
+    }
+}

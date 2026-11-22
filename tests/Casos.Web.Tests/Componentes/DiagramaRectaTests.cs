@@ -90,6 +90,23 @@ public class DiagramaRectaTests() : PruebaEnIdioma("es")
             diagrama.Fichas.Select(ficha => (ficha.Texto, ficha.Valida)));
     }
 
+    [Fact]
+    public void Crear_CasosDeTablaDeDecision_NoSonPuntosNiFichasDeLaRecta()
+    {
+        var nit = new CampoTexto("NIT", false, 9, 10);
+        var historia = new Historia("Registro de cliente");
+        historia.AgregarCampo(new CampoLista("tipo de cliente", true, ["Persona", "Empresa"]));
+        historia.AgregarCampo(nit);
+        historia.AgregarRegla(new ReglaObligatorio("tipo de cliente", "Empresa", "NIT"));
+        var casos = GeneradorCasos.Generar(historia);
+        var codigosDeLaTabla = casos.Where(caso => caso.Tecnica == Tecnica.TablaDecision).Select(caso => caso.Codigo).ToHashSet();
+
+        var diagrama = DiagramaRecta.Crear(nit, casos);
+
+        Assert.Equal(4, codigosDeLaTabla.Count);
+        Assert.DoesNotContain(diagrama.Marcas.SelectMany(marca => marca.Codigos).Concat(diagrama.Fichas.SelectMany(ficha => ficha.Codigos)), codigosDeLaTabla.Contains);
+    }
+
     private static DiagramaRecta DiagramaDe(Campo campo)
     {
         var historia = new Historia("Registro de usuario");

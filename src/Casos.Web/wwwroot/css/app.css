@@ -224,6 +224,20 @@ a {
     cursor: pointer;
 }
 
+/* Agregar y quitar filas: los usan la hoja de campos y las reglas. */
+.agregar {
+    margin-top: var(--espacio-3);
+}
+
+.quitar {
+    padding: 0;
+    background: none;
+    border: 0;
+    color: var(--tenue);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 /* Lo usan los botones de exportar y los de los ejemplos. */
 .boton--pequeno {
     padding: 0 var(--espacio-3);

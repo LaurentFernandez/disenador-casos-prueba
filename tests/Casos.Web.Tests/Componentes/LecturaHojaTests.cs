@@ -75,6 +75,50 @@ public class LecturaHojaTests() : PruebaEnIdioma("es")
         Assert.Equal(MensajesCampo.FaltaNombre, lectura.Avisos[fila]);
     }
 
+    [Fact]
+    public void Leer_ReglaValida_LaAgregaALaHistoriaSinAvisos()
+    {
+        var lectura = LecturaHoja.Leer(FilasDeCliente(), Historia, [Regla("tipo de cliente", "Empresa", "NIT")]);
+
+        Assert.False(lectura.TieneAvisos);
+        Assert.Equal(new ReglaObligatorio("tipo de cliente", "Empresa", "NIT"), Assert.Single(lectura.Historia.Reglas));
+    }
+
+    [Fact]
+    public void Leer_ReglaSinNadaElegido_NoAvisaNiLaAgrega()
+    {
+        var lectura = LecturaHoja.Leer(FilasDeCliente(), Historia, [new FilaRegla()]);
+
+        Assert.False(lectura.TieneAvisos);
+        Assert.Empty(lectura.Historia.Reglas);
+    }
+
+    [Theory]
+    [InlineData("tipo de cliente", "Empresa", "", "Completa la regla: elige los dos campos y la opción.")]
+    [InlineData("tipo de cliente", "Empresa", "RUT", "El campo «RUT» no existe.")]
+    [InlineData("tipo de cliente", "Empresa", "edad", "Ese campo ya es obligatorio; márcalo como opcional para usarlo en la regla.")]
+    [InlineData("edad", "Empresa", "NIT", "El campo de la condición tiene que ser de lista.")]
+    public void Leer_ReglaConProblemas_AvisaYOcultaLosCasos(string condicion, string opcion, string obligatorio, string aviso)
+    {
+        var regla = Regla(condicion, opcion, obligatorio);
+
+        var lectura = LecturaHoja.Leer(FilasDeCliente(), Historia, [regla]);
+
+        Assert.True(lectura.TieneAvisos);
+        Assert.Equal(aviso, lectura.AvisosReglas[regla]);
+        Assert.Empty(lectura.Historia.Reglas);
+    }
+
+    private static List<FilaCampo> FilasDeCliente() =>
+    [
+        Entero("edad", 18, 65),
+        new() { Nombre = "tipo de cliente", Tipo = TipoCampo.Lista, Opciones = "Persona, Empresa" },
+        new() { Nombre = "NIT", Tipo = TipoCampo.Texto, Obligatorio = false, Minimo = 9, Maximo = 10 },
+    ];
+
+    private static FilaRegla Regla(string condicion, string opcion, string obligatorio) =>
+        new() { CampoCondicion = condicion, Opcion = opcion, CampoObligatorio = obligatorio };
+
     private static FilaCampo Entero(string nombre, int minimo, int maximo) =>
         new() { Nombre = nombre, Tipo = TipoCampo.Entero, Minimo = minimo, Maximo = maximo };
 

@@ -4,14 +4,23 @@ using Casos.Web.Recursos;
 namespace Casos.Web.Componentes;
 
 /// <summary>
-/// La hoja de campos leída: la historia con los campos válidos y el aviso de cada fila con problemas.
+/// La hoja de campos y las reglas leídas: la historia con los campos y las reglas válidos, y el aviso de cada fila
+/// con problemas.
 /// </summary>
-public sealed record LecturaHoja(Historia Historia, IReadOnlyDictionary<FilaCampo, string> Avisos)
+public sealed record LecturaHoja(
+    Historia Historia,
+    IReadOnlyDictionary<FilaCampo, string> Avisos,
+    IReadOnlyDictionary<FilaRegla, string> AvisosReglas)
 {
     // Sin un nombre escrito, la historia igual necesita uno para el Gherkin y la exportación.
     public static string NombrePorDefecto => Textos.De("Historia.SinNombre");
 
-    public static LecturaHoja Leer(IEnumerable<FilaCampo> filas, string nombreHistoria)
+    /// <summary>
+    /// Con algún aviso no se generan casos, para que ningún campo ni regla quede fuera sin que se note.
+    /// </summary>
+    public bool TieneAvisos => Avisos.Count > 0 || AvisosReglas.Count > 0;
+
+    public static LecturaHoja Leer(IEnumerable<FilaCampo> filas, string nombreHistoria, IEnumerable<FilaRegla>? reglas = null)
     {
         var historia = new Historia(string.IsNullOrWhiteSpace(nombreHistoria) ? NombrePorDefecto : nombreHistoria.Trim());
         var avisos = new Dictionary<FilaCampo, string>();
@@ -23,7 +32,17 @@ public sealed record LecturaHoja(Historia Historia, IReadOnlyDictionary<FilaCamp
             }
         }
 
-        return new LecturaHoja(historia, avisos);
+        // Las reglas van después de los campos porque se comprueban contra ellos.
+        var avisosReglas = new Dictionary<FilaRegla, string>();
+        foreach (var regla in reglas ?? [])
+        {
+            if (!regla.EstaVacia && AvisoDe(regla, historia) is { } aviso)
+            {
+                avisosReglas[regla] = aviso;
+            }
+        }
+
+        return new LecturaHoja(historia, avisos, avisosReglas);
     }
 
     // Si la fila es válida agrega su campo a la historia; si no, devuelve el aviso.
@@ -48,6 +67,25 @@ public sealed record LecturaHoja(Historia Historia, IReadOnlyDictionary<FilaCamp
         catch (CampoInvalidoException excepcion)
         {
             return MensajesCampo.De(excepcion.Error);
+        }
+    }
+
+    // Si la regla es válida la agrega a la historia; si no, devuelve el aviso.
+    private static string? AvisoDe(FilaRegla regla, Historia historia)
+    {
+        if (!regla.EstaCompleta)
+        {
+            return MensajesRegla.Incompleta;
+        }
+
+        try
+        {
+            historia.AgregarRegla(regla.ARegla());
+            return null;
+        }
+        catch (ReglaInvalidaException excepcion)
+        {
+            return MensajesRegla.De(excepcion);
         }
     }
 }

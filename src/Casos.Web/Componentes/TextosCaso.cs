@@ -21,22 +21,37 @@ public static class TextosCaso
             return Textos.De("Caso.TodosValidos");
         }
 
-        return caso.Posicion is { } posicion
-            ? DescripcionLimite(campo, posicion)
-            : DescripcionClase(campo, caso.ClaseProbada, caso.Datos[campo.Nombre]);
+        return (caso.Regla, caso.Posicion) switch
+        {
+            ({ } regla, _) => DescripcionRegla(caso, regla, campo),
+            (_, { } posicion) => DescripcionLimite(campo, posicion),
+            _ => DescripcionClase(campo, caso.ClaseProbada, caso.Datos[campo.Nombre]),
+        };
     }
 
     public static string Resultado(CasoPrueba caso) =>
         caso is { EsValido: false, CampoProbado: { } campo } ? Textos.De("Caso.Rechaza", campo.Nombre) : Textos.De("Caso.Acepta");
 
-    public static string ValorProbado(CasoPrueba caso) =>
-        caso.CampoProbado is { } campo ? $"{campo.Nombre}: {Valor(caso.Datos[campo.Nombre])}" : Textos.De("Caso.ValoresPorDefecto");
+    public static string ValorProbado(CasoPrueba caso) => caso switch
+    {
+        { Regla: { } regla, CampoProbado: { } campo } => $"{DatoDe(caso, regla.CampoCondicion)} · {DatoDe(caso, campo.Nombre)}",
+        { CampoProbado: { } campo } => DatoDe(caso, campo.Nombre),
+        _ => Textos.De("Caso.ValoresPorDefecto"),
+    };
 
-    public static string NombreTecnica(Tecnica tecnica) =>
-        Textos.De(tecnica == Tecnica.ParticionEquivalencia ? "Tecnica.Particion" : "Tecnica.Limite");
+    public static string NombreTecnica(Tecnica tecnica) => Textos.De(tecnica switch
+    {
+        Tecnica.ParticionEquivalencia => "Tecnica.Particion",
+        Tecnica.ValoresLimite => "Tecnica.Limite",
+        _ => "Tecnica.Decision",
+    });
 
-    public static string NombreLargoTecnica(Tecnica tecnica) =>
-        Textos.De(tecnica == Tecnica.ParticionEquivalencia ? "Tecnica.ParticionLarga" : "Tecnica.LimiteLarga");
+    public static string NombreLargoTecnica(Tecnica tecnica) => Textos.De(tecnica switch
+    {
+        Tecnica.ParticionEquivalencia => "Tecnica.ParticionLarga",
+        Tecnica.ValoresLimite => "Tecnica.LimiteLarga",
+        _ => "Tecnica.DecisionLarga",
+    });
 
     public static string Resumen(IReadOnlyCollection<CasoPrueba> casos)
     {
@@ -109,6 +124,16 @@ public static class TextosCaso
             _ => nombre,
         };
     }
+
+    // Por ejemplo «Tipo de cliente: Empresa y NIT sin valor»: el valor de la condición y si el campo obligatorio quedó vacío.
+    private static string DescripcionRegla(CasoPrueba caso, ReglaObligatorio regla, Campo campo) =>
+        Textos.De(
+            caso.Datos[campo.Nombre].Length == 0 ? "Decision.SinValor" : "Decision.ConValor",
+            ConMayuscula(regla.CampoCondicion),
+            caso.Datos[regla.CampoCondicion],
+            campo.Nombre);
+
+    private static string DatoDe(CasoPrueba caso, string campo) => $"{campo}: {Valor(caso.Datos[campo])}";
 
     // En un texto el rango es de longitud; la clave sale del nombre de la posición.
     private static string DescripcionLimite(Campo campo, PosicionLimite posicion) =>

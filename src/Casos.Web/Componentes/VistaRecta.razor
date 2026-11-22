@@ -97,7 +97,7 @@
                             <td>@TextosCaso.Descripcion(caso)</td>
                             <td>
                                 <span class="tecnica">
-                                    <span class="icono icono--@(caso.Tecnica == Tecnica.ParticionEquivalencia ? "particion" : "limite")" aria-hidden="true"></span>
+                                    <span class="icono icono--@ClaseIcono(caso.Tecnica)" aria-hidden="true"></span>
                                     @TextosCaso.NombreTecnica(caso.Tecnica)
                                 </span>
                             </td>
@@ -139,6 +139,13 @@
 
     [Parameter, EditorRequired]
     public IReadOnlyList<CasoPrueba> Casos { get; set; } = [];
+
+    private static string ClaseIcono(Tecnica tecnica) => tecnica switch
+    {
+        Tecnica.ParticionEquivalencia => "particion",
+        Tecnica.ValoresLimite => "limite",
+        _ => "decision",
+    };
 
     private static double X(double posicion) => MargenLateral + posicion * (Ancho - 2 * MargenLateral);
 

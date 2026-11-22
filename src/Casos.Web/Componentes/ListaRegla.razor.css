@@ -1,0 +1,7 @@
+.lista-regla {
+    max-width: 100%;
+    padding: var(--espacio-1) var(--espacio-2);
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-control);
+}

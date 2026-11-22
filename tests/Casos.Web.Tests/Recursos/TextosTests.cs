@@ -77,6 +77,31 @@ public class TextosTests() : PruebaEnIdioma("en")
         Assert.Equal(new[] { "age", "name", "customer type" }, registro.Historia.Campos.Select(campo => campo.Nombre));
     }
 
+    [Fact]
+    public void CasoDeRegla_EnIngles_DescribeLaReglaYUsaSusPasos()
+    {
+        var conRegla = new Historia("Customer sign-up");
+        conRegla.AgregarCampo(new CampoLista("customer type", true, ["Individual", "Company"]));
+        conRegla.AgregarCampo(new CampoTexto("tax ID", false, 9, 10));
+        conRegla.AgregarRegla(new ReglaObligatorio("customer type", "Company", "tax ID"));
+        var companySinTaxId = GeneradorCasos.Generar(conRegla).Single(caso => caso.Tecnica == Tecnica.TablaDecision && !caso.EsValido);
+
+        Assert.Equal("Customer type: Company and tax ID with no value", TextosCaso.Descripcion(companySinTaxId));
+        Assert.Equal("Decision table", TextosCaso.NombreLargoTecnica(companySinTaxId.Tecnica));
+        Assert.EndsWith("And I leave tax ID empty\n    Then the system rejects the tax ID value", GherkinCasos.Escenario(conRegla, companySinTaxId));
+    }
+
+    [Fact]
+    public void AvisoDeRegla_EnIngles_NombraElCampoQueNoExiste()
+    {
+        var regla = new FilaRegla { CampoCondicion = "customer type", Opcion = "Company", CampoObligatorio = "tax ID" };
+        var tipo = new FilaCampo { Nombre = "customer type", Tipo = TipoCampo.Lista, Opciones = "Individual, Company" };
+
+        var lectura = LecturaHoja.Leer([tipo], "", [regla]);
+
+        Assert.Equal("The field “tax ID” does not exist.", lectura.AvisosReglas[regla]);
+    }
+
     private static IEnumerable<string> ClavesDe(ResourceManager recursos, CultureInfo cultura) =>
         recursos.GetResourceSet(cultura, createIfNotExists: true, tryParents: false)!
             .Cast<DictionaryEntry>()

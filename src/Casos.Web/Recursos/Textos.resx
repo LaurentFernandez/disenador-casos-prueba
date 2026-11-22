@@ -20,7 +20,7 @@
   <data name="Pagina.NombreDeLaHistoria" xml:space="preserve"><value>Nombre de la historia</value></data>
   <data name="Pagina.EjemploHistoria" xml:space="preserve"><value>Ejemplo: Registro de usuario</value></data>
   <data name="Pagina.CasosGenerados" xml:space="preserve"><value>Casos generados</value></data>
-  <data name="Pagina.CorrigeAvisos" xml:space="preserve"><value>Corrige los avisos de la hoja para ver los casos.</value></data>
+  <data name="Pagina.CorrigeAvisos" xml:space="preserve"><value>Corrige los avisos de los campos y las reglas para ver los casos.</value></data>
   <data name="Pagina.AgregaCampo" xml:space="preserve"><value>Agrega un campo a la hoja para ver sus casos.</value></data>
   <data name="NoEncontrada.Titulo" xml:space="preserve"><value>Página no encontrada</value></data>
   <data name="NoEncontrada.Texto" xml:space="preserve"><value>Esta dirección no existe en el diseñador.</value></data>
@@ -61,6 +61,26 @@
   <data name="Aviso.LongitudNegativa" xml:space="preserve"><value>La longitud no puede ser negativa.</value></data>
   <data name="Aviso.LongitudExcesiva" xml:space="preserve"><value>La longitud máxima no puede pasar de {0} caracteres.</value></data>
   <data name="Aviso.RangoInvalido" xml:space="preserve"><value>El mínimo no puede ser mayor que el máximo.</value></data>
+  <data name="Aviso.ReglaIncompleta" xml:space="preserve"><value>Completa la regla: elige los dos campos y la opción.</value></data>
+  <data name="Aviso.CampoInexistente" xml:space="preserve"><value>El campo «{0}» no existe.</value></data>
+  <data name="Aviso.CondicionNoEsLista" xml:space="preserve"><value>El campo de la condición tiene que ser de lista.</value></data>
+  <data name="Aviso.OpcionInexistente" xml:space="preserve"><value>La opción no está en la lista del campo.</value></data>
+  <data name="Aviso.MismoCampo" xml:space="preserve"><value>Elige un campo obligatorio distinto al de la condición.</value></data>
+  <data name="Aviso.CampoYaObligatorio" xml:space="preserve"><value>Ese campo ya es obligatorio; márcalo como opcional para usarlo en la regla.</value></data>
+
+  <!-- Reglas de negocio -->
+  <data name="Reglas.Titulo" xml:space="preserve"><value>Reglas de negocio</value></data>
+  <data name="Reglas.Ayuda" xml:space="preserve"><value>Una regla hace obligatorio un campo opcional cuando un campo de lista tiene una opción. Cada regla agrega los casos de su tabla de decisión.</value></data>
+  <data name="Reglas.Agregar" xml:space="preserve"><value>Agregar regla</value></data>
+  <data name="Reglas.Si" xml:space="preserve"><value>Si</value></data>
+  <data name="Reglas.Es" xml:space="preserve"><value>es</value></data>
+  <data name="Reglas.Entonces" xml:space="preserve"><value>entonces</value></data>
+  <data name="Reglas.EsObligatorio" xml:space="preserve"><value>es obligatorio</value></data>
+  <data name="Reglas.Elegir" xml:space="preserve"><value>Elige…</value></data>
+  <data name="Reglas.CampoCondicion" xml:space="preserve"><value>Campo de la condición de la regla {0}</value></data>
+  <data name="Reglas.Opcion" xml:space="preserve"><value>Opción de la regla {0}</value></data>
+  <data name="Reglas.CampoObligatorio" xml:space="preserve"><value>Campo obligatorio de la regla {0}</value></data>
+  <data name="Reglas.Quitar" xml:space="preserve"><value>Quitar la regla {0}</value></data>
   <data name="Historia.SinNombre" xml:space="preserve"><value>Historia sin nombre</value></data>
 
   <!-- Ejemplos listos -->
@@ -99,14 +119,14 @@
   <data name="Columna.Tecnica" xml:space="preserve"><value>Técnica</value></data>
   <data name="Columna.ValorProbado" xml:space="preserve"><value>Valor probado</value></data>
   <data name="Columna.Resultado" xml:space="preserve"><value>Resultado esperado</value></data>
-  <data name="Matriz.Ayuda" xml:space="preserve"><value>Cada fila cambia un solo campo: la celda resaltada es el valor que se prueba y las demás llevan su valor por defecto.</value></data>
+  <data name="Matriz.Ayuda" xml:space="preserve"><value>Cada fila cambia un solo campo, o los dos de una regla: las celdas resaltadas son los valores que se prueban y las demás llevan su valor por defecto.</value></data>
   <data name="Matriz.Titulo" xml:space="preserve"><value>Casos de prueba con el valor de cada campo</value></data>
   <data name="Matriz.ValorProbado" xml:space="preserve"><value>valor probado</value></data>
   <data name="Recta.Titulo" xml:space="preserve"><value>Casos de prueba</value></data>
   <data name="Recta.FueraDeLaRecta" xml:space="preserve"><value>Fuera de la recta:</value></data>
   <data name="Recta.ListaSinRango" xml:space="preserve"><value>Una lista no tiene rango: cada opción es una clase.</value></data>
   <data name="Recta.AyudaEscala" xml:space="preserve"><value>Las rectas no están a escala. En un texto, la recta es la longitud en caracteres.</value></data>
-  <data name="Recta.AyudaCasos" xml:space="preserve"><value>Cada caso cambia un solo campo. Pasa el cursor o el foco por un caso para verlo en su recta.</value></data>
+  <data name="Recta.AyudaCasos" xml:space="preserve"><value>Cada caso cambia un solo campo, o los dos de una regla. Pasa el cursor o el foco por un caso para verlo en su recta; los de tabla de decisión no están en las rectas.</value></data>
   <data name="Recta.Descripcion" xml:space="preserve"><value>Recta de {0}: {1}. Valores de partición: {2}. Valores límite: {3}.</value></data>
   <data name="Gherkin.Ayuda" xml:space="preserve"><value>Un texto se describe por su longitud, por ejemplo «un texto de 26 caracteres», para que el escenario se pueda leer.</value></data>
 
@@ -119,6 +139,10 @@
   <data name="Tecnica.Limite" xml:space="preserve"><value>Límite</value></data>
   <data name="Tecnica.ParticionLarga" xml:space="preserve"><value>Partición de equivalencia</value></data>
   <data name="Tecnica.LimiteLarga" xml:space="preserve"><value>Valores límite</value></data>
+  <data name="Tecnica.Decision" xml:space="preserve"><value>Decisión</value></data>
+  <data name="Tecnica.DecisionLarga" xml:space="preserve"><value>Tabla de decisión</value></data>
+  <data name="Decision.SinValor" xml:space="preserve"><value>{0}: {1} y {2} sin valor</value></data>
+  <data name="Decision.ConValor" xml:space="preserve"><value>{0}: {1} y {2} con valor</value></data>
   <data name="Resumen" xml:space="preserve"><value>{0} casos: {1} y {2}.</value></data>
   <data name="Resumen.AceptadoUno" xml:space="preserve"><value>{0} se acepta</value></data>
   <data name="Resumen.AceptadoVarios" xml:space="preserve"><value>{0} se aceptan</value></data>

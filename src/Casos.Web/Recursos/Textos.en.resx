@@ -20,7 +20,7 @@
   <data name="Pagina.NombreDeLaHistoria" xml:space="preserve"><value>Story name</value></data>
   <data name="Pagina.EjemploHistoria" xml:space="preserve"><value>Example: User sign-up</value></data>
   <data name="Pagina.CasosGenerados" xml:space="preserve"><value>Generated cases</value></data>
-  <data name="Pagina.CorrigeAvisos" xml:space="preserve"><value>Fix the warnings in the sheet to see the cases.</value></data>
+  <data name="Pagina.CorrigeAvisos" xml:space="preserve"><value>Fix the warnings in the fields and rules to see the cases.</value></data>
   <data name="Pagina.AgregaCampo" xml:space="preserve"><value>Add a field to the sheet to see its cases.</value></data>
   <data name="NoEncontrada.Titulo" xml:space="preserve"><value>Page not found</value></data>
   <data name="NoEncontrada.Texto" xml:space="preserve"><value>This address does not exist in the designer.</value></data>
@@ -61,6 +61,26 @@
   <data name="Aviso.LongitudNegativa" xml:space="preserve"><value>The length cannot be negative.</value></data>
   <data name="Aviso.LongitudExcesiva" xml:space="preserve"><value>The maximum length cannot exceed {0} characters.</value></data>
   <data name="Aviso.RangoInvalido" xml:space="preserve"><value>The minimum cannot be greater than the maximum.</value></data>
+  <data name="Aviso.ReglaIncompleta" xml:space="preserve"><value>Complete the rule: choose both fields and the option.</value></data>
+  <data name="Aviso.CampoInexistente" xml:space="preserve"><value>The field “{0}” does not exist.</value></data>
+  <data name="Aviso.CondicionNoEsLista" xml:space="preserve"><value>The condition field must be a list.</value></data>
+  <data name="Aviso.OpcionInexistente" xml:space="preserve"><value>The option is not in the field's list.</value></data>
+  <data name="Aviso.MismoCampo" xml:space="preserve"><value>Choose a required field other than the condition field.</value></data>
+  <data name="Aviso.CampoYaObligatorio" xml:space="preserve"><value>That field is already required; mark it as optional to use it in the rule.</value></data>
+
+  <!-- Reglas de negocio -->
+  <data name="Reglas.Titulo" xml:space="preserve"><value>Business rules</value></data>
+  <data name="Reglas.Ayuda" xml:space="preserve"><value>A rule makes an optional field required when a list field has a given option. Each rule adds the cases of its decision table.</value></data>
+  <data name="Reglas.Agregar" xml:space="preserve"><value>Add rule</value></data>
+  <data name="Reglas.Si" xml:space="preserve"><value>If</value></data>
+  <data name="Reglas.Es" xml:space="preserve"><value>is</value></data>
+  <data name="Reglas.Entonces" xml:space="preserve"><value>then</value></data>
+  <data name="Reglas.EsObligatorio" xml:space="preserve"><value>is required</value></data>
+  <data name="Reglas.Elegir" xml:space="preserve"><value>Choose…</value></data>
+  <data name="Reglas.CampoCondicion" xml:space="preserve"><value>Rule {0} condition field</value></data>
+  <data name="Reglas.Opcion" xml:space="preserve"><value>Rule {0} option</value></data>
+  <data name="Reglas.CampoObligatorio" xml:space="preserve"><value>Rule {0} required field</value></data>
+  <data name="Reglas.Quitar" xml:space="preserve"><value>Remove rule {0}</value></data>
   <data name="Historia.SinNombre" xml:space="preserve"><value>Untitled story</value></data>
 
   <!-- Ejemplos listos -->
@@ -99,14 +119,14 @@
   <data name="Columna.Tecnica" xml:space="preserve"><value>Technique</value></data>
   <data name="Columna.ValorProbado" xml:space="preserve"><value>Tested value</value></data>
   <data name="Columna.Resultado" xml:space="preserve"><value>Expected result</value></data>
-  <data name="Matriz.Ayuda" xml:space="preserve"><value>Each row changes a single field: the highlighted cell is the value under test and the others keep their default value.</value></data>
+  <data name="Matriz.Ayuda" xml:space="preserve"><value>Each row changes a single field, or the two fields of a rule: the highlighted cells are the values under test and the others keep their default value.</value></data>
   <data name="Matriz.Titulo" xml:space="preserve"><value>Test cases with the value of each field</value></data>
   <data name="Matriz.ValorProbado" xml:space="preserve"><value>tested value</value></data>
   <data name="Recta.Titulo" xml:space="preserve"><value>Test cases</value></data>
   <data name="Recta.FueraDeLaRecta" xml:space="preserve"><value>Off the line:</value></data>
   <data name="Recta.ListaSinRango" xml:space="preserve"><value>A list has no range: each option is a class.</value></data>
   <data name="Recta.AyudaEscala" xml:space="preserve"><value>The lines are not to scale. For a text, the line is the length in characters.</value></data>
-  <data name="Recta.AyudaCasos" xml:space="preserve"><value>Each case changes a single field. Hover over or focus a case to see it on its line.</value></data>
+  <data name="Recta.AyudaCasos" xml:space="preserve"><value>Each case changes a single field, or the two fields of a rule. Hover over or focus a case to see it on its line; decision table cases are not on the lines.</value></data>
   <data name="Recta.Descripcion" xml:space="preserve"><value>Line for {0}: {1}. Partition values: {2}. Boundary values: {3}.</value></data>
   <data name="Gherkin.Ayuda" xml:space="preserve"><value>A text is described by its length, for example “a text of 26 characters”, so that the scenario stays readable.</value></data>
 
@@ -119,6 +139,10 @@
   <data name="Tecnica.Limite" xml:space="preserve"><value>Boundary</value></data>
   <data name="Tecnica.ParticionLarga" xml:space="preserve"><value>Equivalence partitioning</value></data>
   <data name="Tecnica.LimiteLarga" xml:space="preserve"><value>Boundary values</value></data>
+  <data name="Tecnica.Decision" xml:space="preserve"><value>Decision</value></data>
+  <data name="Tecnica.DecisionLarga" xml:space="preserve"><value>Decision table</value></data>
+  <data name="Decision.SinValor" xml:space="preserve"><value>{0}: {1} and {2} with no value</value></data>
+  <data name="Decision.ConValor" xml:space="preserve"><value>{0}: {1} and {2} with a value</value></data>
   <data name="Resumen" xml:space="preserve"><value>{0} cases: {1} and {2}.</value></data>
   <data name="Resumen.AceptadoUno" xml:space="preserve"><value>{0} accepted</value></data>
   <data name="Resumen.AceptadoVarios" xml:space="preserve"><value>{0} accepted</value></data>

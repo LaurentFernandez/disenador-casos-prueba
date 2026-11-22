@@ -39,6 +39,9 @@ public sealed class FilaCampo
         _ => null,
     };
 
-    private string[] OpcionesSeparadas() =>
+    /// <summary>
+    /// Las opciones escritas, sin espacios sobrantes ni vacías; también las ofrecen las reglas.
+    /// </summary>
+    public string[] OpcionesSeparadas() =>
         Opciones.Split(SeparadorOpciones, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
 }

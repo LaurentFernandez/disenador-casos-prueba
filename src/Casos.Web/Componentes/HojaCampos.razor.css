@@ -69,15 +69,6 @@
     accent-color: var(--tinta);
 }
 
-.quitar {
-    padding: 0;
-    background: none;
-    border: 0;
-    color: var(--tenue);
-    text-decoration: underline;
-    cursor: pointer;
-}
-
 .hoja .fila-aviso td {
     padding: var(--espacio-2) var(--espacio-3);
     white-space: normal;
@@ -90,8 +81,4 @@
     padding: var(--espacio-4);
     white-space: normal;
     color: var(--tenue);
-}
-
-.agregar {
-    margin-top: var(--espacio-3);
 }

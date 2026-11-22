@@ -1,0 +1,36 @@
+<select class="lista-regla" value="@Valor" @onchange="Elegir" aria-label="@Etiqueta" aria-describedby="@IdAviso">
+    <option @key="SinElegir" value="">@Textos.De("Reglas.Elegir")</option>
+    @foreach (var opcion in OpcionesConElegido())
+    {
+        @* La clave conserva la opción elegida cuando cambia el orden; sin ella el navegador mostraría otra. *@
+        <option @key="opcion" value="@opcion">@opcion</option>
+    }
+</select>
+
+@code {
+    private static readonly object SinElegir = new();
+
+    [Parameter]
+    public string Valor { get; set; } = "";
+
+    [Parameter]
+    public EventCallback<string> ValorChanged { get; set; }
+
+    [Parameter, EditorRequired]
+    public IEnumerable<string> Opciones { get; set; } = [];
+
+    [Parameter, EditorRequired]
+    public string Etiqueta { get; set; } = "";
+
+    [Parameter]
+    public string? IdAviso { get; set; }
+
+    // Si lo elegido ya no está entre las opciones (un campo renombrado o quitado), se sigue mostrando para que el aviso se entienda.
+    private IEnumerable<string> OpcionesConElegido()
+    {
+        var opciones = Opciones.ToList();
+        return Valor == "" || opciones.Contains(Valor) ? opciones : opciones.Prepend(Valor);
+    }
+
+    private Task Elegir(ChangeEventArgs evento) => ValorChanged.InvokeAsync(evento.Value?.ToString() ?? "");
+}
