@@ -347,7 +347,7 @@ Escenario: Usar sin conexión
 ```
 
 **Prioridad:** Baja
-**Estado:** Pendiente
+**Estado:** Hecha
 
 ## Fase 3. Técnicas avanzadas
 
