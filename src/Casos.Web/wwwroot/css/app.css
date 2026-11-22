@@ -25,6 +25,8 @@
     --tenue: #55607A;
     --valido: #256A80;
     --valido-fondo: #D5EBF1;
+    --resalte: #F2B705;
+    --resalte-fondo: #FFF5D1;
     --invalido: #A24A16;
     --invalido-trama: rgba(162, 74, 22, 0.16);
     --trama-invalida: repeating-linear-gradient(45deg, var(--invalido-trama) 0 2px, transparent 2px 7px);
@@ -42,6 +44,9 @@
     --espacio-4: 16px;
     --espacio-6: 24px;
     --espacio-12: 48px;
+
+    --tamano-icono: 11px;
+    --ancho-muestra: 20px;
 
     --radio: 8px;
     --radio-control: 6px;
@@ -119,6 +124,67 @@ a {
     margin: var(--espacio-2) 0 0;
     color: var(--tenue);
     font-size: var(--tamano-pequeno);
+}
+
+.ayuda--arriba {
+    margin: 0 0 var(--espacio-2);
+}
+
+/* Íconos y celdas que comparten la leyenda y las vistas de los casos. */
+.icono,
+.muestra {
+    display: inline-block;
+    flex: none;
+    height: var(--tamano-icono);
+}
+
+.icono {
+    width: var(--tamano-icono);
+    background: var(--tinta);
+}
+
+.icono--particion {
+    border-radius: 50%;
+}
+
+.icono--limite {
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.muestra {
+    width: var(--ancho-muestra);
+}
+
+.muestra--valida {
+    background: var(--valido-fondo);
+    border: 1px solid var(--valido);
+}
+
+.muestra--invalida {
+    background: repeating-linear-gradient(45deg, var(--invalido) 0 2px, var(--superficie) 2px 6px);
+    border: 1px solid var(--invalido);
+}
+
+.tecnica {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-2);
+}
+
+.resultado {
+    font-weight: 600;
+}
+
+.resultado--acepta {
+    color: var(--valido);
+}
+
+.resultado--rechaza {
+    color: var(--invalido);
+}
+
+.vacio {
+    font-style: italic;
 }
 
 .boton {

@@ -1,68 +1,3 @@
-.vista-matriz {
-    --tamano-icono: 11px;
-    --ancho-muestra: 20px;
-}
-
-.resumen {
-    margin: 0 0 var(--espacio-2);
-    color: var(--tenue);
-}
-
-.leyenda {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--espacio-1) var(--espacio-4);
-    margin: 0 0 var(--espacio-2);
-    padding: 0;
-    list-style: none;
-    color: var(--tenue);
-    font-size: var(--tamano-pequeno);
-}
-
-.leyenda li {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--espacio-2);
-}
-
-.icono,
-.muestra {
-    display: inline-block;
-    flex: none;
-    height: var(--tamano-icono);
-}
-
-.icono {
-    width: var(--tamano-icono);
-    background: var(--tinta);
-}
-
-.icono--particion {
-    border-radius: 50%;
-}
-
-.icono--limite {
-    clip-path: polygon(50% 0, 100% 100%, 0 100%);
-}
-
-.muestra {
-    width: var(--ancho-muestra);
-}
-
-.muestra--valida {
-    background: var(--valido-fondo);
-    border: 1px solid var(--valido);
-}
-
-.muestra--invalida {
-    background: repeating-linear-gradient(45deg, var(--invalido) 0 2px, var(--superficie) 2px 6px);
-    border: 1px solid var(--invalido);
-}
-
-.ayuda--arriba {
-    margin: 0 0 var(--espacio-2);
-}
-
 .matriz {
     width: 100%;
     border-collapse: collapse;
@@ -116,27 +51,5 @@
 
 .valor--invalido {
     background: var(--trama-invalida);
-    color: var(--invalido);
-}
-
-.vacio {
-    font-style: italic;
-}
-
-.tecnica {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--espacio-2);
-}
-
-.resultado {
-    font-weight: 600;
-}
-
-.resultado--acepta {
-    color: var(--valido);
-}
-
-.resultado--rechaza {
     color: var(--invalido);
 }

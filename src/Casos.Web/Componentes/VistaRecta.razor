@@ -1,0 +1,153 @@
+@using System.Globalization
+@using Casos.Core.Modelo
+
+<svg class="definiciones" aria-hidden="true" focusable="false">
+    <defs>
+        <pattern id="trama-recta" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect class="trama__fondo" width="7" height="7"></rect>
+            <rect class="trama__linea" width="2.5" height="7"></rect>
+        </pattern>
+    </defs>
+</svg>
+
+<div class="vista-recta">
+    <div class="vista-recta__campos">
+        <div class="panel">
+            @foreach (var campo in Campos)
+            {
+                var diagrama = DiagramaRecta.Crear(campo, Casos);
+                <article class="campo-recta" aria-label="@campo.Nombre">
+                    <div class="campo-recta__definicion">
+                        <h3 class="campo-recta__nombre">@campo.Nombre</h3>
+                        <p class="campo-recta__reglas">@TextosCaso.Reglas(campo)</p>
+                    </div>
+
+                    @if (diagrama.Bandas.Count > 0)
+                    {
+                        <div class="desplazable">
+                            <svg class="recta" viewBox="0 0 @Ancho @Alto" role="img" aria-label="@TextosCaso.DescripcionRecta(diagrama)">
+                                @* Cada <text> va dentro de un <g>: suelto en un bloque de código, Razor lo toma por su etiqueta especial. *@
+                                @foreach (var banda in diagrama.Bandas)
+                                {
+                                    <g>
+                                        <text class="nombre-clase" x="@Svg(X((banda.Desde + banda.Hasta) / 2))" y="@YNombre" text-anchor="middle">@banda.Nombre</text>
+                                        <rect class="region @(banda.Valida ? "region--valida" : "region--invalida")"
+                                              x="@Svg(X(banda.Desde))" y="@YBanda" width="@Svg(X(banda.Hasta) - X(banda.Desde))" height="@AltoBanda"></rect>
+                                    </g>
+                                }
+                                @foreach (var marca in diagrama.Marcas)
+                                {
+                                    var x = X(marca.Posicion);
+                                    var esParticion = marca.Tecnica == Tecnica.ParticionEquivalencia;
+                                    <g class="@ConResaltado("marca", marca.Codigos)">
+                                        <text x="@Svg(x)" y="@(esParticion ? YEtiquetaParticion : YEtiquetaLimite)" text-anchor="middle">@marca.Valor</text>
+                                        @if (esParticion)
+                                        {
+                                            <circle cx="@Svg(x)" cy="@YCentro" r="@Radio"></circle>
+                                        }
+                                        else
+                                        {
+                                            <path d="@Triangulo(x)"></path>
+                                        }
+                                    </g>
+                                }
+                            </svg>
+                        </div>
+                    }
+
+                    @if (diagrama.Fichas.Count > 0)
+                    {
+                        <p class="campo-recta__nota">@(diagrama.Bandas.Count > 0 ? "Fuera de la recta:" : "Una lista no tiene rango: cada opción es una clase.")</p>
+                        <ul class="fichas">
+                            @foreach (var ficha in diagrama.Fichas)
+                            {
+                                <li class="@ConResaltado(ficha.Valida ? "ficha ficha--valida" : "ficha", ficha.Codigos)">
+                                    @ficha.Texto<span class="visualmente-oculto">, @(ficha.Valida ? "válido" : "inválido")</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </article>
+            }
+        </div>
+        <p class="ayuda">Las rectas no están a escala. En un texto, la recta es la longitud en caracteres.</p>
+    </div>
+
+    <div>
+        <p class="ayuda ayuda--arriba">Cada caso cambia un solo campo. Pasa el cursor o el foco por un caso para verlo en su recta.</p>
+        <div class="panel desplazable">
+            <table class="tabla-casos">
+                <caption class="visualmente-oculto">Casos de prueba</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Código</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Técnica</th>
+                        <th scope="col">Valor probado</th>
+                        <th scope="col">Resultado esperado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var caso in Casos)
+                    {
+                        <tr class="fila" tabindex="0"
+                            @onmouseenter="() => resaltado = caso.Codigo" @onmouseleave="() => resaltado = null"
+                            @onfocus="() => resaltado = caso.Codigo" @onblur="() => resaltado = null">
+                            <th scope="row">@caso.Codigo</th>
+                            <td>@TextosCaso.Descripcion(caso)</td>
+                            <td>
+                                <span class="tecnica">
+                                    <span class="icono icono--@(caso.Tecnica == Tecnica.ParticionEquivalencia ? "particion" : "limite")" aria-hidden="true"></span>
+                                    @TextosCaso.NombreTecnica(caso.Tecnica)
+                                </span>
+                            </td>
+                            <td class="dato-probado">@TextosCaso.ValorProbado(caso)</td>
+                            <td>
+                                <span class="resultado resultado--@(caso.EsValido ? "acepta" : "rechaza")">
+                                    <span aria-hidden="true">@(caso.EsValido ? "✓" : "✕")</span>
+                                    @TextosCaso.Resultado(caso)
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    // Geometría de cada recta, en unidades del viewBox.
+    private const int Ancho = 640;
+    private const int Alto = 112;
+    private const int MargenLateral = 16;
+    private const int YNombre = 14;
+    private const int YEtiquetaParticion = 38;
+    private const int YBanda = 48;
+    private const int AltoBanda = 22;
+    private const int YCentro = 59;
+    private const int Radio = 7;
+    private const int YTriangulo = 74;
+    private const int MitadTriangulo = 8;
+    private const int AltoTriangulo = 13;
+    private const int YEtiquetaLimite = 106;
+
+    private string? resaltado;
+
+    [Parameter, EditorRequired]
+    public IReadOnlyList<Campo> Campos { get; set; } = [];
+
+    [Parameter, EditorRequired]
+    public IReadOnlyList<CasoPrueba> Casos { get; set; } = [];
+
+    private static double X(double posicion) => MargenLateral + posicion * (Ancho - 2 * MargenLateral);
+
+    // Los atributos de SVG piden punto decimal, sin importar el idioma del navegador.
+    private static string Svg(double valor) => valor.ToString("0.#", CultureInfo.InvariantCulture);
+
+    private static string Triangulo(double x) =>
+        $"M{Svg(x)} {YTriangulo} l{MitadTriangulo} {AltoTriangulo} h-{2 * MitadTriangulo} z";
+
+    private string ConResaltado(string clase, IReadOnlyList<string> codigos) =>
+        resaltado is not null && codigos.Contains(resaltado) ? $"{clase} resaltada" : clase;
+}
