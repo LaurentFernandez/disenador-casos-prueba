@@ -8,6 +8,7 @@ namespace Casos.Core.Tests;
 public class GeneradorCasosTests
 {
     private static readonly string NombreValido = new('a', 26);
+    private static readonly string NitConValor = new('a', 9);
 
     [Fact]
     public void Generar_UnCampoEntero_DevuelveLosCasosEnOrdenConCodigosConsecutivos()
@@ -112,6 +113,40 @@ public class GeneradorCasosTests
     }
 
     [Fact]
+    public void Generar_ConUnaRegla_AgregaAlFinalSuTablaDeDecisionConCodigosConsecutivos()
+    {
+        var sinRegla = GeneradorCasos.Generar(HistoriaConClienteYNit());
+        var historia = HistoriaConClienteYNit();
+        var regla = new ReglaObligatorio("tipo de cliente", "Empresa", "NIT");
+        historia.AgregarRegla(regla);
+
+        var casos = GeneradorCasos.Generar(historia);
+
+        var tabla = casos.Skip(sinRegla.Count).ToList();
+        Assert.Equal(sinRegla.Select(caso => caso.Codigo), casos.Take(sinRegla.Count).Select(caso => caso.Codigo));
+        Assert.Equal(new[]
+        {
+            ($"CP-{sinRegla.Count + 1:000}", "Persona", "", true),
+            ($"CP-{sinRegla.Count + 2:000}", "Persona", NitConValor, true),
+            ($"CP-{sinRegla.Count + 3:000}", "Empresa", "", false),
+            ($"CP-{sinRegla.Count + 4:000}", "Empresa", NitConValor, true),
+        }, tabla.Select(caso => (caso.Codigo, caso.Datos["tipo de cliente"], caso.Datos["NIT"], caso.EsValido)));
+        Assert.All(tabla, caso =>
+        {
+            Assert.Equal(TablaDecision, caso.Tecnica);
+            Assert.Equal(regla, caso.Regla);
+            Assert.Equal("NIT", caso.CampoProbado?.Nombre);
+            Assert.Equal("41", caso.Datos["edad"]);
+        });
+    }
+
+    [Fact]
+    public void Generar_SinReglas_NingunCasoTraeRegla()
+    {
+        Assert.All(GeneradorCasos.Generar(HistoriaConClienteYNit()), caso => Assert.Null(caso.Regla));
+    }
+
+    [Fact]
     public void Generar_HistoriaSinCampos_NoDevuelveCasos()
     {
         Assert.Empty(GeneradorCasos.Generar(new Historia("Registro de usuario")));
@@ -130,4 +165,10 @@ public class GeneradorCasosTests
 
     private static Historia HistoriaConEdadYNombre() =>
         HistoriaCon(new CampoEntero("edad", true, 18, 65), new CampoTexto("nombre", true, 3, 50));
+
+    private static Historia HistoriaConClienteYNit() =>
+        HistoriaCon(
+            new CampoEntero("edad", true, 18, 65),
+            new CampoLista("tipo de cliente", true, ["Persona", "Empresa"]),
+            new CampoTexto("NIT", false, 9, 10));
 }
