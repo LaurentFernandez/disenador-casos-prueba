@@ -42,6 +42,7 @@ public static class GeneradorCasos
                 cambio?.Tecnica ?? Tecnica.ParticionEquivalencia,
                 cambio?.Campo,
                 cambio?.Clase.Tipo,
+                cambio?.Posicion,
                 cambio?.Clase.EsValida ?? true,
                 Datos(historia.Campos, porDefecto, cambio)))
             .ToArray();
@@ -51,9 +52,16 @@ public static class GeneradorCasos
     {
         CampoEntero entero => ValoresLimite.Generar(entero.Minimo, entero.Maximo)
             .Select(valor => new Cambio(
-                Tecnica.ValoresLimite, entero, ClaseDelLimite(valor, entero.Minimo, entero.Maximo, Ejemplos.Numero(valor)))),
+                Tecnica.ValoresLimite,
+                entero,
+                ClaseDelLimite(valor, entero.Minimo, entero.Maximo, Ejemplos.Numero(valor)),
+                PosicionDe(valor, entero.Minimo, entero.Maximo))),
         CampoTexto texto => ValoresLimite.GenerarLongitudes(texto)
-            .Select(longitud => new Cambio(Tecnica.ValoresLimite, texto, ClaseDeLongitud(texto, longitud))),
+            .Select(longitud => new Cambio(
+                Tecnica.ValoresLimite,
+                texto,
+                ClaseDeLongitud(texto, longitud),
+                PosicionDe(longitud, texto.LongitudMinima, texto.LongitudMaxima))),
         // Una lista no tiene rango, así que no tiene valores límite.
         _ => [],
     };
@@ -69,6 +77,15 @@ public static class GeneradorCasos
         valor < minimo ? new(TipoClase.MenorQueMinimo, false, ejemplo)
         : valor > maximo ? new(TipoClase.MayorQueMaximo, false, ejemplo)
         : new(TipoClase.DentroDelRango, true, ejemplo);
+
+    // En un rango corto un valor puede ser a la vez mínimo, máximo o vecino de ambos: se informa el primero que aplique.
+    private static PosicionLimite PosicionDe(long valor, long minimo, long maximo) =>
+        valor < minimo ? PosicionLimite.DebajoDelMinimo
+        : valor == minimo ? PosicionLimite.EnElMinimo
+        : valor > maximo ? PosicionLimite.EncimaDelMaximo
+        : valor == maximo ? PosicionLimite.EnElMaximo
+        : valor == minimo + 1 ? PosicionLimite.EncimaDelMinimo
+        : PosicionLimite.DebajoDelMaximo;
 
     private static IReadOnlyDictionary<string, string> Datos(
         IReadOnlyList<Campo> campos, IReadOnlyDictionary<Campo, ClaseEquivalencia> porDefecto, Cambio? cambio)
@@ -89,5 +106,5 @@ public static class GeneradorCasos
     /// <summary>
     /// El valor que un caso cambia respecto a los valores por defecto.
     /// </summary>
-    private sealed record Cambio(Tecnica Tecnica, Campo Campo, ClaseEquivalencia Clase);
+    private sealed record Cambio(Tecnica Tecnica, Campo Campo, ClaseEquivalencia Clase, PosicionLimite? Posicion = null);
 }
