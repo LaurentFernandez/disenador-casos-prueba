@@ -9,7 +9,7 @@ Es un proyecto de portafolio de Laurent Andrés Fernandez (ingeniero de software
 ## Decisiones tomadas (no reabrir sin preguntar a Laurent)
 
 - **Costo cero:** solo herramientas gratuitas u open source. Nada de APIs de pago. Sin IA en el núcleo; la Fase 4 opcional usaría IA local con Ollama, solo en modo local.
-- **Aplicación web** en Blazor WebAssembly con PWA, publicada gratis en GitHub Pages, sin servidor.
+- **Aplicación web** en Blazor WebAssembly con PWA, publicada gratis en GitHub Pages, sin servidor: `https://laurentfernandez.github.io/disenador-casos-prueba/`. La publica el trabajo `publicar` de `ci.yml` en cada push a `main` con las pruebas en verde. La base es relativa (`<base href="./" />`) para que la misma compilación sirva en local y en la subcarpeta; no se modifica el `index.html` publicado porque rompería la verificación de integridad del service worker. Si el despliegue falla con "No artifacts named github-pages", es un desfase de la API de GitHub: basta con volver a ejecutar el trabajo.
 - **.NET 10 (LTS).** Pruebas: xUnit para el motor y para la lógica de la interfaz; bUnit para componentes y Playwright para .NET (E2E) desde la Fase 3.
 - **Interfaz en español e inglés**, con `IStringLocalizer` y archivos `.resx` (Fase 2).
 - **Código en español:** clases, métodos, variables y nombres de pruebas, igual que los demás proyectos de Laurent.
@@ -52,9 +52,9 @@ dotnet run --project src/Casos.Web
 ## Estado actual
 
 - **Fases 0 y 1 terminadas.** El motor tiene el modelo de campos con sus validaciones (`Modelo/`), la partición de equivalencia (`Tecnicas/ParticionEquivalencia`) y los valores límite de enteros y de longitud de texto (`Tecnicas/ValoresLimite`).
-- **Fase 2 en curso.** Ya están la generación de casos en el motor (`GeneradorCasos`), el estilo base de la maqueta, la hoja de campos (`Componentes/HojaCampos.razor`), el nombre de la historia y las vistas Matriz, Recta y Gherkin (`Componentes/CasosGenerados.razor`; el Gherkin lo arma `GherkinCasos`) y la exportación a CSV, Markdown y `.feature` (`ExportacionCasos` y `wwwroot/js/descargas.js`). Hay 36 pruebas del motor y 32 de la lógica de la interfaz.
+- **Fase 2 en curso.** Ya están la generación de casos en el motor (`GeneradorCasos`), el estilo base de la maqueta, la hoja de campos (`Componentes/HojaCampos.razor`), el nombre de la historia y las vistas Matriz, Recta y Gherkin (`Componentes/CasosGenerados.razor`; el Gherkin lo arma `GherkinCasos`) y la exportación a CSV, Markdown y `.feature` (`ExportacionCasos` y `wwwroot/js/descargas.js`). La demo está publicada en GitHub Pages. Hay 36 pruebas del motor y 32 de la lógica de la interfaz.
 - **Historias:** HU-01 a HU-07 están hechas, en el motor y en la interfaz, y sus issues están cerrados. HU-01 no tuvo issue porque se hizo antes de crear el repositorio.
-- **Siguiente:** la publicación en GitHub Pages y el cambio de idioma (HU-08).
+- **Siguiente:** el cambio de idioma entre español e inglés (HU-08), lo último de la Fase 2.
 
 ## Fases
 
