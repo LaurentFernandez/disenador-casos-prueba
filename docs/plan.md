@@ -38,6 +38,6 @@ Una aplicación web que genere casos de prueba a partir de historias de usuario 
 |---|---|---|
 | 0. Arranque | Esqueleto de la solución, CI, primeras historias de usuario | Hecha |
 | 1. Motor | Modelo de campos, partición de equivalencia y valores límite, con pruebas | Hecha |
-| 2. Interfaz | Formulario de campos, tabla de resultados, Gherkin, exportaciones, español e inglés, publicación en GitHub Pages | En curso |
+| 2. Interfaz | Formulario de campos, tabla de resultados, Gherkin, exportaciones, español e inglés, publicación en GitHub Pages | Hecha |
 | 3. Técnicas avanzadas | Tablas de decisión y pairwise; pruebas bUnit y Playwright | Pendiente |
 | 4. Opcional | Modo IA local con Ollama para proponer campos a partir de texto libre | Pendiente |
