@@ -60,4 +60,71 @@ public class HistoriaTests
         Assert.Equal(ErrorCampo.NombreRepetido, excepcion.Error);
         Assert.Single(historia.Campos);
     }
+
+    [Theory]
+    [InlineData("NIT")]
+    [InlineData("nit")]
+    public void AgregarRegla_ReglaQueTieneSentido_QuedaEnLaHistoria(string campoObligatorio)
+    {
+        var historia = HistoriaConClienteYNit();
+        var regla = new ReglaObligatorio("tipo de cliente", "Empresa", campoObligatorio);
+
+        historia.AgregarRegla(regla);
+
+        Assert.Equal(regla, Assert.Single(historia.Reglas));
+    }
+
+    [Theory]
+    [InlineData("tipo", "NIT", "tipo")]
+    [InlineData("tipo de cliente", "RUT", "RUT")]
+    public void AgregarRegla_CampoQueNoExiste_IndicaCualFaltaYNoLaAgrega(string campoCondicion, string campoObligatorio, string faltante)
+    {
+        var historia = HistoriaConClienteYNit();
+
+        var excepcion = Assert.Throws<ReglaInvalidaException>(() =>
+            historia.AgregarRegla(new ReglaObligatorio(campoCondicion, "Empresa", campoObligatorio)));
+
+        Assert.Equal(ErrorRegla.CampoInexistente, excepcion.Error);
+        Assert.Equal(faltante, excepcion.CampoInexistente);
+        Assert.Empty(historia.Reglas);
+    }
+
+    [Fact]
+    public void AgregarRegla_HistoriaSinElCampo_AvisaQueNoExisteComoEnHU11()
+    {
+        var historia = new Historia("Registro de cliente");
+        historia.AgregarCampo(new CampoLista("tipo de cliente", true, ["Persona", "Empresa"]));
+
+        var excepcion = Assert.Throws<ReglaInvalidaException>(() =>
+            historia.AgregarRegla(new ReglaObligatorio("tipo de cliente", "Empresa", "NIT")));
+
+        Assert.Equal(ErrorRegla.CampoInexistente, excepcion.Error);
+        Assert.Equal("NIT", excepcion.CampoInexistente);
+    }
+
+    [Theory]
+    [InlineData("NIT", "Empresa", "tipo de cliente", ErrorRegla.CondicionNoEsLista)]
+    [InlineData("tipo de cliente", "Gobierno", "NIT", ErrorRegla.OpcionInexistente)]
+    [InlineData("tipo de cliente", "Empresa", "Tipo de cliente", ErrorRegla.MismoCampo)]
+    [InlineData("tipo de cliente", "Empresa", "edad", ErrorRegla.CampoYaObligatorio)]
+    public void AgregarRegla_ReglaSinSentido_IndicaElErrorYNoLaAgrega(
+        string campoCondicion, string opcion, string campoObligatorio, ErrorRegla error)
+    {
+        var historia = HistoriaConClienteYNit();
+        historia.AgregarCampo(new CampoEntero("edad", true, 18, 65));
+
+        var excepcion = Assert.Throws<ReglaInvalidaException>(() =>
+            historia.AgregarRegla(new ReglaObligatorio(campoCondicion, opcion, campoObligatorio)));
+
+        Assert.Equal(error, excepcion.Error);
+        Assert.Empty(historia.Reglas);
+    }
+
+    private static Historia HistoriaConClienteYNit()
+    {
+        var historia = new Historia("Registro de cliente");
+        historia.AgregarCampo(new CampoLista("tipo de cliente", true, ["Persona", "Empresa"]));
+        historia.AgregarCampo(new CampoTexto("NIT", false, 9, 10));
+        return historia;
+    }
 }
