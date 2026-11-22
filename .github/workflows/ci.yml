@@ -31,11 +31,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.despliegue.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
 
@@ -54,5 +49,17 @@ jobs:
         with:
           path: publicacion/wwwroot
 
+  # En el mismo trabajo que sube el paquete, la API de GitHub a veces todavía no lo veía al desplegar.
+  # Así, además, reintentar el despliegue no vuelve a subir el paquete.
+  desplegar:
+    needs: publicar
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+    steps:
       - id: despliegue
         uses: actions/deploy-pages@v5
