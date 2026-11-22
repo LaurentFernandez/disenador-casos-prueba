@@ -35,6 +35,17 @@ public static class TextosCaso
     public static string NombreTecnica(Tecnica tecnica) =>
         tecnica == Tecnica.ParticionEquivalencia ? "Partición" : "Límite";
 
+    public static string NombreLargoTecnica(Tecnica tecnica) =>
+        tecnica == Tecnica.ParticionEquivalencia ? "Partición de equivalencia" : "Valores límite";
+
+    public static string Resumen(IReadOnlyCollection<CasoPrueba> casos)
+    {
+        var aceptados = casos.Count(caso => caso.EsValido);
+        var rechazados = casos.Count - aceptados;
+        return $"{casos.Count} casos: {aceptados} {(aceptados == 1 ? "se acepta" : "se aceptan")} "
+            + $"y {rechazados} {(rechazados == 1 ? "se rechaza" : "se rechazan")}.";
+    }
+
     // Un texto de relleno largo se resume con su longitud para que se pueda leer.
     public static string Valor(string valor) =>
         valor.Length == 0 ? Vacio

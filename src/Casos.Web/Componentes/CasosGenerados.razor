@@ -1,10 +1,8 @@
 @using Casos.Core.Modelo
+@implements IAsyncDisposable
+@inject IJSRuntime JS
 
-@{
-    var validos = Casos.Count(caso => caso.EsValido);
-}
-
-<p class="resumen">@Casos.Count casos: @validos se aceptan y @(Casos.Count - validos) se rechazan.</p>
+<p class="resumen">@TextosCaso.Resumen(Casos)</p>
 
 <div class="barra-vistas">
     <div class="segmentos" role="tablist" aria-label="Vista de los casos">
@@ -24,6 +22,16 @@
             <li><span class="icono icono--limite" aria-hidden="true"></span>Valor límite</li>
         </ul>
     }
+
+    <div class="exportar" role="group" aria-label="Exportar los casos">
+        <span class="exportar__etiqueta" aria-hidden="true">Exportar</span>
+        <button type="button" class="boton boton--pequeno" aria-label="Descargar en CSV"
+                @onclick="() => Descargar(ExportacionCasos.Csv(Historia, Casos))">CSV</button>
+        <button type="button" class="boton boton--pequeno" aria-label="Descargar en Markdown"
+                @onclick="() => Descargar(ExportacionCasos.Markdown(Historia, Casos))">Markdown</button>
+        <button type="button" class="boton boton--pequeno" aria-label="Descargar en .feature"
+                @onclick="() => Descargar(ExportacionCasos.Feature(Historia, Casos))">.feature</button>
+    </div>
 </div>
 
 <div id="panel-casos" role="tabpanel" aria-labelledby="@IdPestana(Vista)">
@@ -60,5 +68,21 @@
 
     private static string IdPestana(VistaCasos vista) => $"pestana-{vista.ToString().ToLowerInvariant()}";
 
+    private IJSObjectReference? descargas;
+
     private Task Elegir(VistaCasos vista) => VistaChanged.InvokeAsync(vista);
+
+    private async Task Descargar(ExportacionCasos.Archivo archivo)
+    {
+        descargas ??= await JS.InvokeAsync<IJSObjectReference>("import", "./js/descargas.js");
+        await descargas.InvokeVoidAsync("descargar", archivo.Nombre, archivo.Tipo, archivo.Contenido);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (descargas is not null)
+        {
+            await descargas.DisposeAsync();
+        }
+    }
 }
