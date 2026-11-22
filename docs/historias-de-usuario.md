@@ -267,7 +267,7 @@ Escenario: Sin casos generados
 ```
 
 **Prioridad:** Media
-**Estado:** Pendiente
+**Estado:** Hecha
 
 ### HU-08. Cambiar el idioma entre español e inglés
 
