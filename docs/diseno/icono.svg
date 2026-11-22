@@ -1,0 +1,17 @@
+<!-- Ícono de la aplicación: la recta de partición sobre azul tinta, con el punto de partición arriba y los dos
+     límites abajo. El fondo llena todo el cuadro y el dibujo cabe en el círculo central del 80 %, para que sirva
+     también como ícono "maskable". Los PNG de wwwroot (favicon.png, icon-192.png e icon-512.png) salen de aquí. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <pattern id="trama" width="32" height="32" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="32" height="32" fill="#FFFFFF" />
+      <rect width="13" height="32" fill="#A24A16" />
+    </pattern>
+  </defs>
+  <rect width="512" height="512" fill="#16213E" />
+  <rect x="64" y="216" width="100" height="80" rx="8" fill="url(#trama)" />
+  <rect x="174" y="216" width="164" height="80" rx="8" fill="#D5EBF1" />
+  <rect x="348" y="216" width="100" height="80" rx="8" fill="url(#trama)" />
+  <circle cx="256" cy="172" r="26" fill="#FFFFFF" />
+  <path d="M169 314 l24 44 h-48 z M343 314 l24 44 h-48 z" fill="#FFFFFF" />
+</svg>
