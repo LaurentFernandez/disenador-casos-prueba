@@ -38,7 +38,7 @@ Escenario: Rango inválido
 ```
 
 **Prioridad:** Alta
-**Estado:** En desarrollo (hecha en el motor; falta la interfaz)
+**Estado:** Hecha
 
 ### HU-02. Definir los campos de una historia
 
@@ -135,7 +135,7 @@ Escenario: Campo de lista de opciones
 ```
 
 **Prioridad:** Alta
-**Estado:** En desarrollo (hecha en el motor; falta la interfaz)
+**Estado:** Hecha
 
 ### HU-04. Generar los valores límite de la longitud de un texto
 
@@ -157,7 +157,7 @@ Escenario: Longitud mínima de cero
 ```
 
 **Prioridad:** Media
-**Estado:** En desarrollo (hecha en el motor; falta la interfaz)
+**Estado:** Hecha
 
 ## Fase 2. Interfaz
 
