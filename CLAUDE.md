@@ -15,6 +15,7 @@ Es un proyecto de portafolio de Laurent Andrés Fernandez (ingeniero de software
 - **Código en español:** clases, métodos, variables y nombres de pruebas, igual que los demás proyectos de Laurent.
 - **El motor (`Casos.Core`) no depende de la interfaz.** Toda la lógica vive y se prueba ahí; `Casos.Web` solo presenta.
 - **El motor no devuelve textos para mostrar:** devuelve tipos (por ejemplo, los enums `TipoClase` y `ErrorCampo`) y la interfaz arma la descripción o el aviso en español o inglés.
+- **Casos en vivo:** los casos se generan cada vez que cambia la hoja de campos, sin botón. Si alguna fila tiene un aviso, no se muestran casos hasta corregirla. La longitud máxima de un texto es 10 000 caracteres (`CampoTexto.LongitudMaximaPermitida`).
 - **Repositorio:** `github.com/LaurentFernandez/disenador-casos-prueba`, rama `main`. Público.
 - **Diseño visual:** está en `docs/diseno/maqueta.html`. Los campos se editan en una hoja tipo cuadrícula. Los casos se ven en tres vistas a elección del usuario: Matriz (una columna por campo, con el valor probado resaltado), Recta (el diagrama de partición de cada campo) y Gherkin. El estilo es el mismo en todas: títulos en Barlow (incluida en el proyecto, licencia OFL), azul tinta, lo válido en azul verdoso y lo inválido rayado en naranja. Colores, tamaños y espaciados son variables CSS en `wwwroot/css/app.css`; no se usa Bootstrap.
 
@@ -49,9 +50,9 @@ dotnet run --project src/Casos.Web
 ## Estado actual
 
 - **Fases 0 y 1 terminadas.** El motor tiene el modelo de campos con sus validaciones (`Modelo/`), la partición de equivalencia (`Tecnicas/ParticionEquivalencia`) y los valores límite de enteros y de longitud de texto (`Tecnicas/ValoresLimite`).
-- **Fase 2 en curso.** Ya están la generación de casos en el motor (`GeneradorCasos`), el estilo base de la maqueta y la hoja de campos (`Componentes/HojaCampos.razor`). El motor tiene 31 pruebas; la interfaz todavía no tiene pruebas automáticas (bUnit llega en la Fase 3).
-- **Historias:** HU-02 está hecha y su issue (#1) cerrado. HU-01, HU-03, HU-04 y HU-05 están hechas en el motor y les falta la interfaz; sus issues (#2, #5 y #7) siguen abiertos. HU-01 no tiene issue porque se hizo antes de crear el repositorio.
-- **Siguiente:** el botón "Generar casos" y la vista Matriz de HU-05 (#7).
+- **Fase 2 en curso.** Ya están la generación de casos en el motor (`GeneradorCasos`), el estilo base de la maqueta, la hoja de campos (`Componentes/HojaCampos.razor`) y la vista Matriz (`Componentes/VistaMatriz.razor`). El motor tiene 36 pruebas; la interfaz todavía no tiene pruebas automáticas (bUnit llega en la Fase 3).
+- **Historias:** HU-02 y HU-05 están hechas y sus issues (#1 y #7) cerrados. HU-01, HU-03 y HU-04 están hechas en el motor y les falta la interfaz; los issues de HU-03 y HU-04 (#2 y #5) siguen abiertos. HU-01 no tiene issue porque se hizo antes de crear el repositorio.
+- **Siguiente:** la vista Recta, que muestra en la interfaz las clases y los valores límite de cada campo (HU-01, HU-03 y HU-04).
 
 ## Fases
 
