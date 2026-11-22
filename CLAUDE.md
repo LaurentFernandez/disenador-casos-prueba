@@ -16,7 +16,7 @@ Es un proyecto de portafolio de Laurent Andrés Fernandez (ingeniero de software
 - **El motor (`Casos.Core`) no depende de la interfaz.** Toda la lógica vive y se prueba ahí; `Casos.Web` solo presenta.
 - **El motor no devuelve textos para mostrar:** devuelve tipos (por ejemplo, el enum `TipoClase`) y la interfaz arma la descripción en español o inglés.
 - **Repositorio:** `github.com/LaurentFernandez/disenador-casos-prueba`, rama `main`. Público.
-- La interfaz actual es la plantilla de Blazor con Bootstrap; el diseño visual se decide en la Fase 2.
+- **Diseño visual:** está en `docs/diseno/maqueta.html`. Los campos se editan en una hoja tipo cuadrícula. Los casos se ven en tres vistas a elección del usuario: Matriz (una columna por campo, con el valor probado resaltado), Recta (el diagrama de partición de cada campo) y Gherkin. El estilo es el mismo en todas: títulos en Bahnschrift, azul tinta, lo válido en azul verdoso y lo inválido rayado en naranja. Hasta construirlo, la interfaz sigue siendo la plantilla de Blazor con Bootstrap.
 
 ## Estructura
 
@@ -27,6 +27,7 @@ src/Casos.Web/           interfaz Blazor WebAssembly + PWA
 tests/Casos.Core.Tests/  pruebas xUnit del motor
 docs/plan.md             objetivo, técnicas, arquitectura y fases
 docs/historias-de-usuario.md   requerimientos (los escribe Laurent)
+docs/diseno/maqueta.html       maqueta de la interfaz (se abre en el navegador)
 .github/workflows/ci.yml compila y prueba en cada push a main y en cada PR
 ```
 
@@ -48,7 +49,7 @@ dotnet run --project src/Casos.Web
 ## Estado actual
 
 - **Fases 0 y 1 terminadas.** El motor tiene el modelo de campos con sus validaciones (`Modelo/`), la partición de equivalencia (`Tecnicas/ParticionEquivalencia`) y los valores límite de enteros y de longitud de texto (`Tecnicas/ValoresLimite`), con 24 pruebas. HU-01 a HU-04 están hechas en el motor y les falta la interfaz; por eso los issues de HU-02 a HU-04 (#1, #2 y #5) siguen abiertos.
-- **Siguiente:** Fase 2, la interfaz. Primero hay que decidir el diseño visual. La tabla de casos (HU-05) necesita además, en el motor, la generación de casos: código, datos y resultado esperado, con un solo valor inválido por caso.
+- **Siguiente:** Fase 2, la interfaz, según la maqueta. La generación de casos en el motor ya está hecha (HU-05; #7 sigue abierto hasta tener la tabla). Lo próximo es la hoja de campos (HU-02). Falta elegir una fuente libre parecida a Bahnschrift para incluirla en el proyecto, porque Bahnschrift solo viene con Windows.
 
 ## Fases
 

@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maqueta del diseñador de casos de prueba</title>
+  <style>
+    :root {
+      --fondo: #EEF1F4;
+      --superficie: #FFFFFF;
+      --borde: #D9DFE6;
+      --cabecera: #F3F5F8;
+      --tinta: #16213E;
+      --tenue: #55607A;
+      --valido: #256A80;
+      --valido-fondo: #D5EBF1;
+      --invalido: #A24A16;
+      --invalido-trama: rgba(162, 74, 22, 0.16);
+      --resalte: #F2B705;
+      --resalte-fondo: #FFF5D1;
+      --titulos: Bahnschrift, "DIN Alternate", "Roboto Condensed", "Arial Narrow", sans-serif;
+      --texto: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+      --codigo: "Cascadia Mono", Consolas, ui-monospace, monospace;
+      --radio: 8px;
+    }
+
+    /* ========== Base ========== */
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; background: var(--fondo); color: var(--tinta); font-family: var(--texto); font-size: 15px; line-height: 1.5; }
+    button, input, select { font: inherit; color: inherit; }
+    [hidden] { display: none !important; }
+    :focus-visible { outline: 3px solid var(--tinta); outline-offset: 2px; }
+    .visualmente-oculto {
+      position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+      overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+    }
+    .definiciones { position: absolute; width: 0; height: 0; }
+    .trama__fondo { fill: var(--superficie); }
+    .trama__linea { fill: var(--invalido); opacity: 0.55; }
+
+    /* ========== Estructura ========== */
+    .cabecera, .principal { max-width: 1280px; margin: 0 auto; padding-left: 16px; padding-right: 16px; }
+    .cabecera { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 16px; padding-bottom: 16px; }
+    .marca { margin: 0; font-family: var(--titulos); font-size: 17px; font-weight: 600; }
+    /* minmax(0, 1fr) evita que una tabla ancha estire la columna y desborde la página en el celular. */
+    .principal { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; padding-bottom: 48px; }
+    .titulo { margin: 0; font-family: var(--titulos); font-size: 34px; font-weight: 600; line-height: 1.15; }
+    .historia { max-width: 60ch; margin: 8px 0 0; color: var(--tenue); }
+    .seccion__cabecera { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; margin-bottom: 12px; }
+    .seccion__titulo { margin: 0; font-family: var(--titulos); font-size: 22px; font-weight: 600; }
+    .resumen { margin: 0; color: var(--tenue); }
+    .acciones { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; }
+    .ayuda { margin: 8px 0 0; color: var(--tenue); font-size: 13px; }
+    .ayuda--arriba { margin: 0 0 8px; }
+    .panel { background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio); }
+    .desplazable { overflow-x: auto; }
+
+    /* ========== Botones y selectores ========== */
+    .boton {
+      padding: 6px 14px; background: var(--superficie); border: 1.5px solid var(--tinta);
+      border-radius: 6px; color: var(--tinta); font-weight: 600; cursor: pointer;
+    }
+    .boton--principal { background: var(--tinta); color: #FFFFFF; }
+    .boton--pequeno { padding: 2px 10px; font-weight: 400; }
+    .segmentos { display: inline-flex; overflow: hidden; border: 1.5px solid var(--tinta); border-radius: 6px; }
+    .segmentos button { padding: 4px 14px; background: var(--superficie); border: 0; cursor: pointer; }
+    .segmentos button + button { border-left: 1.5px solid var(--tinta); }
+    .segmentos [aria-pressed="true"],
+    .segmentos [aria-selected="true"] { background: var(--tinta); color: #FFFFFF; font-weight: 600; }
+    .barra-vistas { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; margin-bottom: 16px; }
+    .exportar { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-left: auto; }
+    .exportar__etiqueta { color: var(--tenue); }
+
+    /* ========== Leyenda e íconos ========== */
+    .leyenda { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; padding: 0; list-style: none; color: var(--tenue); font-size: 13px; }
+    .leyenda li { display: inline-flex; align-items: center; gap: 6px; }
+    .icono { display: inline-block; flex: none; width: 11px; height: 11px; background: var(--tinta); }
+    .icono--particion { border-radius: 50%; }
+    .icono--limite { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+    .icono--valida { width: 20px; background: var(--valido-fondo); border: 1px solid var(--valido); }
+    .icono--invalida {
+      width: 20px; border: 1px solid var(--invalido);
+      background: repeating-linear-gradient(45deg, var(--invalido) 0 2px, var(--superficie) 2px 6px);
+    }
+
+    /* ========== Rejillas: hoja de campos y matriz ========== */
+    .rejilla { width: 100%; border-collapse: collapse; border-style: hidden; font-size: 14px; font-variant-numeric: tabular-nums; }
+    .rejilla th, .rejilla td { padding: 7px 10px; text-align: left; white-space: nowrap; border: 1px solid var(--borde); }
+    .rejilla thead th { background: var(--cabecera); color: var(--tenue); font-family: var(--titulos); font-size: 13px; font-weight: 600; }
+    .hoja { min-width: 720px; table-layout: fixed; }
+    .columna-campo { width: 13rem; }
+    .columna-tipo { width: 9rem; }
+    .columna-obligatorio { width: 7rem; }
+    .columna-numero { width: 6.5rem; }
+    .hoja td { padding: 0; }
+    .hoja .centrado { padding: 7px 10px; text-align: center; }
+    .hoja .no-aplica { background: var(--cabecera); }
+    .celda { display: block; width: 100%; padding: 7px 10px; background: transparent; border: 0; }
+    .celda:focus-visible { outline: 2px solid var(--tinta); outline-offset: -2px; }
+    .celda--numero { text-align: right; }
+    .hoja input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--tinta); }
+    .matriz tbody th,
+    .matriz thead th:first-child { position: sticky; left: 0; z-index: 1; background: var(--cabecera); }
+    .matriz tbody th { font-family: var(--titulos); font-weight: 600; }
+    /* Alinea por la línea base: Bahnschrift y Segoe UI tienen métricas distintas y el código quedaba más alto. */
+    .matriz th, .matriz td { vertical-align: baseline; }
+    .valor { color: var(--tenue); }
+    .valor--probado { font-weight: 600; }
+    .valor--valido { background: var(--valido-fondo); color: var(--valido); }
+    .valor--invalido { background: repeating-linear-gradient(45deg, var(--invalido-trama) 0 2px, transparent 2px 7px); color: var(--invalido); }
+
+    /* ========== Celdas compartidas ========== */
+    .tecnica { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .vacio { font-style: italic; }
+    .resultado { font-weight: 600; white-space: nowrap; }
+    .resultado--acepta { color: var(--valido); }
+    .resultado--rechaza { color: var(--invalido); }
+
+    /* ========== Vista Recta ========== */
+    .vista-recta { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .campo-recta { padding: 16px 20px; }
+    .campo-recta + .campo-recta { border-top: 1px solid var(--borde); }
+    .campo-recta__definicion { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; margin-bottom: 4px; }
+    .campo-recta__nombre { margin: 0; font-family: var(--titulos); font-size: 20px; font-weight: 600; }
+    .campo-recta__reglas { margin: 0; color: var(--tenue); }
+    .figura { min-width: 0; margin: 0; }
+    .recta { display: block; width: 100%; min-width: 520px; height: auto; }
+    .recta text { font-family: var(--titulos); font-size: 16px; fill: var(--tinta); }
+    .recta .nombre-clase { font-size: 14px; fill: var(--tenue); }
+    .region--valida { fill: var(--valido-fondo); stroke: var(--valido); stroke-width: 1.5; }
+    .region--invalida { fill: url(#trama); stroke: var(--invalido); stroke-width: 1.5; }
+    .marca circle { fill: var(--tinta); stroke: var(--superficie); stroke-width: 2; }
+    .marca path { fill: var(--tinta); }
+    .marca--activa circle,
+    .marca--activa path { fill: var(--resalte); stroke: var(--tinta); stroke-width: 2; }
+    .marca--activa text { font-weight: 700; }
+    .figura__nota { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 6px 0 0; color: var(--tenue); font-size: 13px; }
+    .fichas { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 0; padding: 0; list-style: none; }
+    .ficha {
+      display: inline-block; padding: 1px 10px; border: 1.5px solid var(--invalido); border-radius: 4px;
+      background: repeating-linear-gradient(45deg, var(--invalido-trama) 0 2px, transparent 2px 7px);
+      font-family: var(--titulos); font-size: 14px;
+    }
+    .ficha--valida { background: var(--valido-fondo); border-color: var(--valido); }
+    .ficha.marca--activa { background: var(--resalte); border-color: var(--tinta); }
+    .tabla-casos { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+    .tabla-casos th, .tabla-casos td { padding: 9px 12px; text-align: left; vertical-align: baseline; border-bottom: 1px solid var(--borde); }
+    .tabla-casos thead th { color: var(--tenue); font-family: var(--titulos); font-size: 13px; font-weight: 600; }
+    .tabla-casos tbody tr:last-child > * { border-bottom: 0; }
+    .tabla-casos tbody th { font-family: var(--titulos); font-weight: 600; white-space: nowrap; }
+    .dato-probado { font-weight: 600; }
+    .fila:hover, .fila:focus { background: var(--resalte-fondo); }
+    .fila:focus { outline: none; }
+    .fila:focus-visible { outline: 3px solid var(--tinta); outline-offset: -3px; }
+
+    /* ========== Vista Gherkin ========== */
+    .codigo {
+      margin: 0; padding: 14px 18px; overflow-x: auto; background: var(--superficie);
+      border: 1px solid var(--borde); border-radius: var(--radio);
+      font-family: var(--codigo); font-size: 13px; line-height: 1.6;
+    }
+
+    @media (min-width: 1180px) {
+      .vista-recta { grid-template-columns: 560px minmax(0, 1fr); align-items: start; }
+      .vista-recta__campos { position: sticky; top: 16px; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .marca circle, .marca path, .ficha, .fila { transition: fill 0.15s, background-color 0.15s; }
+    }
+  </style>
+</head>
+<body>
+  <svg class="definiciones" aria-hidden="true" focusable="false">
+    <defs>
+      <pattern id="trama" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect class="trama__fondo" width="7" height="7"></rect>
+        <rect class="trama__linea" width="2.5" height="7"></rect>
+      </pattern>
+    </defs>
+  </svg>
+
+  <header class="cabecera">
+    <p class="marca">Diseñador de casos de prueba</p>
+    <div class="segmentos" role="group" aria-label="Idioma" data-alternar>
+      <button type="button" aria-pressed="true">ES</button>
+      <button type="button" aria-pressed="false">EN</button>
+    </div>
+  </header>
+
+  <main class="principal">
+    <section aria-labelledby="titulo">
+      <h1 class="titulo" id="titulo">Registro de usuario</h1>
+      <p class="historia">Como visitante quiero crear una cuenta para guardar mis compras.</p>
+    </section>
+
+    <section aria-labelledby="campos-titulo">
+      <div class="seccion__cabecera">
+        <h2 class="seccion__titulo" id="campos-titulo">Campos</h2>
+        <div class="acciones">
+          <button type="button" class="boton">Agregar campo</button>
+          <button type="button" class="boton boton--principal">Generar casos</button>
+        </div>
+      </div>
+      <div class="panel desplazable">
+        <table class="rejilla hoja">
+          <colgroup>
+            <col class="columna-campo">
+            <col class="columna-tipo">
+            <col class="columna-obligatorio">
+            <col class="columna-numero">
+            <col class="columna-numero">
+            <col>
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">Campo</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Obligatorio</th>
+              <th scope="col">Mínimo</th>
+              <th scope="col">Máximo</th>
+              <th scope="col">Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input class="celda" value="edad" aria-label="Nombre del campo 1"></td>
+              <td>
+                <select class="celda" aria-label="Tipo de edad">
+                  <option selected>Entero</option>
+                  <option>Texto</option>
+                  <option>Lista</option>
+                </select>
+              </td>
+              <td class="centrado"><input type="checkbox" checked aria-label="edad es obligatorio"></td>
+              <td><input class="celda celda--numero" value="18" inputmode="numeric" aria-label="Mínimo de edad"></td>
+              <td><input class="celda celda--numero" value="65" inputmode="numeric" aria-label="Máximo de edad"></td>
+              <td class="no-aplica"><span class="visualmente-oculto">No aplica</span></td>
+            </tr>
+            <tr>
+              <td><input class="celda" value="nombre" aria-label="Nombre del campo 2"></td>
+              <td>
+                <select class="celda" aria-label="Tipo de nombre">
+                  <option>Entero</option>
+                  <option selected>Texto</option>
+                  <option>Lista</option>
+                </select>
+              </td>
+              <td class="centrado"><input type="checkbox" checked aria-label="nombre es obligatorio"></td>
+              <td><input class="celda celda--numero" value="3" inputmode="numeric" aria-label="Longitud mínima de nombre"></td>
+              <td><input class="celda celda--numero" value="50" inputmode="numeric" aria-label="Longitud máxima de nombre"></td>
+              <td class="no-aplica"><span class="visualmente-oculto">No aplica</span></td>
+            </tr>
+            <tr>
+              <td><input class="celda" value="tipo de cliente" aria-label="Nombre del campo 3"></td>
+              <td>
+                <select class="celda" aria-label="Tipo de tipo de cliente">
+                  <option>Entero</option>
+                  <option>Texto</option>
+                  <option selected>Lista</option>
+                </select>
+              </td>
+              <td class="centrado"><input type="checkbox" checked aria-label="tipo de cliente es obligatorio"></td>
+              <td class="no-aplica"><span class="visualmente-oculto">No aplica</span></td>
+              <td class="no-aplica"><span class="visualmente-oculto">No aplica</span></td>
+              <td><input class="celda" value="Persona, Empresa" aria-label="Opciones de tipo de cliente"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="ayuda">En los campos de texto, mínimo y máximo son la longitud en caracteres.</p>
+    </section>
+
+    <section aria-labelledby="casos-titulo">
+      <div class="seccion__cabecera">
+        <h2 class="seccion__titulo" id="casos-titulo">Casos generados</h2>
+        <p class="resumen" data-resumen></p>
+      </div>
+      <div class="barra-vistas">
+        <div class="segmentos" role="tablist" aria-label="Vista de los casos">
+          <button type="button" role="tab" id="tab-matriz" aria-selected="true" aria-controls="panel-matriz">Matriz</button>
+          <button type="button" role="tab" id="tab-recta" aria-selected="false" aria-controls="panel-recta">Recta</button>
+          <button type="button" role="tab" id="tab-gherkin" aria-selected="false" aria-controls="panel-gherkin" data-sin-leyenda>Gherkin</button>
+        </div>
+        <ul class="leyenda" aria-label="Leyenda" data-leyenda>
+          <li><span class="icono icono--valida" aria-hidden="true"></span>Válido</li>
+          <li><span class="icono icono--invalida" aria-hidden="true"></span>Inválido</li>
+          <li><span class="icono icono--particion" aria-hidden="true"></span>Partición de equivalencia</li>
+          <li><span class="icono icono--limite" aria-hidden="true"></span>Valor límite</li>
+        </ul>
+        <div class="exportar" role="group" aria-label="Exportar">
+          <span class="exportar__etiqueta" aria-hidden="true">Exportar</span>
+          <button type="button" class="boton boton--pequeno">CSV</button>
+          <button type="button" class="boton boton--pequeno">Markdown</button>
+          <button type="button" class="boton boton--pequeno">.feature</button>
+        </div>
+      </div>
+
+      <div id="panel-matriz" role="tabpanel" aria-labelledby="tab-matriz">
+        <p class="ayuda ayuda--arriba">Cada fila cambia un solo campo: la celda resaltada es el valor que se prueba y las demás llevan su valor por defecto.</p>
+        <div class="panel desplazable">
+          <table class="rejilla matriz">
+            <caption class="visualmente-oculto">Casos de prueba con el valor de cada campo</caption>
+            <thead>
+              <tr>
+                <th scope="col">Código</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Técnica</th>
+                <th scope="col">edad</th>
+                <th scope="col">nombre</th>
+                <th scope="col">tipo de cliente</th>
+                <th scope="col">Resultado esperado</th>
+              </tr>
+            </thead>
+            <tbody data-casos="matriz"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="panel-recta" role="tabpanel" aria-labelledby="tab-recta" hidden>
+        <div class="vista-recta">
+          <div class="vista-recta__campos">
+            <div class="panel">
+              <article class="campo-recta" aria-labelledby="recta-edad">
+                <div class="campo-recta__definicion">
+                  <h3 class="campo-recta__nombre" id="recta-edad">edad</h3>
+                  <p class="campo-recta__reglas">Entero, obligatorio, de 18 a 65</p>
+                </div>
+                <figure class="figura">
+                  <div class="desplazable">
+                    <svg class="recta" viewBox="0 0 640 112" role="img" aria-labelledby="recta-edad-titulo recta-edad-desc">
+                      <title id="recta-edad-titulo">Clases y valores de edad</title>
+                      <desc id="recta-edad-desc">Menor que 18 es inválida, de 18 a 65 es válida y mayor que 65 es inválida. Valores de partición: 17, 41 y 66. Valores límite: 17, 18, 19, 64, 65 y 66.</desc>
+                      <text class="nombre-clase" x="70" y="14" text-anchor="middle">menor que 18</text>
+                      <text class="nombre-clase" x="320" y="14" text-anchor="middle">de 18 a 65</text>
+                      <text class="nombre-clase" x="570" y="14" text-anchor="middle">mayor que 65</text>
+                      <rect class="region--invalida" x="16" y="48" width="108" height="22"></rect>
+                      <rect class="region--valida" x="124" y="48" width="392" height="22"></rect>
+                      <rect class="region--invalida" x="516" y="48" width="108" height="22"></rect>
+                      <g class="marca" data-id="edad:17:P"><text x="112" y="38" text-anchor="middle">17</text><circle cx="112" cy="59" r="7"></circle></g>
+                      <g class="marca" data-id="edad:41:P"><text x="320" y="38" text-anchor="middle">41</text><circle cx="320" cy="59" r="7"></circle></g>
+                      <g class="marca" data-id="edad:66:P"><text x="528" y="38" text-anchor="middle">66</text><circle cx="528" cy="59" r="7"></circle></g>
+                      <g class="marca" data-id="edad:17:L"><path d="M112 74 l8 13 h-16 z"></path><text x="112" y="106" text-anchor="middle">17</text></g>
+                      <g class="marca" data-id="edad:18:L"><path d="M136 74 l8 13 h-16 z"></path><text x="136" y="106" text-anchor="middle">18</text></g>
+                      <g class="marca" data-id="edad:19:L"><path d="M160 74 l8 13 h-16 z"></path><text x="160" y="106" text-anchor="middle">19</text></g>
+                      <g class="marca" data-id="edad:64:L"><path d="M480 74 l8 13 h-16 z"></path><text x="480" y="106" text-anchor="middle">64</text></g>
+                      <g class="marca" data-id="edad:65:L"><path d="M504 74 l8 13 h-16 z"></path><text x="504" y="106" text-anchor="middle">65</text></g>
+                      <g class="marca" data-id="edad:66:L"><path d="M528 74 l8 13 h-16 z"></path><text x="528" y="106" text-anchor="middle">66</text></g>
+                    </svg>
+                  </div>
+                  <figcaption class="figura__nota">
+                    Fuera de la recta, también inválidas:
+                    <span class="ficha" data-id="edad:18.5:P">18.5</span>
+                    <span class="ficha" data-id="edad:abc:P">abc</span>
+                    <span class="ficha" data-id="edad:vacio:P">vacío</span>
+                  </figcaption>
+                </figure>
+              </article>
+
+              <article class="campo-recta" aria-labelledby="recta-nombre">
+                <div class="campo-recta__definicion">
+                  <h3 class="campo-recta__nombre" id="recta-nombre">nombre</h3>
+                  <p class="campo-recta__reglas">Texto, obligatorio, de 3 a 50 caracteres</p>
+                </div>
+                <figure class="figura">
+                  <div class="desplazable">
+                    <svg class="recta" viewBox="0 0 640 112" role="img" aria-labelledby="recta-nombre-titulo recta-nombre-desc">
+                      <title id="recta-nombre-titulo">Clases y valores de la longitud de nombre</title>
+                      <desc id="recta-nombre-desc">Vacío es inválida, de 1 a 2 caracteres es inválida, de 3 a 50 es válida y más de 50 es inválida. Valores de partición: 0, 2, 26 y 51 caracteres. Valores límite: 2, 3, 4, 49, 50 y 51.</desc>
+                      <text class="nombre-clase" x="33" y="14" text-anchor="middle">vacío</text>
+                      <text class="nombre-clase" x="89" y="14" text-anchor="middle">1 a 2</text>
+                      <text class="nombre-clase" x="320" y="14" text-anchor="middle">de 3 a 50</text>
+                      <text class="nombre-clase" x="570" y="14" text-anchor="middle">más de 50</text>
+                      <rect class="region--invalida" x="16" y="48" width="34" height="22"></rect>
+                      <rect class="region--invalida" x="54" y="48" width="70" height="22"></rect>
+                      <rect class="region--valida" x="124" y="48" width="392" height="22"></rect>
+                      <rect class="region--invalida" x="516" y="48" width="108" height="22"></rect>
+                      <g class="marca" data-id="nombre:vacio:P"><text x="33" y="38" text-anchor="middle">0</text><circle cx="33" cy="59" r="7"></circle></g>
+                      <g class="marca" data-id="nombre:2:P"><text x="112" y="38" text-anchor="middle">2</text><circle cx="112" cy="59" r="7"></circle></g>
+                      <g class="marca" data-id="nombre:26:P"><text x="320" y="38" text-anchor="middle">26</text><circle cx="320" cy="59" r="7"></circle></g>
+                      <g class="marca" data-id="nombre:51:P"><text x="528" y="38" text-anchor="middle">51</text><circle cx="528" cy="59" r="7"></circle></g>
+                      <g class="marca" data-id="nombre:2:L"><path d="M112 74 l8 13 h-16 z"></path><text x="112" y="106" text-anchor="middle">2</text></g>
+                      <g class="marca" data-id="nombre:3:L"><path d="M136 74 l8 13 h-16 z"></path><text x="136" y="106" text-anchor="middle">3</text></g>
+                      <g class="marca" data-id="nombre:4:L"><path d="M160 74 l8 13 h-16 z"></path><text x="160" y="106" text-anchor="middle">4</text></g>
+                      <g class="marca" data-id="nombre:49:L"><path d="M480 74 l8 13 h-16 z"></path><text x="480" y="106" text-anchor="middle">49</text></g>
+                      <g class="marca" data-id="nombre:50:L"><path d="M504 74 l8 13 h-16 z"></path><text x="504" y="106" text-anchor="middle">50</text></g>
+                      <g class="marca" data-id="nombre:51:L"><path d="M528 74 l8 13 h-16 z"></path><text x="528" y="106" text-anchor="middle">51</text></g>
+                    </svg>
+                  </div>
+                  <figcaption class="figura__nota">Longitud en caracteres.</figcaption>
+                </figure>
+              </article>
+
+              <article class="campo-recta" aria-labelledby="recta-tipo">
+                <div class="campo-recta__definicion">
+                  <h3 class="campo-recta__nombre" id="recta-tipo">tipo de cliente</h3>
+                  <p class="campo-recta__reglas">Lista, obligatoria, con 2 opciones</p>
+                </div>
+                <figure class="figura">
+                  <ul class="fichas" aria-label="Clases de tipo de cliente">
+                    <li class="ficha ficha--valida" data-id="tipo:Persona:P">Persona<span class="visualmente-oculto">, válida</span></li>
+                    <li class="ficha ficha--valida" data-id="tipo:Empresa:P">Empresa<span class="visualmente-oculto">, válida</span></li>
+                    <li class="ficha" data-id="tipo:fuera:P">Opción no válida<span class="visualmente-oculto">, inválida</span></li>
+                    <li class="ficha" data-id="tipo:vacio:P">vacío<span class="visualmente-oculto">, inválida</span></li>
+                  </ul>
+                  <figcaption class="figura__nota">Una lista no tiene rango: cada opción es una clase válida y no hay valores límite.</figcaption>
+                </figure>
+              </article>
+            </div>
+            <p class="ayuda">Las rectas no están a escala.</p>
+          </div>
+
+          <div>
+            <p class="ayuda ayuda--arriba">Cada caso cambia un solo campo. Pasa el cursor o el foco por un caso para verlo en la recta.</p>
+            <div class="panel desplazable">
+              <table class="tabla-casos">
+                <caption class="visualmente-oculto">Casos de prueba</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Código</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Técnica</th>
+                    <th scope="col">Valor probado</th>
+                    <th scope="col">Resultado esperado</th>
+                  </tr>
+                </thead>
+                <tbody data-casos="recta"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="panel-gherkin" role="tabpanel" aria-labelledby="tab-gherkin" hidden>
+        <pre class="codigo"><code data-gherkin></code></pre>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    'use strict';
+
+    const HISTORIA = 'Registro de usuario';
+    const PARTICION = 'Partición de equivalencia';
+    const LIMITES = 'Valores límite';
+    const LARGO_VISIBLE = 6;
+    const OPCIONES_TIPO = ['Persona', 'Empresa'];
+
+    const CAMPOS = [
+      { id: 'edad', nombre: 'edad', articulo: 'la', verbo: 'ingreso', porDefecto: '41' },
+      { id: 'nombre', nombre: 'nombre', articulo: 'el', verbo: 'ingreso', porDefecto: 'a'.repeat(26) },
+      { id: 'tipo', nombre: 'tipo de cliente', articulo: 'el', verbo: 'elijo', porDefecto: 'Persona' },
+    ];
+
+    // Los mismos 24 casos que genera el motor (GeneradorCasos) para estos tres campos.
+    const CASOS = [
+      nuevoCaso(PARTICION, null, null, 'Todos los valores válidos', true),
+      nuevoCaso(PARTICION, 'edad', '17', 'Edad menor que 18', false),
+      nuevoCaso(PARTICION, 'edad', '66', 'Edad mayor que 65', false),
+      nuevoCaso(PARTICION, 'edad', '18.5', 'Edad con decimales', false),
+      nuevoCaso(PARTICION, 'edad', 'abc', 'Edad que no es un número', false),
+      nuevoCaso(PARTICION, 'edad', '', 'Edad vacía', false),
+      nuevoCaso(PARTICION, 'nombre', 'a'.repeat(2), 'Nombre de 1 a 2 caracteres', false),
+      nuevoCaso(PARTICION, 'nombre', 'a'.repeat(51), 'Nombre de más de 50 caracteres', false),
+      nuevoCaso(PARTICION, 'nombre', '', 'Nombre vacío', false),
+      nuevoCaso(PARTICION, 'tipo', 'Empresa', 'Tipo de cliente Empresa', true),
+      nuevoCaso(PARTICION, 'tipo', 'Opción no válida', 'Tipo de cliente fuera de la lista', false),
+      nuevoCaso(PARTICION, 'tipo', '', 'Tipo de cliente vacío', false),
+      nuevoCaso(LIMITES, 'edad', '17', 'Edad justo debajo del mínimo', false),
+      nuevoCaso(LIMITES, 'edad', '18', 'Edad en el mínimo', true),
+      nuevoCaso(LIMITES, 'edad', '19', 'Edad justo encima del mínimo', true),
+      nuevoCaso(LIMITES, 'edad', '64', 'Edad justo debajo del máximo', true),
+      nuevoCaso(LIMITES, 'edad', '65', 'Edad en el máximo', true),
+      nuevoCaso(LIMITES, 'edad', '66', 'Edad justo encima del máximo', false),
+      nuevoCaso(LIMITES, 'nombre', 'a'.repeat(2), 'Nombre justo debajo de la longitud mínima', false),
+      nuevoCaso(LIMITES, 'nombre', 'a'.repeat(3), 'Nombre en la longitud mínima', true),
+      nuevoCaso(LIMITES, 'nombre', 'a'.repeat(4), 'Nombre justo encima de la longitud mínima', true),
+      nuevoCaso(LIMITES, 'nombre', 'a'.repeat(49), 'Nombre justo debajo de la longitud máxima', true),
+      nuevoCaso(LIMITES, 'nombre', 'a'.repeat(50), 'Nombre en la longitud máxima', true),
+      nuevoCaso(LIMITES, 'nombre', 'a'.repeat(51), 'Nombre justo encima de la longitud máxima', false),
+    ];
+
+    function nuevoCaso(tecnica, campo, valor, descripcion, valido) {
+      return { tecnica, campo, valor, descripcion, valido };
+    }
+
+    /* ---------- Datos de cada caso ---------- */
+
+    function campoPorId(id) {
+      return CAMPOS.find((campo) => campo.id === id);
+    }
+
+    function codigoDe(indice) {
+      return `CP-${String(indice + 1).padStart(3, '0')}`;
+    }
+
+    // El caso con todos los valores por defecto prueba todos los campos a la vez.
+    function datosDe(caso) {
+      return CAMPOS.map((campo) => {
+        const cambia = caso.campo === campo.id;
+        return { campo, valor: cambia ? caso.valor : campo.porDefecto, probado: caso.campo === null || cambia };
+      });
+    }
+
+    function textoResultado(caso) {
+      if (caso.valido) return 'acepta los datos';
+      const campo = campoPorId(caso.campo);
+      return `rechaza ${campo.articulo} ${campo.nombre}`;
+    }
+
+    function conMayuscula(texto) {
+      return texto.charAt(0).toUpperCase() + texto.slice(1);
+    }
+
+    // Un texto de relleno largo se resume con su longitud para que la tabla se pueda leer.
+    function mostrar(valor) {
+      if (valor === '') return 'vacío';
+      if (valor.length > LARGO_VISIBLE && /^a+$/.test(valor)) return `aaaa… (${valor.length})`;
+      return valor;
+    }
+
+    function textoResumen() {
+      const validos = CASOS.filter((caso) => caso.valido).length;
+      return `${CASOS.length} casos: ${validos} se aceptan y ${CASOS.length - validos} se rechazan.`;
+    }
+
+    /* ---------- Gherkin ---------- */
+
+    function escenarioGherkin(caso, indice) {
+      const pasos = datosDe(caso).map(({ campo, valor }, posicion) =>
+        `    ${posicion === 0 ? 'Cuando' : 'Y'} ${campo.verbo} ${campo.articulo} ${campo.nombre} "${valor}"`);
+      return [
+        `  Escenario: ${codigoDe(indice)} ${caso.descripcion}`,
+        `    Dado el formulario "${HISTORIA}"`,
+        ...pasos,
+        `    Entonces el sistema ${textoResultado(caso)}`,
+      ].join('\n');
+    }
+
+    function featureCompleta() {
+      return ['# language: es', `Característica: ${HISTORIA}`, '', CASOS.map(escenarioGherkin).join('\n\n')].join('\n');
+    }
+
+    /* ---------- Celdas compartidas por las dos vistas ---------- */
+
+    function el(etiqueta, clase, texto) {
+      const nodo = document.createElement(etiqueta);
+      if (clase) nodo.className = clase;
+      if (texto !== undefined) nodo.textContent = texto;
+      return nodo;
+    }
+
+    function valorVisible(valor) {
+      return el('span', valor === '' ? 'vacio' : '', mostrar(valor));
+    }
+
+    function celdaCodigo(indice) {
+      const celda = el('th', null, codigoDe(indice));
+      celda.scope = 'row';
+      return celda;
+    }
+
+    function celdaTecnica(caso) {
+      const esParticion = caso.tecnica === PARTICION;
+      const icono = el('span', `icono icono--${esParticion ? 'particion' : 'limite'}`);
+      icono.setAttribute('aria-hidden', 'true');
+      const etiqueta = el('span', 'tecnica');
+      etiqueta.append(icono, esParticion ? 'Partición' : 'Límite');
+      const celda = el('td');
+      celda.append(etiqueta);
+      return celda;
+    }
+
+    function celdaResultado(caso) {
+      const icono = el('span', null, caso.valido ? '✓ ' : '✕ ');
+      icono.setAttribute('aria-hidden', 'true');
+      const resultado = el('span', `resultado resultado--${caso.valido ? 'acepta' : 'rechaza'}`);
+      resultado.append(icono, conMayuscula(textoResultado(caso)));
+      const celda = el('td');
+      celda.append(resultado);
+      return celda;
+    }
+
+    /* ---------- Vista Matriz ---------- */
+
+    function renderMatriz(cuerpo) {
+      CASOS.forEach((caso, indice) => {
+        const fila = el('tr');
+        fila.append(celdaCodigo(indice), el('td', null, caso.descripcion), celdaTecnica(caso));
+        for (const dato of datosDe(caso)) {
+          const celda = el('td', 'valor');
+          celda.append(valorVisible(dato.valor));
+          if (dato.probado) {
+            celda.classList.add('valor--probado', caso.valido ? 'valor--valido' : 'valor--invalido');
+            celda.append(el('span', 'visualmente-oculto', ', valor probado'));
+          }
+          fila.append(celda);
+        }
+        fila.append(celdaResultado(caso));
+        cuerpo.append(fila);
+      });
+    }
+
+    /* ---------- Vista Recta ---------- */
+
+    function claveDe(campoId, valor) {
+      if (valor === '') return 'vacio';
+      if (campoId === 'nombre') return String(valor.length);
+      if (campoId === 'tipo' && !OPCIONES_TIPO.includes(valor)) return 'fuera';
+      return valor;
+    }
+
+    function marcasDe(caso) {
+      if (caso.campo === null) return CAMPOS.map((campo) => `${campo.id}:${claveDe(campo.id, campo.porDefecto)}:P`);
+      return [`${caso.campo}:${claveDe(caso.campo, caso.valor)}:${caso.tecnica === PARTICION ? 'P' : 'L'}`];
+    }
+
+    function conectarResaltado(fila, marcas, raiz) {
+      const elementos = marcas.flatMap((marca) => [...raiz.querySelectorAll(`[data-id="${marca}"]`)]);
+      const resaltar = (activo) => elementos.forEach((elemento) => elemento.classList.toggle('marca--activa', activo));
+      fila.addEventListener('mouseenter', () => resaltar(true));
+      fila.addEventListener('mouseleave', () => resaltar(false));
+      fila.addEventListener('focus', () => resaltar(true));
+      fila.addEventListener('blur', () => resaltar(false));
+    }
+
+    // Solo el valor que cambia: los demás campos llevan su valor por defecto, que se ve en las rectas.
+    function celdaValorProbado(caso) {
+      const celda = el('td', 'dato-probado');
+      if (caso.campo === null) {
+        celda.textContent = 'Valores por defecto';
+      } else {
+        celda.append(`${campoPorId(caso.campo).nombre}: `, valorVisible(caso.valor));
+      }
+      return celda;
+    }
+
+    function renderRecta(cuerpo, raiz) {
+      CASOS.forEach((caso, indice) => {
+        const fila = el('tr', 'fila');
+        fila.tabIndex = 0;
+        fila.append(celdaCodigo(indice), el('td', null, caso.descripcion), celdaTecnica(caso), celdaValorProbado(caso), celdaResultado(caso));
+        conectarResaltado(fila, marcasDe(caso), raiz);
+        cuerpo.append(fila);
+      });
+    }
+
+    /* ---------- Controles ---------- */
+
+    function iniciarVistas() {
+      const pestanas = [...document.querySelectorAll('[role="tab"]')];
+      const leyenda = document.querySelector('[data-leyenda]');
+      for (const pestana of pestanas) {
+        pestana.addEventListener('click', () => {
+          for (const otra of pestanas) {
+            const activa = otra === pestana;
+            otra.setAttribute('aria-selected', String(activa));
+            document.getElementById(otra.getAttribute('aria-controls')).hidden = !activa;
+          }
+          leyenda.hidden = pestana.hasAttribute('data-sin-leyenda');
+        });
+      }
+    }
+
+    function iniciarAlternadores() {
+      for (const grupo of document.querySelectorAll('[data-alternar]')) {
+        const botones = [...grupo.querySelectorAll('button')];
+        for (const boton of botones) {
+          boton.addEventListener('click', () => {
+            botones.forEach((otro) => otro.setAttribute('aria-pressed', String(otro === boton)));
+          });
+        }
+      }
+    }
+
+    document.querySelector('[data-resumen]').textContent = textoResumen();
+    document.querySelector('[data-gherkin]').textContent = featureCompleta();
+    renderMatriz(document.querySelector('[data-casos="matriz"]'));
+    renderRecta(document.querySelector('[data-casos="recta"]'), document.getElementById('panel-recta'));
+    iniciarVistas();
+    iniciarAlternadores();
+  </script>
+</body>
+</html>
