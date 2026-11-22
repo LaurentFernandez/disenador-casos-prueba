@@ -10,7 +10,7 @@ Es un proyecto de portafolio de Laurent Andrés Fernandez (ingeniero de software
 
 - **Costo cero:** solo herramientas gratuitas u open source. Nada de APIs de pago. Sin IA en el núcleo; la Fase 4 opcional usaría IA local con Ollama, solo en modo local.
 - **Aplicación web** en Blazor WebAssembly con PWA, publicada gratis en GitHub Pages, sin servidor.
-- **.NET 10 (LTS).** Pruebas: xUnit para el motor; bUnit para componentes y Playwright para .NET (E2E) desde la Fase 3.
+- **.NET 10 (LTS).** Pruebas: xUnit para el motor y para la lógica de la interfaz; bUnit para componentes y Playwright para .NET (E2E) desde la Fase 3.
 - **Interfaz en español e inglés**, con `IStringLocalizer` y archivos `.resx` (Fase 2).
 - **Código en español:** clases, métodos, variables y nombres de pruebas, igual que los demás proyectos de Laurent.
 - **El motor (`Casos.Core`) no depende de la interfaz.** Toda la lógica vive y se prueba ahí; `Casos.Web` solo presenta.
@@ -26,6 +26,7 @@ DisenadorCasosPrueba.slnx
 src/Casos.Core/          motor (modelo en Modelo/, técnicas en Tecnicas/)
 src/Casos.Web/           interfaz Blazor WebAssembly + PWA (componentes en Componentes/)
 tests/Casos.Core.Tests/  pruebas xUnit del motor
+tests/Casos.Web.Tests/   pruebas xUnit de la lógica de la interfaz
 docs/plan.md             objetivo, técnicas, arquitectura y fases
 docs/historias-de-usuario.md   requerimientos (los escribe Laurent)
 docs/diseno/maqueta.html       maqueta de la interfaz (se abre en el navegador)
@@ -50,9 +51,9 @@ dotnet run --project src/Casos.Web
 ## Estado actual
 
 - **Fases 0 y 1 terminadas.** El motor tiene el modelo de campos con sus validaciones (`Modelo/`), la partición de equivalencia (`Tecnicas/ParticionEquivalencia`) y los valores límite de enteros y de longitud de texto (`Tecnicas/ValoresLimite`).
-- **Fase 2 en curso.** Ya están la generación de casos en el motor (`GeneradorCasos`), el estilo base de la maqueta, la hoja de campos (`Componentes/HojaCampos.razor`) y la vista Matriz (`Componentes/VistaMatriz.razor`). El motor tiene 36 pruebas; la interfaz todavía no tiene pruebas automáticas (bUnit llega en la Fase 3).
-- **Historias:** HU-02 y HU-05 están hechas y sus issues (#1 y #7) cerrados. HU-01, HU-03 y HU-04 están hechas en el motor y les falta la interfaz; los issues de HU-03 y HU-04 (#2 y #5) siguen abiertos. HU-01 no tiene issue porque se hizo antes de crear el repositorio.
-- **Siguiente:** la vista Recta, que muestra en la interfaz las clases y los valores límite de cada campo (HU-01, HU-03 y HU-04).
+- **Fase 2 en curso.** Ya están la generación de casos en el motor (`GeneradorCasos`), el estilo base de la maqueta, la hoja de campos (`Componentes/HojaCampos.razor`) y las vistas Matriz y Recta (`Componentes/VistaMatriz.razor` y `Componentes/VistaRecta.razor`). Hay 36 pruebas del motor y 14 de la lógica de la interfaz.
+- **Historias:** HU-01 a HU-05 están hechas, en el motor y en la interfaz, y sus issues están cerrados. HU-01 no tuvo issue porque se hizo antes de crear el repositorio.
+- **Siguiente:** la vista Gherkin (HU-06); después, la exportación (HU-07) y la publicación en GitHub Pages.
 
 ## Fases
 
