@@ -52,9 +52,9 @@ dotnet run --project src/Casos.Web
 ## Estado actual
 
 - **Fases 0 y 1 terminadas.** El motor tiene el modelo de campos con sus validaciones (`Modelo/`), la partición de equivalencia (`Tecnicas/ParticionEquivalencia`) y los valores límite de enteros y de longitud de texto (`Tecnicas/ValoresLimite`).
-- **Fase 2 en curso.** Ya están la generación de casos en el motor (`GeneradorCasos`), el estilo base de la maqueta, la hoja de campos (`Componentes/HojaCampos.razor`), el nombre de la historia y las vistas Matriz, Recta y Gherkin (`Componentes/CasosGenerados.razor`; el Gherkin lo arma `GherkinCasos`). Hay 36 pruebas del motor y 20 de la lógica de la interfaz.
-- **Historias:** HU-01 a HU-06 están hechas, en el motor y en la interfaz, y sus issues están cerrados. HU-01 no tuvo issue porque se hizo antes de crear el repositorio.
-- **Siguiente:** la exportación (HU-07) y la publicación en GitHub Pages.
+- **Fase 2 en curso.** Ya están la generación de casos en el motor (`GeneradorCasos`), el estilo base de la maqueta, la hoja de campos (`Componentes/HojaCampos.razor`), el nombre de la historia y las vistas Matriz, Recta y Gherkin (`Componentes/CasosGenerados.razor`; el Gherkin lo arma `GherkinCasos`) y la exportación a CSV, Markdown y `.feature` (`ExportacionCasos` y `wwwroot/js/descargas.js`). Hay 36 pruebas del motor y 32 de la lógica de la interfaz.
+- **Historias:** HU-01 a HU-07 están hechas, en el motor y en la interfaz, y sus issues están cerrados. HU-01 no tuvo issue porque se hizo antes de crear el repositorio.
+- **Siguiente:** la publicación en GitHub Pages y el cambio de idioma (HU-08).
 
 ## Fases
 
