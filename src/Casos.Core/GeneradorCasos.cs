@@ -4,8 +4,9 @@ using Casos.Core.Tecnicas;
 namespace Casos.Core;
 
 /// <summary>
-/// Convierte los campos de una historia en casos de prueba con partición de equivalencia y valores límite.
-/// Cada caso cambia el valor de un solo campo; los demás llevan su valor válido por defecto.
+/// Convierte los campos de una historia en casos de prueba con partición de equivalencia y valores límite, y sus
+/// reglas en casos de tabla de decisión. Cada caso cambia el valor de un solo campo, o de los dos campos de su regla
+/// en una tabla de decisión; los demás llevan su valor válido por defecto.
 /// </summary>
 public static class GeneradorCasos
 {
@@ -13,7 +14,8 @@ public static class GeneradorCasos
 
     /// <summary>
     /// Devuelve los casos en orden: primero los de partición de equivalencia, empezando por el caso
-    /// con todos los valores por defecto, y después los de valores límite, campo por campo.
+    /// con todos los valores por defecto, después los de valores límite, campo por campo, y al final
+    /// los de tabla de decisión, regla por regla.
     /// </summary>
     public static IReadOnlyList<CasoPrueba> Generar(Historia historia)
     {
@@ -34,6 +36,7 @@ public static class GeneradorCasos
                 .Where(clase => clase != porDefecto[campo])
                 .Select(clase => new Cambio(Tecnica.ParticionEquivalencia, campo, clase))),
             .. historia.Campos.SelectMany(LimitesDe),
+            .. historia.Reglas.SelectMany(regla => CambiosDeRegla(historia, regla)),
         ];
 
         return cambios
@@ -43,9 +46,25 @@ public static class GeneradorCasos
                 cambio?.Campo,
                 cambio?.Clase.Tipo,
                 cambio?.Posicion,
-                cambio?.Clase.EsValida ?? true,
-                Datos(historia.Campos, porDefecto, cambio)))
+                cambio?.EsValido ?? true,
+                Datos(historia.Campos, porDefecto, cambio),
+                cambio?.Regla))
             .ToArray();
+    }
+
+    private static IEnumerable<Cambio> CambiosDeRegla(Historia historia, ReglaObligatorio regla)
+    {
+        // AgregarRegla ya comprobó que los dos campos existen y que el de la condición es una lista.
+        var condicion = (CampoLista)historia.CampoLlamado(regla.CampoCondicion)!;
+        var obligatorio = historia.CampoLlamado(regla.CampoObligatorio)!;
+        return TablaDecision.Generar(condicion, regla.Opcion, obligatorio)
+            .Select(combinacion => new Cambio(Tecnica.TablaDecision, obligatorio, combinacion.ClaseObligatorio)
+            {
+                EsValido = combinacion.EsValida,
+                Regla = regla,
+                CampoCondicion = condicion,
+                ValorCondicion = combinacion.ValorCondicion,
+            });
     }
 
     private static IEnumerable<Cambio> LimitesDe(Campo campo) => campo switch
@@ -94,8 +113,13 @@ public static class GeneradorCasos
         var datos = new OrderedDictionary<string, string>();
         foreach (var campo in campos)
         {
-            var clase = cambio is not null && cambio.Campo == campo ? cambio.Clase : porDefecto[campo];
-            datos.Add(campo.Nombre, clase.ValorEjemplo);
+            var valor = cambio switch
+            {
+                not null when cambio.Campo == campo => cambio.Clase.ValorEjemplo,
+                { ValorCondicion: { } valorCondicion } when cambio.CampoCondicion == campo => valorCondicion,
+                _ => porDefecto[campo].ValorEjemplo,
+            };
+            datos.Add(campo.Nombre, valor);
         }
 
         return datos;
@@ -104,7 +128,17 @@ public static class GeneradorCasos
     private static string Codigo(int numero) => $"{PrefijoCodigo}{numero:000}";
 
     /// <summary>
-    /// El valor que un caso cambia respecto a los valores por defecto.
+    /// El valor que un caso cambia respecto a los valores por defecto. En una tabla de decisión también cambia
+    /// el valor del campo de la condición, y la validez la decide la regla en lugar de la clase.
     /// </summary>
-    private sealed record Cambio(Tecnica Tecnica, Campo Campo, ClaseEquivalencia Clase, PosicionLimite? Posicion = null);
+    private sealed record Cambio(Tecnica Tecnica, Campo Campo, ClaseEquivalencia Clase, PosicionLimite? Posicion = null)
+    {
+        public bool EsValido { get; init; } = Clase.EsValida;
+
+        public ReglaObligatorio? Regla { get; init; }
+
+        public Campo? CampoCondicion { get; init; }
+
+        public string? ValorCondicion { get; init; }
+    }
 }

@@ -7,4 +7,5 @@ public enum Tecnica
 {
     ParticionEquivalencia,
     ValoresLimite,
+    TablaDecision,
 }
