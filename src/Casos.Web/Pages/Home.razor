@@ -4,13 +4,17 @@
 <PageTitle>Diseñador de casos de prueba</PageTitle>
 
 @{
-    var lectura = LecturaHoja.Leer(filas);
+    var lectura = LecturaHoja.Leer(filas, nombreHistoria);
     // Con avisos en la hoja no se generan casos, para que ningún campo quede fuera sin que se note.
     var casos = lectura.Avisos.Count == 0 ? GeneradorCasos.Generar(lectura.Historia) : [];
 }
 
 <section class="seccion" aria-labelledby="campos-titulo">
     <h1 class="titulo" id="campos-titulo">Campos de la historia</h1>
+    <p class="nombre-historia">
+        <label for="nombre-historia">Nombre de la historia</label>
+        <input id="nombre-historia" @bind="nombreHistoria" placeholder="Ejemplo: Registro de usuario" />
+    </p>
     <HojaCampos Filas="filas" Avisos="lectura.Avisos" CambioFilas="StateHasChanged" />
 </section>
 
@@ -26,11 +30,12 @@
     }
     else
     {
-        <CasosGenerados Campos="lectura.Historia.Campos" Casos="casos" @bind-Vista="vista" />
+        <CasosGenerados Historia="lectura.Historia" Casos="casos" @bind-Vista="vista" />
     }
 </section>
 
 @code {
     private readonly List<FilaCampo> filas = [new()];
+    private string nombreHistoria = "";
     private VistaCasos vista;
 }

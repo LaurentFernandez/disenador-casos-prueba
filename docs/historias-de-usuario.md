@@ -208,25 +208,33 @@ Escenario: Caso con todos los valores válidos
 
 ```gherkin
 Escenario: Caso inválido en Gherkin
-  Dado el caso CP-003 de la historia "Registro de usuario" con edad 17 y nombre "Ana María"
+  Dado el caso CP-002 de la historia "Registro de usuario" con edad 17, un nombre de 26 caracteres y el tipo de cliente "Persona"
   Cuando veo el caso en Gherkin
   Entonces obtengo:
     """
-    Escenario: CP-003 Edad menor que 18
+    Escenario: CP-002 Edad menor que 18
       Dado el formulario "Registro de usuario"
-      Cuando ingreso la edad "17"
-      Y ingreso el nombre "Ana María"
-      Entonces el sistema rechaza la edad
+      Cuando ingreso "17" en edad
+      Y ingreso un texto de 26 caracteres en nombre
+      Y elijo "Persona" en tipo de cliente
+      Entonces el sistema rechaza el valor de edad
     """
 
+Escenario: Valor vacío en Gherkin
+  Dado un caso con el nombre sin valor
+  Cuando veo el caso en Gherkin
+  Entonces el paso del nombre es "Y dejo nombre sin valor"
+
 Escenario: Caso válido en Gherkin
-  Dado el caso CP-001 de la historia "Registro de usuario" con edad 41 y nombre "Ana María"
+  Dado el caso CP-001 de la historia "Registro de usuario"
   Cuando veo el caso en Gherkin
   Entonces el escenario termina con "Entonces el sistema acepta los datos"
 ```
 
+Los pasos evitan el género gramatical porque los nombres de los campos los escribe el usuario, y un texto se describe por su longitud para que el escenario se pueda leer.
+
 **Prioridad:** Alta
-**Estado:** Pendiente
+**Estado:** Hecha
 
 ### HU-07. Exportar los casos
 

@@ -3,6 +3,29 @@
     font-size: var(--tamano-titulo);
 }
 
+.nombre-historia {
+    --ancho-nombre-historia: 32rem;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--espacio-2) var(--espacio-3);
+    margin: 0 0 var(--espacio-3);
+}
+
+.nombre-historia label {
+    font-weight: 600;
+}
+
+.nombre-historia input {
+    flex: 1 1 auto;
+    max-width: var(--ancho-nombre-historia);
+    padding: var(--espacio-2) var(--espacio-3);
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-control);
+}
+
 .seccion + .seccion {
     margin-top: var(--espacio-6);
 }

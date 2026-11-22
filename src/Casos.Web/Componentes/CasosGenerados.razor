@@ -8,34 +8,43 @@
 
 <div class="barra-vistas">
     <div class="segmentos" role="tablist" aria-label="Vista de los casos">
-        <button type="button" role="tab" id="pestana-matriz" aria-controls="panel-casos"
-                aria-selected="@(Vista == VistaCasos.Matriz ? "true" : "false")" @onclick="() => Elegir(VistaCasos.Matriz)">Matriz</button>
-        <button type="button" role="tab" id="pestana-recta" aria-controls="panel-casos"
-                aria-selected="@(Vista == VistaCasos.Recta ? "true" : "false")" @onclick="() => Elegir(VistaCasos.Recta)">Recta</button>
+        @foreach (var opcion in Enum.GetValues<VistaCasos>())
+        {
+            <button type="button" role="tab" id="@IdPestana(opcion)" aria-controls="panel-casos"
+                    aria-selected="@(Vista == opcion ? "true" : "false")" @onclick="() => Elegir(opcion)">@opcion</button>
+        }
     </div>
 
-    <ul class="leyenda" aria-label="Leyenda">
-        <li><span class="muestra muestra--valida" aria-hidden="true"></span>Válido</li>
-        <li><span class="muestra muestra--invalida" aria-hidden="true"></span>Inválido</li>
-        <li><span class="icono icono--particion" aria-hidden="true"></span>Partición de equivalencia</li>
-        <li><span class="icono icono--limite" aria-hidden="true"></span>Valor límite</li>
-    </ul>
+    @if (Vista != VistaCasos.Gherkin)
+    {
+        <ul class="leyenda" aria-label="Leyenda">
+            <li><span class="muestra muestra--valida" aria-hidden="true"></span>Válido</li>
+            <li><span class="muestra muestra--invalida" aria-hidden="true"></span>Inválido</li>
+            <li><span class="icono icono--particion" aria-hidden="true"></span>Partición de equivalencia</li>
+            <li><span class="icono icono--limite" aria-hidden="true"></span>Valor límite</li>
+        </ul>
+    }
 </div>
 
-<div id="panel-casos" role="tabpanel" aria-labelledby="@(Vista == VistaCasos.Matriz ? "pestana-matriz" : "pestana-recta")">
-    @if (Vista == VistaCasos.Matriz)
+<div id="panel-casos" role="tabpanel" aria-labelledby="@IdPestana(Vista)">
+    @switch (Vista)
     {
-        <VistaMatriz Campos="Campos" Casos="Casos" />
-    }
-    else
-    {
-        <VistaRecta Campos="Campos" Casos="Casos" />
+        case VistaCasos.Matriz:
+            <VistaMatriz Campos="Historia.Campos" Casos="Casos" />
+            break;
+        case VistaCasos.Recta:
+            <VistaRecta Campos="Historia.Campos" Casos="Casos" />
+            break;
+        default:
+            <p class="ayuda ayuda--arriba">Un texto se describe por su longitud, por ejemplo «un texto de 26 caracteres», para que el escenario se pueda leer.</p>
+            <pre class="codigo"><code>@GherkinCasos.Caracteristica(Historia, Casos)</code></pre>
+            break;
     }
 </div>
 
 @code {
     [Parameter, EditorRequired]
-    public IReadOnlyList<Campo> Campos { get; set; } = [];
+    public Historia Historia { get; set; } = null!;
 
     [Parameter, EditorRequired]
     public IReadOnlyList<CasoPrueba> Casos { get; set; } = [];
@@ -48,6 +57,8 @@
 
     [Parameter]
     public EventCallback<VistaCasos> VistaChanged { get; set; }
+
+    private static string IdPestana(VistaCasos vista) => $"pestana-{vista.ToString().ToLowerInvariant()}";
 
     private Task Elegir(VistaCasos vista) => VistaChanged.InvokeAsync(vista);
 }
