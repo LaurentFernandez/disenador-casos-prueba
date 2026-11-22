@@ -63,6 +63,24 @@
   <data name="Aviso.RangoInvalido" xml:space="preserve"><value>El mínimo no puede ser mayor que el máximo.</value></data>
   <data name="Historia.SinNombre" xml:space="preserve"><value>Historia sin nombre</value></data>
 
+  <!-- Ejemplos listos -->
+  <data name="Ejemplo.Registro" xml:space="preserve"><value>Registro de usuario</value></data>
+  <data name="Ejemplo.Registro.Edad" xml:space="preserve"><value>edad</value></data>
+  <data name="Ejemplo.Registro.Nombre" xml:space="preserve"><value>nombre</value></data>
+  <data name="Ejemplo.Registro.TipoCliente" xml:space="preserve"><value>tipo de cliente</value></data>
+  <data name="Ejemplo.Registro.Opciones" xml:space="preserve"><value>Persona, Empresa</value></data>
+  <data name="Ejemplo.Contrasena" xml:space="preserve"><value>Recuperar contraseña</value></data>
+  <data name="Ejemplo.Contrasena.Correo" xml:space="preserve"><value>correo</value></data>
+  <data name="Ejemplo.Contrasena.Codigo" xml:space="preserve"><value>código de verificación</value></data>
+  <data name="Ejemplo.Contrasena.Nueva" xml:space="preserve"><value>nueva contraseña</value></data>
+  <data name="Ejemplo.Carrito" xml:space="preserve"><value>Carrito de compras</value></data>
+  <data name="Ejemplo.Carrito.Cantidad" xml:space="preserve"><value>cantidad</value></data>
+  <data name="Ejemplo.Carrito.Cupon" xml:space="preserve"><value>cupón</value></data>
+  <data name="Ejemplo.Carrito.MedioPago" xml:space="preserve"><value>medio de pago</value></data>
+  <data name="Ejemplo.Carrito.Opciones" xml:space="preserve"><value>Tarjeta, Transferencia, Contraentrega</value></data>
+  <data name="Ejemplos.Titulo" xml:space="preserve"><value>Ejemplos</value></data>
+  <data name="Ejemplos.Confirmar" xml:space="preserve"><value>El ejemplo reemplazará la historia y los campos que escribiste. ¿Quieres continuar?</value></data>
+
   <!-- Vistas de los casos -->
   <data name="Casos.Vistas" xml:space="preserve"><value>Vista de los casos</value></data>
   <data name="Vista.Matriz" xml:space="preserve"><value>Matriz</value></data>

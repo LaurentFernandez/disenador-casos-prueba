@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Casos.Core
+@inject IJSRuntime JS
 
 <PageTitle>@Textos.De("Marca")</PageTitle>
 
@@ -11,11 +12,18 @@
 
 <section class="seccion" aria-labelledby="campos-titulo">
     <h1 class="titulo" id="campos-titulo">@Textos.De("Pagina.CamposDeLaHistoria")</h1>
+    <div class="ejemplos" role="group" aria-labelledby="ejemplos-titulo">
+        <span class="ejemplos__etiqueta" id="ejemplos-titulo">@Textos.De("Ejemplos.Titulo")</span>
+        @foreach (var ejemplo in EjemplosHistoria.Todos())
+        {
+            <button type="button" class="boton boton--pequeno" @onclick="() => Cargar(ejemplo)">@ejemplo.Historia</button>
+        }
+    </div>
     <p class="nombre-historia">
         <label for="nombre-historia">@Textos.De("Pagina.NombreDeLaHistoria")</label>
-        <input id="nombre-historia" @bind="nombreHistoria" placeholder="@Textos.De("Pagina.EjemploHistoria")" />
+        <input id="nombre-historia" @bind="nombreHistoria" @bind:after="MarcarCambio" placeholder="@Textos.De("Pagina.EjemploHistoria")" />
     </p>
-    <HojaCampos Filas="filas" Avisos="lectura.Avisos" CambioFilas="StateHasChanged" />
+    <HojaCampos Filas="filas" Avisos="lectura.Avisos" CambioFilas="MarcarCambio" />
 </section>
 
 <section class="seccion" aria-labelledby="casos-titulo">
@@ -38,4 +46,25 @@
     private readonly List<FilaCampo> filas = [new()];
     private string nombreHistoria = "";
     private VistaCasos vista;
+
+    // Si se escribió algo desde que se abrió la página o se cargó el último ejemplo.
+    private bool hayCambiosPropios;
+
+    private bool HayDatos => !string.IsNullOrWhiteSpace(nombreHistoria) || filas.Any(fila => !fila.EstaVacia);
+
+    private void MarcarCambio() => hayCambiosPropios = true;
+
+    // Solo se pregunta si hay algo escrito a mano: quien va probando un ejemplo tras otro no ve la pregunta cada vez.
+    private async Task Cargar(EjemplosHistoria.Ejemplo ejemplo)
+    {
+        if (hayCambiosPropios && HayDatos && !await JS.InvokeAsync<bool>("confirm", Textos.De("Ejemplos.Confirmar")))
+        {
+            return;
+        }
+
+        nombreHistoria = ejemplo.Historia;
+        filas.Clear();
+        filas.AddRange(ejemplo.Filas);
+        hayCambiosPropios = false;
+    }
 }

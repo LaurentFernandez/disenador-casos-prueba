@@ -41,11 +41,6 @@
     font-size: var(--tamano-pequeno);
 }
 
-.boton--pequeno {
-    padding: 0 var(--espacio-3);
-    font-weight: 400;
-}
-
 .codigo {
     margin: 0;
     padding: var(--espacio-3) var(--espacio-4);

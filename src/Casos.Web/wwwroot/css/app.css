@@ -224,6 +224,12 @@ a {
     cursor: pointer;
 }
 
+/* Lo usan los botones de exportar y los de los ejemplos. */
+.boton--pequeno {
+    padding: 0 var(--espacio-3);
+    font-weight: 400;
+}
+
 /* Interfaz propia de Blazor (de la plantilla): aviso de error y progreso de carga. */
 #blazor-error-ui {
     color-scheme: light only;
