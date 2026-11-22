@@ -63,6 +63,22 @@
   <data name="Aviso.RangoInvalido" xml:space="preserve"><value>The minimum cannot be greater than the maximum.</value></data>
   <data name="Historia.SinNombre" xml:space="preserve"><value>Untitled story</value></data>
 
+  <!-- Ejemplos listos -->
+  <data name="Ejemplo.Registro" xml:space="preserve"><value>User sign-up</value></data>
+  <data name="Ejemplo.Registro.Edad" xml:space="preserve"><value>age</value></data>
+  <data name="Ejemplo.Registro.Nombre" xml:space="preserve"><value>name</value></data>
+  <data name="Ejemplo.Registro.TipoCliente" xml:space="preserve"><value>customer type</value></data>
+  <data name="Ejemplo.Registro.Opciones" xml:space="preserve"><value>Individual, Company</value></data>
+  <data name="Ejemplo.Contrasena" xml:space="preserve"><value>Password recovery</value></data>
+  <data name="Ejemplo.Contrasena.Correo" xml:space="preserve"><value>email</value></data>
+  <data name="Ejemplo.Contrasena.Codigo" xml:space="preserve"><value>verification code</value></data>
+  <data name="Ejemplo.Contrasena.Nueva" xml:space="preserve"><value>new password</value></data>
+  <data name="Ejemplo.Carrito" xml:space="preserve"><value>Shopping cart</value></data>
+  <data name="Ejemplo.Carrito.Cantidad" xml:space="preserve"><value>quantity</value></data>
+  <data name="Ejemplo.Carrito.Cupon" xml:space="preserve"><value>coupon</value></data>
+  <data name="Ejemplo.Carrito.MedioPago" xml:space="preserve"><value>payment method</value></data>
+  <data name="Ejemplo.Carrito.Opciones" xml:space="preserve"><value>Card, Bank transfer, Cash on delivery</value></data>
+
   <!-- Vistas de los casos -->
   <data name="Casos.Vistas" xml:space="preserve"><value>Case view</value></data>
   <data name="Vista.Matriz" xml:space="preserve"><value>Matrix</value></data>

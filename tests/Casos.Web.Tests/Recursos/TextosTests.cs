@@ -66,6 +66,17 @@ public class TextosTests() : PruebaEnIdioma("en")
         Assert.Equal("Enter the field name.", lectura.Avisos[sinNombre]);
     }
 
+    [Fact]
+    public void Ejemplos_EnIngles_TraenLaHistoriaYLosCamposEnIngles()
+    {
+        var ejemplos = EjemplosHistoria.Todos();
+        var registro = LecturaHoja.Leer(ejemplos[0].Filas, ejemplos[0].Historia);
+
+        Assert.Equal(new[] { "User sign-up", "Password recovery", "Shopping cart" }, ejemplos.Select(ejemplo => ejemplo.Historia));
+        Assert.Empty(registro.Avisos);
+        Assert.Equal(new[] { "age", "name", "customer type" }, registro.Historia.Campos.Select(campo => campo.Nombre));
+    }
+
     private static IEnumerable<string> ClavesDe(ResourceManager recursos, CultureInfo cultura) =>
         recursos.GetResourceSet(cultura, createIfNotExists: true, tryParents: false)!
             .Cast<DictionaryEntry>()
