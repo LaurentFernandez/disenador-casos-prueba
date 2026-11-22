@@ -299,7 +299,7 @@ Escenario: Idioma inicial por defecto
 ```
 
 **Prioridad:** Media
-**Estado:** Pendiente
+**Estado:** Hecha
 
 ### HU-09. Cargar ejemplos listos
 
