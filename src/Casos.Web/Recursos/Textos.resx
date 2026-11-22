@@ -119,7 +119,7 @@
   <data name="Columna.Tecnica" xml:space="preserve"><value>Técnica</value></data>
   <data name="Columna.ValorProbado" xml:space="preserve"><value>Valor probado</value></data>
   <data name="Columna.Resultado" xml:space="preserve"><value>Resultado esperado</value></data>
-  <data name="Matriz.Ayuda" xml:space="preserve"><value>Cada fila cambia un solo campo, o los dos de una regla: las celdas resaltadas son los valores que se prueban y las demás llevan su valor por defecto.</value></data>
+  <data name="Matriz.Ayuda" xml:space="preserve"><value>Cada fila cambia un solo campo, los dos de una regla o los de lista que combina por pares: las celdas resaltadas son los valores que se prueban y las demás llevan su valor por defecto.</value></data>
   <data name="Matriz.Titulo" xml:space="preserve"><value>Casos de prueba con el valor de cada campo</value></data>
   <data name="Matriz.ValorProbado" xml:space="preserve"><value>valor probado</value></data>
   <data name="Recta.Titulo" xml:space="preserve"><value>Casos de prueba</value></data>
@@ -141,6 +141,8 @@
   <data name="Tecnica.LimiteLarga" xml:space="preserve"><value>Valores límite</value></data>
   <data name="Tecnica.Decision" xml:space="preserve"><value>Decisión</value></data>
   <data name="Tecnica.DecisionLarga" xml:space="preserve"><value>Tabla de decisión</value></data>
+  <data name="Tecnica.Pares" xml:space="preserve"><value>Pares</value></data>
+  <data name="Tecnica.ParesLarga" xml:space="preserve"><value>Combinación por pares</value></data>
   <data name="Decision.SinValor" xml:space="preserve"><value>{0}: {1} y {2} sin valor</value></data>
   <data name="Decision.ConValor" xml:space="preserve"><value>{0}: {1} y {2} con valor</value></data>
   <data name="Resumen" xml:space="preserve"><value>{0} casos: {1} y {2}.</value></data>

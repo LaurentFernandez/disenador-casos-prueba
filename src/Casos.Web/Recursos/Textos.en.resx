@@ -119,7 +119,7 @@
   <data name="Columna.Tecnica" xml:space="preserve"><value>Technique</value></data>
   <data name="Columna.ValorProbado" xml:space="preserve"><value>Tested value</value></data>
   <data name="Columna.Resultado" xml:space="preserve"><value>Expected result</value></data>
-  <data name="Matriz.Ayuda" xml:space="preserve"><value>Each row changes a single field, or the two fields of a rule: the highlighted cells are the values under test and the others keep their default value.</value></data>
+  <data name="Matriz.Ayuda" xml:space="preserve"><value>Each row changes a single field, the two fields of a rule or the list fields it combines in pairs: the highlighted cells are the values under test and the others keep their default value.</value></data>
   <data name="Matriz.Titulo" xml:space="preserve"><value>Test cases with the value of each field</value></data>
   <data name="Matriz.ValorProbado" xml:space="preserve"><value>tested value</value></data>
   <data name="Recta.Titulo" xml:space="preserve"><value>Test cases</value></data>
@@ -141,6 +141,8 @@
   <data name="Tecnica.LimiteLarga" xml:space="preserve"><value>Boundary values</value></data>
   <data name="Tecnica.Decision" xml:space="preserve"><value>Decision</value></data>
   <data name="Tecnica.DecisionLarga" xml:space="preserve"><value>Decision table</value></data>
+  <data name="Tecnica.Pares" xml:space="preserve"><value>Pairwise</value></data>
+  <data name="Tecnica.ParesLarga" xml:space="preserve"><value>Pairwise combination</value></data>
   <data name="Decision.SinValor" xml:space="preserve"><value>{0}: {1} and {2} with no value</value></data>
   <data name="Decision.ConValor" xml:space="preserve"><value>{0}: {1} and {2} with a value</value></data>
   <data name="Resumen" xml:space="preserve"><value>{0} cases: {1} and {2}.</value></data>

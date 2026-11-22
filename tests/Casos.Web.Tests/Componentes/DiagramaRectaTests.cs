@@ -107,6 +107,23 @@ public class DiagramaRectaTests() : PruebaEnIdioma("es")
         Assert.DoesNotContain(diagrama.Marcas.SelectMany(marca => marca.Codigos).Concat(diagrama.Fichas.SelectMany(ficha => ficha.Codigos)), codigosDeLaTabla.Contains);
     }
 
+    [Fact]
+    public void Crear_CasosDePares_NoSonFichasDeLaRecta()
+    {
+        var navegador = new CampoLista("navegador", true, ["Chrome", "Firefox", "Edge"]);
+        var historia = new Historia("Compatibilidad");
+        historia.AgregarCampo(navegador);
+        historia.AgregarCampo(new CampoLista("sistema", true, ["Windows", "macOS"]));
+        historia.CombinarPorPares();
+        var casos = GeneradorCasos.Generar(historia);
+        var codigosDePares = casos.Where(caso => caso.Tecnica == Tecnica.Pares).Select(caso => caso.Codigo).ToHashSet();
+
+        var diagrama = DiagramaRecta.Crear(navegador, casos);
+
+        Assert.Equal(6, codigosDePares.Count);
+        Assert.DoesNotContain(diagrama.Fichas.SelectMany(ficha => ficha.Codigos), codigosDePares.Contains);
+    }
+
     private static DiagramaRecta DiagramaDe(Campo campo)
     {
         var historia = new Historia("Registro de usuario");

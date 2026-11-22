@@ -24,6 +24,10 @@
             {
                 <li><span class="icono icono--decision" aria-hidden="true"></span>@TextosCaso.NombreLargoTecnica(Tecnica.TablaDecision)</li>
             }
+            @if (Casos.Any(caso => caso.Tecnica == Tecnica.Pares))
+            {
+                <li><span class="icono icono--pares" aria-hidden="true"></span>@TextosCaso.NombreLargoTecnica(Tecnica.Pares)</li>
+            }
         </ul>
     }
 

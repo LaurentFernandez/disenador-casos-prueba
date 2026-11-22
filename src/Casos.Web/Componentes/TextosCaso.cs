@@ -11,11 +11,18 @@ public static class TextosCaso
 {
     private const int LargoVisible = 6;
     private const int PrefijoVisible = 4;
+    private const string Separador = " · ";
 
     public static string Vacio => Textos.De("Valor.Vacio");
 
     public static string Descripcion(CasoPrueba caso)
     {
+        // Una combinación por pares se describe con las opciones que junta, por ejemplo «Chrome · Windows · español».
+        if (caso.CamposCombinados is { } combinados)
+        {
+            return string.Join(Separador, combinados.Select(campo => Valor(caso.Datos[campo.Nombre])));
+        }
+
         if (caso.CampoProbado is not { } campo)
         {
             return Textos.De("Caso.TodosValidos");
@@ -34,7 +41,8 @@ public static class TextosCaso
 
     public static string ValorProbado(CasoPrueba caso) => caso switch
     {
-        { Regla: { } regla, CampoProbado: { } campo } => $"{DatoDe(caso, regla.CampoCondicion)} · {DatoDe(caso, campo.Nombre)}",
+        { CamposCombinados: { } combinados } => string.Join(Separador, combinados.Select(campo => DatoDe(caso, campo.Nombre))),
+        { Regla: { } regla, CampoProbado: { } campo } => $"{DatoDe(caso, regla.CampoCondicion)}{Separador}{DatoDe(caso, campo.Nombre)}",
         { CampoProbado: { } campo } => DatoDe(caso, campo.Nombre),
         _ => Textos.De("Caso.ValoresPorDefecto"),
     };
@@ -43,14 +51,16 @@ public static class TextosCaso
     {
         Tecnica.ParticionEquivalencia => "Tecnica.Particion",
         Tecnica.ValoresLimite => "Tecnica.Limite",
-        _ => "Tecnica.Decision",
+        Tecnica.TablaDecision => "Tecnica.Decision",
+        _ => "Tecnica.Pares",
     });
 
     public static string NombreLargoTecnica(Tecnica tecnica) => Textos.De(tecnica switch
     {
         Tecnica.ParticionEquivalencia => "Tecnica.ParticionLarga",
         Tecnica.ValoresLimite => "Tecnica.LimiteLarga",
-        _ => "Tecnica.DecisionLarga",
+        Tecnica.TablaDecision => "Tecnica.DecisionLarga",
+        _ => "Tecnica.ParesLarga",
     });
 
     public static string Resumen(IReadOnlyCollection<CasoPrueba> casos)

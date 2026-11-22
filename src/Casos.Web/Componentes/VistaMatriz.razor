@@ -32,8 +32,10 @@
                     @foreach (var campo in Campos)
                     {
                         var valor = caso.Datos[campo.Nombre];
-                        // El caso con todos los valores por defecto prueba todos los campos a la vez; el de una regla, sus dos campos.
-                        var probado = caso.CampoProbado is null || caso.CampoProbado == campo || caso.Regla?.CampoCondicion == campo.Nombre;
+                        // Uno por pares prueba los campos que combina; el que tiene todos los valores por defecto, todos los campos a
+                        // la vez, y el de una regla, sus dos campos.
+                        var probado = caso.CamposCombinados?.Contains(campo)
+                            ?? (caso.CampoProbado is null || caso.CampoProbado == campo || caso.Regla?.CampoCondicion == campo.Nombre);
                         <td class="@ClaseDeValor(probado, caso.EsValido)">
                             <span class="@(valor.Length == 0 ? "vacio" : null)">@TextosCaso.Valor(valor)</span>
                             @if (probado)
@@ -65,7 +67,8 @@
     {
         Tecnica.ParticionEquivalencia => "particion",
         Tecnica.ValoresLimite => "limite",
-        _ => "decision",
+        Tecnica.TablaDecision => "decision",
+        _ => "pares",
     };
 
     private static string ClaseDeValor(bool probado, bool valido) =>

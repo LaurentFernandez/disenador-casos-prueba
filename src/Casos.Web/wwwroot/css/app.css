@@ -178,6 +178,10 @@ a {
     clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }
 
+.icono--pares {
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+
 .muestra {
     width: var(--ancho-muestra);
 }

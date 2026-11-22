@@ -43,6 +43,36 @@ public class TextosCasoTests() : PruebaEnIdioma("es")
         Assert.Equal("Tabla de decisión", TextosCaso.NombreLargoTecnica(Tecnica.TablaDecision));
     }
 
+    [Fact]
+    public void Descripcion_CasoDePares_JuntaLasOpcionesQueCombina()
+    {
+        Assert.Equal("Chrome · Windows · español", TextosCaso.Descripcion(CasosPorPares()[0]));
+    }
+
+    [Fact]
+    public void ValorProbado_CasoDePares_MuestraCadaCampoCombinado()
+    {
+        Assert.Equal("navegador: Chrome · sistema: Windows · idioma: español", TextosCaso.ValorProbado(CasosPorPares()[0]));
+    }
+
+    [Fact]
+    public void NombreTecnica_Pares_TieneSuNombreCortoYLargo()
+    {
+        Assert.Equal("Pares", TextosCaso.NombreTecnica(Tecnica.Pares));
+        Assert.Equal("Combinación por pares", TextosCaso.NombreLargoTecnica(Tecnica.Pares));
+    }
+
+    private static IReadOnlyList<CasoPrueba> CasosPorPares()
+    {
+        var historia = new Historia("Compatibilidad");
+        historia.AgregarCampo(new CampoEntero("edad", true, 18, 65));
+        historia.AgregarCampo(new CampoLista("navegador", true, ["Chrome", "Firefox", "Edge"]));
+        historia.AgregarCampo(new CampoLista("sistema", true, ["Windows", "macOS"]));
+        historia.AgregarCampo(new CampoLista("idioma", true, ["español", "inglés"]));
+        historia.CombinarPorPares();
+        return GeneradorCasos.Generar(historia).Where(caso => caso.Tecnica == Tecnica.Pares).ToList();
+    }
+
     private static IReadOnlyList<CasoPrueba> CasosDeLaRegla()
     {
         var historia = new Historia("Registro de cliente");
