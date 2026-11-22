@@ -1,0 +1,27 @@
+@using System.Globalization
+@inject IJSRuntime JS
+@inject NavigationManager Navegacion
+
+<div class="segmentos" role="group" aria-label="Idioma / Language">
+    <button type="button" lang="es" aria-label="Español (ES)" aria-pressed="@Elegido("es")" @onclick='() => Elegir("es")'>ES</button>
+    <button type="button" lang="en" aria-label="English (EN)" aria-pressed="@Elegido("en")" @onclick='() => Elegir("en")'>EN</button>
+</div>
+
+@code {
+    private static string Actual => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+    private static string Elegido(string idioma) => idioma == Actual ? "true" : "false";
+
+    // El idioma se fija al arrancar la aplicación, así que cambiarlo exige recargar la página.
+    private async Task Elegir(string idioma)
+    {
+        if (idioma == Actual)
+        {
+            return;
+        }
+
+        await using var modulo = await JS.InvokeAsync<IJSObjectReference>("import", "./js/idioma.js");
+        await modulo.InvokeVoidAsync("guardar", idioma);
+        Navegacion.NavigateTo(Navegacion.Uri, forceLoad: true);
+    }
+}
