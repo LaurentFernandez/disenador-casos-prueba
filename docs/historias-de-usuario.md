@@ -325,7 +325,7 @@ Escenario: Proteger lo que ya escribí
 ```
 
 **Prioridad:** Media
-**Estado:** Pendiente
+**Estado:** Hecha
 
 ### HU-10. Instalar la aplicación y usarla sin conexión
 
