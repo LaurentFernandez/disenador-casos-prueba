@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using Casos.Core.Modelo;
+using Casos.Web.Recursos;
 
 namespace Casos.Web.Componentes;
 
@@ -18,8 +19,6 @@ public static class ExportacionCasos
 
     // Una celda que empieza con uno de estos caracteres puede ejecutarse como fórmula en una hoja de cálculo.
     private const string InicioDeFormula = "=+-@\t\r";
-
-    private const string NombreSinLetras = "casos";
 
     /// <summary>
     /// Un archivo listo para descargar.
@@ -70,11 +69,17 @@ public static class ExportacionCasos
             .Where(caracter => CharUnicodeInfo.GetUnicodeCategory(caracter) != UnicodeCategory.NonSpacingMark));
         var palabras = Regex.Split(sinTildes.ToLowerInvariant(), "[^a-z0-9]+").Where(palabra => palabra.Length > 0);
         var nombre = string.Join('-', palabras);
-        return nombre.Length > 0 ? nombre : NombreSinLetras;
+        return nombre.Length > 0 ? nombre : Textos.De("Exportar.NombreSinLetras");
     }
 
     private static IEnumerable<string> Encabezados(Historia historia) =>
-        ["Código", "Descripción", "Técnica", .. historia.Campos.Select(campo => campo.Nombre), "Resultado esperado"];
+    [
+        Textos.De("Columna.Codigo"),
+        Textos.De("Columna.Descripcion"),
+        Textos.De("Columna.Tecnica"),
+        .. historia.Campos.Select(campo => campo.Nombre),
+        Textos.De("Columna.Resultado"),
+    ];
 
     private static IEnumerable<string> Celdas(Historia historia, CasoPrueba caso, Func<string, string> valorVisible) =>
     [

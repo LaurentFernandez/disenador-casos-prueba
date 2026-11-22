@@ -4,7 +4,7 @@ using Casos.Web.Componentes;
 
 namespace Casos.Web.Tests.Componentes;
 
-public class GherkinCasosTests
+public class GherkinCasosTests() : PruebaEnIdioma("es")
 {
     private readonly Historia historia = HistoriaDeRegistro();
 

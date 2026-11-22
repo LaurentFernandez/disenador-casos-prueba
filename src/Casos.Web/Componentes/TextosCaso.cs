@@ -1,24 +1,24 @@
 using Casos.Core.Modelo;
+using Casos.Web.Recursos;
 
 namespace Casos.Web.Componentes;
 
-// shortcut: los textos solo están en español; pasarlos a archivos .resx con el cambio de idioma (HU-08).
 /// <summary>
 /// Textos de las vistas de los casos, armados a partir de lo que devuelve el motor.
 /// Evitan el género gramatical porque los nombres de los campos los escribe el usuario.
 /// </summary>
 public static class TextosCaso
 {
-    public const string Vacio = "vacío";
-
     private const int LargoVisible = 6;
     private const int PrefijoVisible = 4;
+
+    public static string Vacio => Textos.De("Valor.Vacio");
 
     public static string Descripcion(CasoPrueba caso)
     {
         if (caso.CampoProbado is not { } campo)
         {
-            return "Todos los valores válidos";
+            return Textos.De("Caso.TodosValidos");
         }
 
         return caso.Posicion is { } posicion
@@ -27,23 +27,26 @@ public static class TextosCaso
     }
 
     public static string Resultado(CasoPrueba caso) =>
-        caso is { EsValido: false, CampoProbado: { } campo } ? $"Rechaza el valor de {campo.Nombre}" : "Acepta los datos";
+        caso is { EsValido: false, CampoProbado: { } campo } ? Textos.De("Caso.Rechaza", campo.Nombre) : Textos.De("Caso.Acepta");
 
     public static string ValorProbado(CasoPrueba caso) =>
-        caso.CampoProbado is { } campo ? $"{campo.Nombre}: {Valor(caso.Datos[campo.Nombre])}" : "Valores por defecto";
+        caso.CampoProbado is { } campo ? $"{campo.Nombre}: {Valor(caso.Datos[campo.Nombre])}" : Textos.De("Caso.ValoresPorDefecto");
 
     public static string NombreTecnica(Tecnica tecnica) =>
-        tecnica == Tecnica.ParticionEquivalencia ? "Partición" : "Límite";
+        Textos.De(tecnica == Tecnica.ParticionEquivalencia ? "Tecnica.Particion" : "Tecnica.Limite");
 
     public static string NombreLargoTecnica(Tecnica tecnica) =>
-        tecnica == Tecnica.ParticionEquivalencia ? "Partición de equivalencia" : "Valores límite";
+        Textos.De(tecnica == Tecnica.ParticionEquivalencia ? "Tecnica.ParticionLarga" : "Tecnica.LimiteLarga");
 
     public static string Resumen(IReadOnlyCollection<CasoPrueba> casos)
     {
         var aceptados = casos.Count(caso => caso.EsValido);
         var rechazados = casos.Count - aceptados;
-        return $"{casos.Count} casos: {aceptados} {(aceptados == 1 ? "se acepta" : "se aceptan")} "
-            + $"y {rechazados} {(rechazados == 1 ? "se rechaza" : "se rechazan")}.";
+        return Textos.De(
+            "Resumen",
+            casos.Count,
+            Textos.De(aceptados == 1 ? "Resumen.AceptadoUno" : "Resumen.AceptadoVarios", aceptados),
+            Textos.De(rechazados == 1 ? "Resumen.RechazadoUno" : "Resumen.RechazadoVarios", rechazados));
     }
 
     // Un texto de relleno largo se resume con su longitud para que se pueda leer.
@@ -57,33 +60,36 @@ public static class TextosCaso
     /// </summary>
     public static string Reglas(Campo campo)
     {
-        var obligatorio = campo.Obligatorio ? "obligatorio" : "opcional";
+        var obligatorio = Textos.De(campo.Obligatorio ? "Reglas.Obligatorio" : "Reglas.Opcional");
         return campo switch
         {
-            CampoEntero entero => $"Entero, {obligatorio}, {Rango(entero.Minimo, entero.Maximo)}",
-            CampoTexto texto => $"Texto, {obligatorio}, {Rango(texto.LongitudMinima, texto.LongitudMaxima)} caracteres",
-            CampoLista lista => $"Lista, {obligatorio}, con {Cantidad(lista.Opciones.Count, "opción", "opciones")}",
+            CampoEntero entero => Textos.De("Reglas.Entero", obligatorio, Rango(entero.Minimo, entero.Maximo)),
+            CampoTexto texto => Textos.De("Reglas.Texto", obligatorio, Rango(texto.LongitudMinima, texto.LongitudMaxima)),
+            CampoLista lista => Textos.De("Reglas.Lista", obligatorio, Cantidad(lista.Opciones.Count, "Opciones.Una", "Opciones.Varias")),
             _ => obligatorio,
         };
     }
 
-    public static string MenorQue(long minimo) => $"menor que {minimo}";
+    public static string MenorQue(long minimo) => Textos.De("Rango.MenorQue", minimo);
 
-    public static string MayorQue(long maximo) => $"mayor que {maximo}";
+    public static string MayorQue(long maximo) => Textos.De("Rango.MayorQue", maximo);
 
-    public static string MasDe(long maximo) => $"más de {maximo}";
+    public static string MasDe(long maximo) => Textos.De("Rango.MasDe", maximo);
 
-    public static string Rango(long desde, long hasta) => desde == hasta ? $"{desde}" : $"de {desde} a {hasta}";
+    public static string Rango(long desde, long hasta) => desde == hasta ? $"{desde}" : Textos.De("Rango.DeA", desde, hasta);
 
     /// <summary>
     /// La recta de un campo contada en palabras, para quien usa un lector de pantalla.
     /// </summary>
     public static string DescripcionRecta(DiagramaRecta diagrama)
     {
-        var clases = string.Join("; ", diagrama.Bandas.Select(banda => $"{banda.Nombre}, {(banda.Valida ? "válido" : "inválido")}"));
-        return $"Recta de {diagrama.Campo.Nombre}: {clases}. "
-            + $"Valores de partición: {ValoresDe(diagrama, Tecnica.ParticionEquivalencia)}. "
-            + $"Valores límite: {ValoresDe(diagrama, Tecnica.ValoresLimite)}.";
+        var clases = string.Join("; ", diagrama.Bandas.Select(banda => $"{banda.Nombre}, {Textos.De(banda.Valida ? "Clase.Valida" : "Clase.Invalida")}"));
+        return Textos.De(
+            "Recta.Descripcion",
+            diagrama.Campo.Nombre,
+            clases,
+            ValoresDe(diagrama, Tecnica.ParticionEquivalencia),
+            ValoresDe(diagrama, Tecnica.ValoresLimite));
     }
 
     private static string DescripcionClase(Campo campo, TipoClase? clase, string valor)
@@ -93,45 +99,31 @@ public static class TextosCaso
         {
             (TipoClase.MenorQueMinimo, CampoEntero entero) => $"{nombre} {MenorQue(entero.Minimo)}",
             (TipoClase.MayorQueMaximo, CampoEntero entero) => $"{nombre} {MayorQue(entero.Maximo)}",
-            (TipoClase.MenorQueMinimo, CampoTexto texto) => $"{nombre} de {RangoDeCaracteres(1, texto.LongitudMinima - 1)}",
-            (TipoClase.MayorQueMaximo, CampoTexto texto) => $"{nombre} de {MasDe(texto.LongitudMaxima)} caracteres",
-            (TipoClase.ConDecimales, _) => $"{nombre} con decimales",
-            (TipoClase.NoEsNumero, _) => $"{nombre} que no es un número",
+            (TipoClase.MenorQueMinimo, CampoTexto texto) => Textos.De("Clase.TextoCorto", nombre, RangoDeCaracteres(1, texto.LongitudMinima - 1)),
+            (TipoClase.MayorQueMaximo, CampoTexto texto) => Textos.De("Clase.TextoLargo", nombre, MasDe(texto.LongitudMaxima)),
+            (TipoClase.ConDecimales, _) => Textos.De("Clase.ConDecimales", nombre),
+            (TipoClase.NoEsNumero, _) => Textos.De("Clase.NoEsNumero", nombre),
             (TipoClase.Opcion, _) => $"{nombre}: {valor}",
-            (TipoClase.FueraDeLista, _) => $"{nombre} fuera de la lista",
-            (TipoClase.Vacio, _) => $"{nombre} sin valor",
+            (TipoClase.FueraDeLista, _) => Textos.De("Clase.FueraDeLista", nombre),
+            (TipoClase.Vacio, _) => Textos.De("Clase.Vacio", nombre),
             _ => nombre,
         };
     }
 
-    private static string DescripcionLimite(Campo campo, PosicionLimite posicion)
-    {
-        var nombre = ConMayuscula(campo.Nombre);
-        // En un texto el rango es de longitud.
-        var (delMinimo, enElMinimo, delMaximo, enElMaximo) = campo is CampoTexto
-            ? ("de la longitud mínima", "en la longitud mínima", "de la longitud máxima", "en la longitud máxima")
-            : ("del mínimo", "en el mínimo", "del máximo", "en el máximo");
-        return posicion switch
-        {
-            PosicionLimite.DebajoDelMinimo => $"{nombre} justo debajo {delMinimo}",
-            PosicionLimite.EnElMinimo => $"{nombre} {enElMinimo}",
-            PosicionLimite.EncimaDelMinimo => $"{nombre} justo encima {delMinimo}",
-            PosicionLimite.DebajoDelMaximo => $"{nombre} justo debajo {delMaximo}",
-            PosicionLimite.EnElMaximo => $"{nombre} {enElMaximo}",
-            _ => $"{nombre} justo encima {delMaximo}",
-        };
-    }
+    // En un texto el rango es de longitud; la clave sale del nombre de la posición.
+    private static string DescripcionLimite(Campo campo, PosicionLimite posicion) =>
+        Textos.De($"Limite.{(campo is CampoTexto ? "Texto" : "Entero")}.{posicion}", ConMayuscula(campo.Nombre));
 
     private static string ValoresDe(DiagramaRecta diagrama, Tecnica tecnica) =>
         string.Join(", ", diagrama.Marcas.Where(marca => marca.Tecnica == tecnica).Select(marca => marca.Valor));
 
     private static string RangoDeCaracteres(int desde, int hasta) =>
-        desde == hasta ? Caracteres(desde) : $"{desde} a {Caracteres(hasta)}";
+        desde == hasta ? Caracteres(desde) : Textos.De("Rango.Caracteres", desde, Caracteres(hasta));
 
-    public static string Caracteres(int cantidad) => Cantidad(cantidad, "carácter", "caracteres");
+    public static string Caracteres(int cantidad) => Cantidad(cantidad, "Caracteres.Uno", "Caracteres.Varios");
 
-    private static string Cantidad(int cantidad, string singular, string plural) =>
-        cantidad == 1 ? $"1 {singular}" : $"{cantidad} {plural}";
+    private static string Cantidad(int cantidad, string claveUno, string claveVarios) =>
+        cantidad == 1 ? Textos.De(claveUno) : Textos.De(claveVarios, cantidad);
 
     private static string ConMayuscula(string texto) => string.Concat(texto[..1].ToUpperInvariant(), texto[1..]);
 }

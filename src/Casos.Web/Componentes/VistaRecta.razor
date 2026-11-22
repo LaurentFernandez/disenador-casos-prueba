@@ -57,12 +57,12 @@
 
                     @if (diagrama.Fichas.Count > 0)
                     {
-                        <p class="campo-recta__nota">@(diagrama.Bandas.Count > 0 ? "Fuera de la recta:" : "Una lista no tiene rango: cada opción es una clase.")</p>
+                        <p class="campo-recta__nota">@Textos.De(diagrama.Bandas.Count > 0 ? "Recta.FueraDeLaRecta" : "Recta.ListaSinRango")</p>
                         <ul class="fichas">
                             @foreach (var ficha in diagrama.Fichas)
                             {
                                 <li class="@ConResaltado(ficha.Valida ? "ficha ficha--valida" : "ficha", ficha.Codigos)">
-                                    @ficha.Texto<span class="visualmente-oculto">, @(ficha.Valida ? "válido" : "inválido")</span>
+                                    @ficha.Texto<span class="visualmente-oculto">, @Textos.De(ficha.Valida ? "Clase.Valida" : "Clase.Invalida")</span>
                                 </li>
                             }
                         </ul>
@@ -70,21 +70,21 @@
                 </article>
             }
         </div>
-        <p class="ayuda">Las rectas no están a escala. En un texto, la recta es la longitud en caracteres.</p>
+        <p class="ayuda">@Textos.De("Recta.AyudaEscala")</p>
     </div>
 
     <div>
-        <p class="ayuda ayuda--arriba">Cada caso cambia un solo campo. Pasa el cursor o el foco por un caso para verlo en su recta.</p>
+        <p class="ayuda ayuda--arriba">@Textos.De("Recta.AyudaCasos")</p>
         <div class="panel desplazable">
             <table class="tabla-casos">
-                <caption class="visualmente-oculto">Casos de prueba</caption>
+                <caption class="visualmente-oculto">@Textos.De("Recta.Titulo")</caption>
                 <thead>
                     <tr>
-                        <th scope="col">Código</th>
-                        <th scope="col">Descripción</th>
-                        <th scope="col">Técnica</th>
-                        <th scope="col">Valor probado</th>
-                        <th scope="col">Resultado esperado</th>
+                        <th scope="col">@Textos.De("Columna.Codigo")</th>
+                        <th scope="col">@Textos.De("Columna.Descripcion")</th>
+                        <th scope="col">@Textos.De("Columna.Tecnica")</th>
+                        <th scope="col">@Textos.De("Columna.ValorProbado")</th>
+                        <th scope="col">@Textos.De("Columna.Resultado")</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -1,6 +1,6 @@
 <div class="panel desplazable">
     <table class="hoja">
-        <caption class="visualmente-oculto">Campos de la historia</caption>
+        <caption class="visualmente-oculto">@Textos.De("Pagina.CamposDeLaHistoria")</caption>
         <colgroup>
             <col class="columna-campo" />
             <col class="columna-tipo" />
@@ -12,13 +12,13 @@
         </colgroup>
         <thead>
             <tr>
-                <th scope="col">Campo</th>
-                <th scope="col">Tipo</th>
-                <th scope="col">Obligatorio</th>
-                <th scope="col">Mínimo</th>
-                <th scope="col">Máximo</th>
-                <th scope="col">Opciones</th>
-                <th scope="col"><span class="visualmente-oculto">Acciones</span></th>
+                <th scope="col">@Textos.De("Hoja.Campo")</th>
+                <th scope="col">@Textos.De("Hoja.Tipo")</th>
+                <th scope="col">@Textos.De("Hoja.Obligatorio")</th>
+                <th scope="col">@Textos.De("Hoja.Minimo")</th>
+                <th scope="col">@Textos.De("Hoja.Maximo")</th>
+                <th scope="col">@Textos.De("Hoja.Opciones")</th>
+                <th scope="col"><span class="visualmente-oculto">@Textos.De("Hoja.Acciones")</span></th>
             </tr>
         </thead>
         <tbody>
@@ -31,36 +31,37 @@
 
                 <tr @key="fila">
                     <td>
-                        <input class="celda" @bind="fila.Nombre" @bind:after="AvisarCambio" aria-label="Nombre del campo @numero"
+                        <input class="celda" @bind="fila.Nombre" @bind:after="AvisarCambio" aria-label="@Textos.De("Hoja.NombreDelCampo", numero)"
                                aria-invalid="@(aviso is null ? null : "true")" aria-describedby="@idAviso" />
                     </td>
                     <td>
-                        <select class="celda" @bind="fila.Tipo" @bind:after="AvisarCambio" aria-label="Tipo del campo @numero">
-                            <option value="@TipoCampo.Entero">Entero</option>
-                            <option value="@TipoCampo.Texto">Texto</option>
-                            <option value="@TipoCampo.Lista">Lista</option>
+                        <select class="celda" @bind="fila.Tipo" @bind:after="AvisarCambio" aria-label="@Textos.De("Hoja.TipoDelCampo", numero)">
+                            @foreach (var tipo in Enum.GetValues<TipoCampo>())
+                            {
+                                <option value="@tipo">@Textos.De($"Tipo.{tipo}")</option>
+                            }
                         </select>
                     </td>
                     <td class="centrado">
-                        <input type="checkbox" @bind="fila.Obligatorio" @bind:after="AvisarCambio" aria-label="Campo @numero obligatorio" />
+                        <input type="checkbox" @bind="fila.Obligatorio" @bind:after="AvisarCambio" aria-label="@Textos.De("Hoja.CampoObligatorio", numero)" />
                     </td>
                     @if (fila.Tipo == TipoCampo.Lista)
                     {
-                        <td class="no-aplica"><span class="visualmente-oculto">No aplica</span></td>
-                        <td class="no-aplica"><span class="visualmente-oculto">No aplica</span></td>
+                        <td class="no-aplica"><span class="visualmente-oculto">@Textos.De("Hoja.NoAplica")</span></td>
+                        <td class="no-aplica"><span class="visualmente-oculto">@Textos.De("Hoja.NoAplica")</span></td>
                         <td>
-                            <input class="celda" @bind="fila.Opciones" @bind:after="AvisarCambio" placeholder="Ejemplo: Persona, Empresa"
-                                   aria-label="Opciones del campo @numero, separadas por comas" />
+                            <input class="celda" @bind="fila.Opciones" @bind:after="AvisarCambio" placeholder="@Textos.De("Hoja.EjemploOpciones")"
+                                   aria-label="@Textos.De("Hoja.OpcionesDelCampo", numero)" />
                         </td>
                     }
                     else
                     {
-                        <td><input type="number" class="celda celda--numero" @bind="fila.Minimo" @bind:after="AvisarCambio" aria-label="Mínimo del campo @numero" /></td>
-                        <td><input type="number" class="celda celda--numero" @bind="fila.Maximo" @bind:after="AvisarCambio" aria-label="Máximo del campo @numero" /></td>
-                        <td class="no-aplica"><span class="visualmente-oculto">No aplica</span></td>
+                        <td><input type="number" class="celda celda--numero" @bind="fila.Minimo" @bind:after="AvisarCambio" aria-label="@Textos.De("Hoja.MinimoDelCampo", numero)" /></td>
+                        <td><input type="number" class="celda celda--numero" @bind="fila.Maximo" @bind:after="AvisarCambio" aria-label="@Textos.De("Hoja.MaximoDelCampo", numero)" /></td>
+                        <td class="no-aplica"><span class="visualmente-oculto">@Textos.De("Hoja.NoAplica")</span></td>
                     }
                     <td class="centrado">
-                        <button type="button" class="quitar" aria-label="Quitar el campo @numero" @onclick="() => Quitar(fila)">Quitar</button>
+                        <button type="button" class="quitar" aria-label="@Textos.De("Hoja.QuitarElCampo", numero)" @onclick="() => Quitar(fila)">@Textos.De("Hoja.Quitar")</button>
                     </td>
                 </tr>
 
@@ -75,16 +76,16 @@
             @if (Filas.Count == 0)
             {
                 <tr>
-                    <td colspan="7" class="sin-campos">No hay campos. Agrega el primero con «Agregar campo».</td>
+                    <td colspan="7" class="sin-campos">@Textos.De("Hoja.SinCampos")</td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
 
-<p class="ayuda">En los campos de texto, mínimo y máximo son la longitud en caracteres. Separa las opciones de una lista con comas.</p>
+<p class="ayuda">@Textos.De("Hoja.Ayuda")</p>
 
-<button type="button" class="boton agregar" @onclick="Agregar">Agregar campo</button>
+<button type="button" class="boton agregar" @onclick="Agregar">@Textos.De("Hoja.AgregarCampo")</button>
 
 @code {
     [Parameter, EditorRequired]

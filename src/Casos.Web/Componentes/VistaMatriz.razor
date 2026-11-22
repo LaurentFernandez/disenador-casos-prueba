@@ -1,20 +1,20 @@
 @using Casos.Core.Modelo
 
-<p class="ayuda ayuda--arriba">Cada fila cambia un solo campo: la celda resaltada es el valor que se prueba y las demás llevan su valor por defecto.</p>
+<p class="ayuda ayuda--arriba">@Textos.De("Matriz.Ayuda")</p>
 
 <div class="panel desplazable">
     <table class="matriz">
-        <caption class="visualmente-oculto">Casos de prueba con el valor de cada campo</caption>
+        <caption class="visualmente-oculto">@Textos.De("Matriz.Titulo")</caption>
         <thead>
             <tr>
-                <th scope="col">Código</th>
-                <th scope="col">Descripción</th>
-                <th scope="col">Técnica</th>
+                <th scope="col">@Textos.De("Columna.Codigo")</th>
+                <th scope="col">@Textos.De("Columna.Descripcion")</th>
+                <th scope="col">@Textos.De("Columna.Tecnica")</th>
                 @foreach (var campo in Campos)
                 {
                     <th scope="col">@campo.Nombre</th>
                 }
-                <th scope="col">Resultado esperado</th>
+                <th scope="col">@Textos.De("Columna.Resultado")</th>
             </tr>
         </thead>
         <tbody>
@@ -38,7 +38,7 @@
                             <span class="@(valor.Length == 0 ? "vacio" : null)">@TextosCaso.Valor(valor)</span>
                             @if (probado)
                             {
-                                <span class="visualmente-oculto">, valor probado</span>
+                                <span class="visualmente-oculto">, @Textos.De("Matriz.ValorProbado")</span>
                             }
                         </td>
                     }

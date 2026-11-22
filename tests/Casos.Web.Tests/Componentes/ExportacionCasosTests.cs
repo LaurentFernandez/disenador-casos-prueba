@@ -4,14 +4,14 @@ using Casos.Web.Componentes;
 
 namespace Casos.Web.Tests.Componentes;
 
-public class ExportacionCasosTests
+public class ExportacionCasosTests : PruebaEnIdioma
 {
     private const string EncabezadoCsv = "Código;Descripción;Técnica;edad;nombre;tipo de cliente;Resultado esperado";
 
     private readonly Historia historia;
     private readonly IReadOnlyList<CasoPrueba> casos;
 
-    public ExportacionCasosTests()
+    public ExportacionCasosTests() : base("es")
     {
         historia = HistoriaCon(new CampoEntero("edad", true, 18, 65), new CampoTexto("nombre", true, 3, 50), Lista("Persona", "Empresa"));
         casos = GeneradorCasos.Generar(historia);
