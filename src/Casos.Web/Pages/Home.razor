@@ -2,6 +2,14 @@
 
 <PageTitle>Diseñador de casos de prueba</PageTitle>
 
+@{
+    var lectura = LecturaHoja.Leer(filas);
+}
+
 <h1 class="titulo">Campos de la historia</h1>
 
-<HojaCampos />
+<HojaCampos Filas="filas" Avisos="lectura.Avisos" CambioFilas="StateHasChanged" />
+
+@code {
+    private readonly List<FilaCampo> filas = [new()];
+}
