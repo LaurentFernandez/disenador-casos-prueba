@@ -79,7 +79,7 @@ Escenario: Longitud inválida
 
 **Fuera de alcance:** campos decimales y de fecha; se evaluarán en una historia aparte.
 **Prioridad:** Alta
-**Estado:** En desarrollo (hecha en el motor; falta la interfaz)
+**Estado:** Hecha
 
 ### HU-03. Generar las clases de equivalencia de cada campo
 
