@@ -62,7 +62,30 @@ public class TextosCasoTests() : PruebaEnIdioma("es")
         Assert.Equal("Combinación por pares", TextosCaso.NombreLargoTecnica(Tecnica.Pares));
     }
 
-    private static IReadOnlyList<CasoPrueba> CasosPorPares()
+    [Fact]
+    public void TotalPares_TresCamposDeHU12_DiceSeisDeDoce()
+    {
+        var historia = HistoriaPorPares();
+
+        Assert.Equal("Combinaciones por pares: 6 de 12 posibles.", TextosCaso.TotalPares(historia, GeneradorCasos.Generar(historia)));
+    }
+
+    [Fact]
+    public void TotalPares_VeinteListasDeDiezOpciones_MuestraElTotalQueNoCabeEnUnLong()
+    {
+        var historia = new Historia("Configuración");
+        foreach (var numero in Enumerable.Range(1, 20))
+        {
+            historia.AgregarCampo(new CampoLista($"opción {numero}", true, Enumerable.Range(0, 10).Select(valor => $"{valor}").ToList()));
+        }
+
+        Assert.Equal("Combinaciones por pares: 0 de 100.000.000.000.000.000.000 posibles.", TextosCaso.TotalPares(historia, []));
+    }
+
+    private static IReadOnlyList<CasoPrueba> CasosPorPares() =>
+        GeneradorCasos.Generar(HistoriaPorPares()).Where(caso => caso.Tecnica == Tecnica.Pares).ToList();
+
+    private static Historia HistoriaPorPares()
     {
         var historia = new Historia("Compatibilidad");
         historia.AgregarCampo(new CampoEntero("edad", true, 18, 65));
@@ -70,7 +93,7 @@ public class TextosCasoTests() : PruebaEnIdioma("es")
         historia.AgregarCampo(new CampoLista("sistema", true, ["Windows", "macOS"]));
         historia.AgregarCampo(new CampoLista("idioma", true, ["español", "inglés"]));
         historia.CombinarPorPares();
-        return GeneradorCasos.Generar(historia).Where(caso => caso.Tecnica == Tecnica.Pares).ToList();
+        return historia;
     }
 
     private static IReadOnlyList<CasoPrueba> CasosDeLaRegla()

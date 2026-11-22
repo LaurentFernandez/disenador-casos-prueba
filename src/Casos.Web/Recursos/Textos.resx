@@ -20,7 +20,7 @@
   <data name="Pagina.NombreDeLaHistoria" xml:space="preserve"><value>Nombre de la historia</value></data>
   <data name="Pagina.EjemploHistoria" xml:space="preserve"><value>Ejemplo: Registro de usuario</value></data>
   <data name="Pagina.CasosGenerados" xml:space="preserve"><value>Casos generados</value></data>
-  <data name="Pagina.CorrigeAvisos" xml:space="preserve"><value>Corrige los avisos de los campos y las reglas para ver los casos.</value></data>
+  <data name="Pagina.CorrigeAvisos" xml:space="preserve"><value>Corrige los avisos de arriba para ver los casos.</value></data>
   <data name="Pagina.AgregaCampo" xml:space="preserve"><value>Agrega un campo a la hoja para ver sus casos.</value></data>
   <data name="NoEncontrada.Titulo" xml:space="preserve"><value>Página no encontrada</value></data>
   <data name="NoEncontrada.Texto" xml:space="preserve"><value>Esta dirección no existe en el diseñador.</value></data>
@@ -67,6 +67,7 @@
   <data name="Aviso.OpcionInexistente" xml:space="preserve"><value>La opción no está en la lista del campo.</value></data>
   <data name="Aviso.MismoCampo" xml:space="preserve"><value>Elige un campo obligatorio distinto al de la condición.</value></data>
   <data name="Aviso.CampoYaObligatorio" xml:space="preserve"><value>Ese campo ya es obligatorio; márcalo como opcional para usarlo en la regla.</value></data>
+  <data name="Aviso.ParesSinListas" xml:space="preserve"><value>Se necesitan al menos dos campos de lista para combinar por pares.</value></data>
 
   <!-- Reglas de negocio -->
   <data name="Reglas.Titulo" xml:space="preserve"><value>Reglas de negocio</value></data>
@@ -81,6 +82,12 @@
   <data name="Reglas.Opcion" xml:space="preserve"><value>Opción de la regla {0}</value></data>
   <data name="Reglas.CampoObligatorio" xml:space="preserve"><value>Campo obligatorio de la regla {0}</value></data>
   <data name="Reglas.Quitar" xml:space="preserve"><value>Quitar la regla {0}</value></data>
+
+  <!-- Combinación por pares -->
+  <data name="Pares.Titulo" xml:space="preserve"><value>Combinación por pares</value></data>
+  <data name="Pares.Combinar" xml:space="preserve"><value>Combinar por pares los campos de lista</value></data>
+  <data name="Pares.Ayuda" xml:space="preserve"><value>Agrega el mínimo de casos en que cada opción de un campo de lista aparece junto a cada opción de los demás, en lugar de probar todas las combinaciones.</value></data>
+  <data name="Pares.Total" xml:space="preserve"><value>Combinaciones por pares: {0} de {1:N0} posibles.</value></data>
   <data name="Historia.SinNombre" xml:space="preserve"><value>Historia sin nombre</value></data>
 
   <!-- Ejemplos listos -->

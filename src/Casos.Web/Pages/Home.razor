@@ -5,7 +5,7 @@
 <PageTitle>@Textos.De("Marca")</PageTitle>
 
 @{
-    var lectura = LecturaHoja.Leer(filas, nombreHistoria, reglas);
+    var lectura = LecturaHoja.Leer(filas, nombreHistoria, reglas, porPares);
     var casos = lectura.TieneAvisos ? [] : GeneradorCasos.Generar(lectura.Historia);
 }
 
@@ -30,6 +30,24 @@
     <HojaReglas Reglas="reglas" Filas="filas" Avisos="lectura.AvisosReglas" CambioReglas="MarcarCambio" />
 </section>
 
+<section class="seccion" aria-labelledby="pares-titulo">
+    <h2 class="titulo" id="pares-titulo">@Textos.De("Pares.Titulo")</h2>
+    <p class="casilla">
+        <input type="checkbox" id="por-pares" @bind="porPares" @bind:after="MarcarCambio"
+               aria-describedby="@(lectura.AvisoPares is null ? null : "aviso-pares")" />
+        <label for="por-pares">@Textos.De("Pares.Combinar")</label>
+    </p>
+    @if (lectura.AvisoPares is { } avisoPares)
+    {
+        <p class="aviso" id="aviso-pares">@avisoPares</p>
+    }
+    else if (lectura.Historia.PorPares && !lectura.TieneAvisos)
+    {
+        <p class="estado">@TextosCaso.TotalPares(lectura.Historia, casos)</p>
+    }
+    <p class="ayuda">@Textos.De("Pares.Ayuda")</p>
+</section>
+
 <section class="seccion" aria-labelledby="casos-titulo">
     <h2 class="titulo" id="casos-titulo">@Textos.De("Pagina.CasosGenerados")</h2>
     @if (lectura.TieneAvisos)
@@ -50,6 +68,7 @@
     private readonly List<FilaCampo> filas = [new()];
     private readonly List<FilaRegla> reglas = [];
     private string nombreHistoria = "";
+    private bool porPares;
     private VistaCasos vista;
 
     // Si se escribió algo desde que se abrió la página o se cargó el último ejemplo.
@@ -72,6 +91,7 @@
         filas.Clear();
         filas.AddRange(ejemplo.Filas);
         reglas.Clear();
+        porPares = false;
         hayCambiosPropios = false;
     }
 }

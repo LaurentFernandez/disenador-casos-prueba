@@ -4,13 +4,14 @@ using Casos.Web.Recursos;
 namespace Casos.Web.Componentes;
 
 /// <summary>
-/// La hoja de campos y las reglas leídas: la historia con los campos y las reglas válidos, y el aviso de cada fila
-/// con problemas.
+/// La hoja de campos y las reglas leídas: la historia con los campos y las reglas válidos, el aviso de cada fila
+/// con problemas y el de la combinación por pares si se pidió y no se puede.
 /// </summary>
 public sealed record LecturaHoja(
     Historia Historia,
     IReadOnlyDictionary<FilaCampo, string> Avisos,
-    IReadOnlyDictionary<FilaRegla, string> AvisosReglas)
+    IReadOnlyDictionary<FilaRegla, string> AvisosReglas,
+    string? AvisoPares = null)
 {
     // Sin un nombre escrito, la historia igual necesita uno para el Gherkin y la exportación.
     public static string NombrePorDefecto => Textos.De("Historia.SinNombre");
@@ -18,9 +19,10 @@ public sealed record LecturaHoja(
     /// <summary>
     /// Con algún aviso no se generan casos, para que ningún campo ni regla quede fuera sin que se note.
     /// </summary>
-    public bool TieneAvisos => Avisos.Count > 0 || AvisosReglas.Count > 0;
+    public bool TieneAvisos => Avisos.Count > 0 || AvisosReglas.Count > 0 || AvisoPares is not null;
 
-    public static LecturaHoja Leer(IEnumerable<FilaCampo> filas, string nombreHistoria, IEnumerable<FilaRegla>? reglas = null)
+    public static LecturaHoja Leer(
+        IEnumerable<FilaCampo> filas, string nombreHistoria, IEnumerable<FilaRegla>? reglas = null, bool porPares = false)
     {
         var historia = new Historia(string.IsNullOrWhiteSpace(nombreHistoria) ? NombrePorDefecto : nombreHistoria.Trim());
         var avisos = new Dictionary<FilaCampo, string>();
@@ -42,7 +44,20 @@ public sealed record LecturaHoja(
             }
         }
 
-        return new LecturaHoja(historia, avisos, avisosReglas);
+        // También va después de los campos, porque necesita al menos dos de lista.
+        return new LecturaHoja(historia, avisos, avisosReglas, porPares ? AvisoDePares(historia) : null);
+    }
+
+    // Si se puede, activa la combinación por pares; si no, devuelve el aviso.
+    private static string? AvisoDePares(Historia historia)
+    {
+        if (!historia.PuedeCombinarPorPares)
+        {
+            return Textos.De("Aviso.ParesSinListas");
+        }
+
+        historia.CombinarPorPares();
+        return null;
     }
 
     // Si la fila es válida agrega su campo a la historia; si no, devuelve el aviso.

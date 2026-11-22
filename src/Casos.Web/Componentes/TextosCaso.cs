@@ -1,3 +1,4 @@
+using System.Numerics;
 using Casos.Core.Modelo;
 using Casos.Web.Recursos;
 
@@ -62,6 +63,18 @@ public static class TextosCaso
         Tecnica.TablaDecision => "Tecnica.DecisionLarga",
         _ => "Tecnica.ParesLarga",
     });
+
+    /// <summary>
+    /// Cuántas combinaciones por pares salieron contra todas las posibles de los campos de lista, por ejemplo
+    /// «Combinaciones por pares: 6 de 12 posibles».
+    /// </summary>
+    public static string TotalPares(Historia historia, IReadOnlyCollection<CasoPrueba> casos)
+    {
+        // BigInteger porque con muchas listas el producto no cabe en un long.
+        var posibles = historia.Campos.OfType<CampoLista>()
+            .Aggregate(BigInteger.One, (total, lista) => total * lista.Opciones.Distinct().Count());
+        return Textos.De("Pares.Total", casos.Count(caso => caso.Tecnica == Tecnica.Pares), posibles);
+    }
 
     public static string Resumen(IReadOnlyCollection<CasoPrueba> casos)
     {

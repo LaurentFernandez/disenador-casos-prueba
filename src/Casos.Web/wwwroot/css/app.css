@@ -131,6 +131,15 @@ a {
     margin: 0 0 var(--espacio-2);
 }
 
+/* El aviso de una regla o de la combinación por pares, rayado como lo inválido. */
+.aviso {
+    margin: 0;
+    padding: var(--espacio-2) var(--espacio-3);
+    background: var(--trama-invalida);
+    color: var(--invalido);
+    font-weight: 600;
+}
+
 /* Botones segmentados: el selector de idioma y las pestañas de las vistas. */
 .segmentos {
     display: inline-flex;
