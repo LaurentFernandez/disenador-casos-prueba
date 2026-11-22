@@ -99,14 +99,14 @@
   <data name="Columna.Tecnica" xml:space="preserve"><value>Técnica</value></data>
   <data name="Columna.ValorProbado" xml:space="preserve"><value>Valor probado</value></data>
   <data name="Columna.Resultado" xml:space="preserve"><value>Resultado esperado</value></data>
-  <data name="Matriz.Ayuda" xml:space="preserve"><value>Cada fila cambia un solo campo: la celda resaltada es el valor que se prueba y las demás llevan su valor por defecto.</value></data>
+  <data name="Matriz.Ayuda" xml:space="preserve"><value>Cada fila cambia un solo campo, o los dos de una regla: las celdas resaltadas son los valores que se prueban y las demás llevan su valor por defecto.</value></data>
   <data name="Matriz.Titulo" xml:space="preserve"><value>Casos de prueba con el valor de cada campo</value></data>
   <data name="Matriz.ValorProbado" xml:space="preserve"><value>valor probado</value></data>
   <data name="Recta.Titulo" xml:space="preserve"><value>Casos de prueba</value></data>
   <data name="Recta.FueraDeLaRecta" xml:space="preserve"><value>Fuera de la recta:</value></data>
   <data name="Recta.ListaSinRango" xml:space="preserve"><value>Una lista no tiene rango: cada opción es una clase.</value></data>
   <data name="Recta.AyudaEscala" xml:space="preserve"><value>Las rectas no están a escala. En un texto, la recta es la longitud en caracteres.</value></data>
-  <data name="Recta.AyudaCasos" xml:space="preserve"><value>Cada caso cambia un solo campo. Pasa el cursor o el foco por un caso para verlo en su recta.</value></data>
+  <data name="Recta.AyudaCasos" xml:space="preserve"><value>Cada caso cambia un solo campo, o los dos de una regla. Pasa el cursor o el foco por un caso para verlo en su recta; los de tabla de decisión no están en las rectas.</value></data>
   <data name="Recta.Descripcion" xml:space="preserve"><value>Recta de {0}: {1}. Valores de partición: {2}. Valores límite: {3}.</value></data>
   <data name="Gherkin.Ayuda" xml:space="preserve"><value>Un texto se describe por su longitud, por ejemplo «un texto de 26 caracteres», para que el escenario se pueda leer.</value></data>
 
@@ -119,6 +119,10 @@
   <data name="Tecnica.Limite" xml:space="preserve"><value>Límite</value></data>
   <data name="Tecnica.ParticionLarga" xml:space="preserve"><value>Partición de equivalencia</value></data>
   <data name="Tecnica.LimiteLarga" xml:space="preserve"><value>Valores límite</value></data>
+  <data name="Tecnica.Decision" xml:space="preserve"><value>Decisión</value></data>
+  <data name="Tecnica.DecisionLarga" xml:space="preserve"><value>Tabla de decisión</value></data>
+  <data name="Decision.SinValor" xml:space="preserve"><value>{0}: {1} y {2} sin valor</value></data>
+  <data name="Decision.ConValor" xml:space="preserve"><value>{0}: {1} y {2} con valor</value></data>
   <data name="Resumen" xml:space="preserve"><value>{0} casos: {1} y {2}.</value></data>
   <data name="Resumen.AceptadoUno" xml:space="preserve"><value>{0} se acepta</value></data>
   <data name="Resumen.AceptadoVarios" xml:space="preserve"><value>{0} se aceptan</value></data>

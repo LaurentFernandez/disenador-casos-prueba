@@ -99,14 +99,14 @@
   <data name="Columna.Tecnica" xml:space="preserve"><value>Technique</value></data>
   <data name="Columna.ValorProbado" xml:space="preserve"><value>Tested value</value></data>
   <data name="Columna.Resultado" xml:space="preserve"><value>Expected result</value></data>
-  <data name="Matriz.Ayuda" xml:space="preserve"><value>Each row changes a single field: the highlighted cell is the value under test and the others keep their default value.</value></data>
+  <data name="Matriz.Ayuda" xml:space="preserve"><value>Each row changes a single field, or the two fields of a rule: the highlighted cells are the values under test and the others keep their default value.</value></data>
   <data name="Matriz.Titulo" xml:space="preserve"><value>Test cases with the value of each field</value></data>
   <data name="Matriz.ValorProbado" xml:space="preserve"><value>tested value</value></data>
   <data name="Recta.Titulo" xml:space="preserve"><value>Test cases</value></data>
   <data name="Recta.FueraDeLaRecta" xml:space="preserve"><value>Off the line:</value></data>
   <data name="Recta.ListaSinRango" xml:space="preserve"><value>A list has no range: each option is a class.</value></data>
   <data name="Recta.AyudaEscala" xml:space="preserve"><value>The lines are not to scale. For a text, the line is the length in characters.</value></data>
-  <data name="Recta.AyudaCasos" xml:space="preserve"><value>Each case changes a single field. Hover over or focus a case to see it on its line.</value></data>
+  <data name="Recta.AyudaCasos" xml:space="preserve"><value>Each case changes a single field, or the two fields of a rule. Hover over or focus a case to see it on its line; decision table cases are not on the lines.</value></data>
   <data name="Recta.Descripcion" xml:space="preserve"><value>Line for {0}: {1}. Partition values: {2}. Boundary values: {3}.</value></data>
   <data name="Gherkin.Ayuda" xml:space="preserve"><value>A text is described by its length, for example “a text of 26 characters”, so that the scenario stays readable.</value></data>
 
@@ -119,6 +119,10 @@
   <data name="Tecnica.Limite" xml:space="preserve"><value>Boundary</value></data>
   <data name="Tecnica.ParticionLarga" xml:space="preserve"><value>Equivalence partitioning</value></data>
   <data name="Tecnica.LimiteLarga" xml:space="preserve"><value>Boundary values</value></data>
+  <data name="Tecnica.Decision" xml:space="preserve"><value>Decision</value></data>
+  <data name="Tecnica.DecisionLarga" xml:space="preserve"><value>Decision table</value></data>
+  <data name="Decision.SinValor" xml:space="preserve"><value>{0}: {1} and {2} with no value</value></data>
+  <data name="Decision.ConValor" xml:space="preserve"><value>{0}: {1} and {2} with a value</value></data>
   <data name="Resumen" xml:space="preserve"><value>{0} cases: {1} and {2}.</value></data>
   <data name="Resumen.AceptadoUno" xml:space="preserve"><value>{0} accepted</value></data>
   <data name="Resumen.AceptadoVarios" xml:space="preserve"><value>{0} accepted</value></data>

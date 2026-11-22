@@ -43,6 +43,27 @@ public class GherkinCasosTests() : PruebaEnIdioma("es")
     }
 
     [Fact]
+    public void Escenario_CasoDeRegla_CambiaLosDosCamposDeLaRegla()
+    {
+        var conRegla = new Historia("Registro de cliente");
+        conRegla.AgregarCampo(new CampoLista("tipo de cliente", true, ["Persona", "Empresa"]));
+        conRegla.AgregarCampo(new CampoTexto("NIT", false, 9, 10));
+        conRegla.AgregarRegla(new ReglaObligatorio("tipo de cliente", "Empresa", "NIT"));
+        var empresaSinNit = GeneradorCasos.Generar(conRegla)
+            .Single(caso => caso.Tecnica == Tecnica.TablaDecision && !caso.EsValido);
+
+        Assert.Equal(
+            $"""
+              Escenario: {empresaSinNit.Codigo} Tipo de cliente: Empresa y NIT sin valor
+                Dado el formulario "Registro de cliente"
+                Cuando elijo "Empresa" en tipo de cliente
+                Y dejo NIT sin valor
+                Entonces el sistema rechaza el valor de NIT
+            """.ReplaceLineEndings("\n"),
+            GherkinCasos.Escenario(conRegla, empresaSinNit));
+    }
+
+    [Fact]
     public void Caracteristica_EmpiezaConElIdiomaYTieneUnEscenarioPorCaso()
     {
         var casos = GeneradorCasos.Generar(historia);

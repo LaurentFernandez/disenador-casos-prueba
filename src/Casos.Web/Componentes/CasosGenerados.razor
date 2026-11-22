@@ -20,6 +20,10 @@
             <li><span class="muestra muestra--invalida" aria-hidden="true"></span>@Textos.De("Leyenda.Invalido")</li>
             <li><span class="icono icono--particion" aria-hidden="true"></span>@TextosCaso.NombreLargoTecnica(Tecnica.ParticionEquivalencia)</li>
             <li><span class="icono icono--limite" aria-hidden="true"></span>@Textos.De("Leyenda.Limite")</li>
+            @if (Casos.Any(caso => caso.Tecnica == Tecnica.TablaDecision))
+            {
+                <li><span class="icono icono--decision" aria-hidden="true"></span>@TextosCaso.NombreLargoTecnica(Tecnica.TablaDecision)</li>
+            }
         </ul>
     }
 
