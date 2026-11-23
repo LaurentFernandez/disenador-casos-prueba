@@ -72,7 +72,7 @@ public class TextosTests() : PruebaEnIdioma("en")
         var ejemplos = EjemplosHistoria.Todos();
         var registro = LecturaHoja.Leer(ejemplos[0].Filas, ejemplos[0].Historia);
 
-        Assert.Equal(new[] { "User sign-up", "Password recovery", "Shopping cart" }, ejemplos.Select(ejemplo => ejemplo.Historia));
+        Assert.Equal(new[] { "User sign-up", "Password recovery", "Shopping cart", "Compatibility" }, ejemplos.Select(ejemplo => ejemplo.Historia));
         Assert.Empty(registro.Avisos);
         Assert.Equal(new[] { "age", "name", "customer type" }, registro.Historia.Campos.Select(campo => campo.Nombre));
     }

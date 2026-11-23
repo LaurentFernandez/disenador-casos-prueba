@@ -6,10 +6,10 @@ namespace Casos.Web.Tests.Componentes;
 public class EjemplosHistoriaTests() : PruebaEnIdioma("es")
 {
     [Fact]
-    public void Todos_SonLosTresEjemplosDeHU09()
+    public void Todos_SonLosCuatroEjemplosDeHU09()
     {
         Assert.Equal(
-            new[] { "Registro de usuario", "Recuperar contraseña", "Carrito de compras" },
+            new[] { "Registro de usuario", "Recuperar contraseña", "Carrito de compras", "Compatibilidad" },
             EjemplosHistoria.Todos().Select(ejemplo => ejemplo.Historia));
     }
 
@@ -18,9 +18,9 @@ public class EjemplosHistoriaTests() : PruebaEnIdioma("es")
     {
         Assert.All(EjemplosHistoria.Todos(), ejemplo =>
         {
-            var lectura = LecturaHoja.Leer(ejemplo.Filas, ejemplo.Historia);
+            var lectura = LecturaHoja.Leer(ejemplo.Filas, ejemplo.Historia, porPares: ejemplo.PorPares);
 
-            Assert.Empty(lectura.Avisos);
+            Assert.False(lectura.TieneAvisos);
             Assert.Equal(ejemplo.Filas.Count, lectura.Historia.Campos.Count);
             Assert.NotEmpty(GeneradorCasos.Generar(lectura.Historia));
         });
@@ -43,6 +43,18 @@ public class EjemplosHistoriaTests() : PruebaEnIdioma("es")
         var cupon = EjemplosHistoria.Todos()[2].Filas.Single(fila => fila.Nombre == "cupón");
 
         Assert.False(cupon.Obligatorio);
+    }
+
+    [Fact]
+    public void Compatibilidad_EsElUnicoQueCombinaPorParesYDaSeisDeDoceComoEnHU09()
+    {
+        var compatibilidad = EjemplosHistoria.Todos()[3];
+
+        var historia = LecturaHoja.Leer(compatibilidad.Filas, compatibilidad.Historia, porPares: compatibilidad.PorPares).Historia;
+
+        Assert.Equal(new[] { false, false, false, true }, EjemplosHistoria.Todos().Select(ejemplo => ejemplo.PorPares));
+        Assert.Equal(new[] { "navegador", "sistema", "idioma" }, historia.Campos.Select(campo => campo.Nombre));
+        Assert.Equal("Combinaciones por pares: 6 de 12 posibles.", TextosCaso.TotalPares(historia, GeneradorCasos.Generar(historia)));
     }
 
     [Fact]
