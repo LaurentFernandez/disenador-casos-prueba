@@ -310,7 +310,7 @@ Escenario: Idioma inicial por defecto
 ```gherkin
 Escenario: Ejemplos disponibles
   Cuando abro la lista de ejemplos
-  Entonces veo "Registro de usuario", "Recuperar contraseña" y "Carrito de compras"
+  Entonces veo "Registro de usuario", "Recuperar contraseña", "Carrito de compras" y "Compatibilidad"
 
 Escenario: Cargar un ejemplo
   Dado que no he definido campos
@@ -322,6 +322,12 @@ Escenario: Proteger lo que ya escribí
   Dado que ya definí campos propios
   Cuando elijo un ejemplo
   Entonces la herramienta pide confirmación antes de reemplazarlos
+
+Escenario: Ejemplo para la combinación por pares
+  Cuando elijo el ejemplo "Compatibilidad"
+  Entonces se cargan los campos "navegador" (Chrome, Firefox, Edge), "sistema" (Windows, macOS) e "idioma" (español, inglés)
+  Y la combinación por pares queda marcada
+  Y veo 6 combinaciones por pares de 12 posibles
 ```
 
 **Prioridad:** Media
