@@ -53,10 +53,16 @@ dotnet run --project src/Casos.Web
 
 - **Fases 0, 1 y 2 terminadas.** El motor tiene el modelo de campos con sus validaciones (`Modelo/`), la partición de equivalencia (`Tecnicas/ParticionEquivalencia`) y los valores límite de enteros y de longitud de texto (`Tecnicas/ValoresLimite`).
 - **Interfaz (Fase 2).** Están la generación de casos en el motor (`GeneradorCasos`), el estilo base de la maqueta, la hoja de campos (`Componentes/HojaCampos.razor`), el nombre de la historia y las vistas Matriz, Recta y Gherkin (`Componentes/CasosGenerados.razor`; el Gherkin lo arma `GherkinCasos`), la exportación a CSV, Markdown y `.feature` (`ExportacionCasos` y `wwwroot/js/descargas.js`), el cambio de idioma (`Componentes/SelectorIdioma.razor` y `wwwroot/js/idioma.js`) y los ejemplos listos (`Componentes/EjemplosHistoria.cs`; la página pide confirmación con `confirm()` solo si se escribió algo desde la última carga). La demo está publicada en GitHub Pages, se puede instalar y funciona sin conexión gracias al service worker.
-- **Fase 3 en curso.** Ya están las reglas de negocio con su tabla de decisión (HU-11): una regla dice "si un campo de lista tiene una opción, otro campo opcional pasa a ser obligatorio" (`Modelo/ReglaObligatorio`, validada por `Historia.AgregarRegla` con el enum `ErrorRegla`). `Tecnicas/TablaDecision` da 4 casos por regla, con una opción representativa para el "no". En la interfaz, las reglas se arman en `Componentes/HojaReglas.razor`; sus casos van en las tres vistas (en la Recta solo en la tabla de casos) y en las exportaciones. Hay 52 pruebas del motor y 58 de la lógica de la interfaz.
-- **Historias:** HU-01 a HU-11 están hechas, en el motor y en la interfaz, y sus issues están cerrados. HU-01 no tuvo issue porque se hizo antes de crear el repositorio.
-- **Siguiente:** pairwise (HU-12) y las pruebas bUnit de componentes y Playwright de extremo a extremo.
-- **Por decidir:** el motor usa el valor de prueba "Opción no válida" para el caso fuera de la lista (`ParticionEquivalencia`), y en la interfaz en inglés aparece tal cual porque es un dato, no un texto de la interfaz.
+- **Fase 3 en curso.** Las dos técnicas avanzadas están hechas, en el motor y en la interfaz:
+  - **Tabla de decisión (HU-11):** una regla dice "si un campo de lista tiene una opción, otro campo opcional pasa a ser obligatorio" (`Modelo/ReglaObligatorio`, validada por `Historia.AgregarRegla` con el enum `ErrorRegla`). `Tecnicas/TablaDecision` da 4 casos por regla, con una opción representativa para el "no". En la interfaz, las reglas se arman en `Componentes/HojaReglas.razor`.
+  - **Combinación por pares (HU-12):** `Tecnicas/Pares` implementa IPO sobre los campos de lista y es determinista. Se activa con `Historia.CombinarPorPares`, que necesita al menos dos campos de lista (`PuedeCombinarPorPares`). En la interfaz, la activa la casilla de la sección "Combinación por pares" de `Pages/Home.razor`; con menos de dos listas avisa y oculta los casos, y si no, dice cuántas combinaciones salieron de las posibles. Cada caso por pares trae los campos que combina en `CasoPrueba.CamposCombinados`, que la Matriz resalta.
+  - Los casos de las dos técnicas van en las tres vistas (en la Recta solo en la tabla de casos) y en las exportaciones.
+  - Hay 64 pruebas del motor y 67 de la lógica de la interfaz.
+- **Historias:** HU-01 a HU-12 están hechas, en el motor y en la interfaz, y sus issues están cerrados. HU-01 no tuvo issue porque se hizo antes de crear el repositorio.
+- **Siguiente:** las pruebas bUnit de componentes y Playwright de extremo a extremo, que cierran la Fase 3.
+- **Por decidir:**
+  - El motor usa el valor de prueba "Opción no válida" para el caso fuera de la lista (`ParticionEquivalencia`), y en la interfaz en inglés aparece tal cual porque es un dato, no un texto de la interfaz.
+  - Ninguno de los tres ejemplos listos tiene dos campos de lista, así que para ver los casos por pares en la demo hay que agregar uno a mano. Se propuso un cuarto ejemplo, "Compatibilidad" (navegador, sistema e idioma).
 
 ## Fases
 
