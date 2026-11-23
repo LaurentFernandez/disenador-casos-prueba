@@ -9,9 +9,9 @@ namespace Casos.Web.Componentes;
 public static class EjemplosHistoria
 {
     /// <summary>
-    /// Un ejemplo: el nombre de la historia y las filas de la hoja con sus reglas.
+    /// Un ejemplo: el nombre de la historia, las filas de la hoja con sus reglas y si combina por pares sus campos de lista.
     /// </summary>
-    public sealed record Ejemplo(string Historia, IReadOnlyList<FilaCampo> Filas);
+    public sealed record Ejemplo(string Historia, IReadOnlyList<FilaCampo> Filas, bool PorPares = false);
 
     /// <summary>
     /// Los ejemplos, con filas nuevas en cada llamada porque la hoja modifica las filas que recibe.
@@ -36,6 +36,13 @@ public static class EjemplosHistoria
             Texto("Ejemplo.Carrito.Cupon", 5, 10, obligatorio: false),
             Lista("Ejemplo.Carrito.MedioPago", "Ejemplo.Carrito.Opciones"),
         ]),
+        // El único con dos o más listas, para ver la combinación por pares: 6 combinaciones en lugar de 12.
+        new(Textos.De("Ejemplo.Compatibilidad"),
+        [
+            Lista("Ejemplo.Compatibilidad.Navegador", "Ejemplo.Compatibilidad.Navegadores"),
+            Lista("Ejemplo.Compatibilidad.Sistema", "Ejemplo.Compatibilidad.Sistemas"),
+            Lista("Ejemplo.Compatibilidad.Idioma", "Ejemplo.Compatibilidad.Idiomas"),
+        ], PorPares: true),
     ];
 
     private static FilaCampo Entero(string clave, int minimo, int maximo) =>

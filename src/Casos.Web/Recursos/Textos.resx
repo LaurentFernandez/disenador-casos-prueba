@@ -105,6 +105,13 @@
   <data name="Ejemplo.Carrito.Cupon" xml:space="preserve"><value>cupón</value></data>
   <data name="Ejemplo.Carrito.MedioPago" xml:space="preserve"><value>medio de pago</value></data>
   <data name="Ejemplo.Carrito.Opciones" xml:space="preserve"><value>Tarjeta, Transferencia, Contraentrega</value></data>
+  <data name="Ejemplo.Compatibilidad" xml:space="preserve"><value>Compatibilidad</value></data>
+  <data name="Ejemplo.Compatibilidad.Navegador" xml:space="preserve"><value>navegador</value></data>
+  <data name="Ejemplo.Compatibilidad.Navegadores" xml:space="preserve"><value>Chrome, Firefox, Edge</value></data>
+  <data name="Ejemplo.Compatibilidad.Sistema" xml:space="preserve"><value>sistema</value></data>
+  <data name="Ejemplo.Compatibilidad.Sistemas" xml:space="preserve"><value>Windows, macOS</value></data>
+  <data name="Ejemplo.Compatibilidad.Idioma" xml:space="preserve"><value>idioma</value></data>
+  <data name="Ejemplo.Compatibilidad.Idiomas" xml:space="preserve"><value>español, inglés</value></data>
   <data name="Ejemplos.Titulo" xml:space="preserve"><value>Ejemplos</value></data>
   <data name="Ejemplos.Confirmar" xml:space="preserve"><value>El ejemplo reemplazará la historia y los campos que escribiste. ¿Quieres continuar?</value></data>
 
