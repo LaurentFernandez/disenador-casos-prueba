@@ -25,7 +25,8 @@ Una aplicación web que genere casos de prueba a partir de historias de usuario 
 - `Casos.Core`: el motor, en C# puro y sin dependencias de interfaz. Toda la lógica vive y se prueba aquí.
 - `Casos.Web`: interfaz en Blazor WebAssembly, instalable como PWA. Se ejecuta completa en el navegador, sin servidor.
 - `Casos.Core.Tests`: pruebas unitarias del motor con xUnit.
-- Más adelante: `Casos.Web.Tests` (bUnit) y pruebas E2E con Playwright para .NET.
+- `Casos.Web.Tests`: pruebas de la lógica de la interfaz con xUnit y de sus componentes con bUnit.
+- `Casos.E2E.Tests`: pruebas de extremo a extremo con Playwright para .NET, que abren la aplicación en Chromium.
 - GitHub Actions compila y prueba en cada push; desde la Fase 2 también publica en GitHub Pages.
 
 ## Herramientas (todas gratuitas)
@@ -39,5 +40,5 @@ Una aplicación web que genere casos de prueba a partir de historias de usuario 
 | 0. Arranque | Esqueleto de la solución, CI, primeras historias de usuario | Hecha |
 | 1. Motor | Modelo de campos, partición de equivalencia y valores límite, con pruebas | Hecha |
 | 2. Interfaz | Formulario de campos, tabla de resultados, Gherkin, exportaciones, español e inglés, publicación en GitHub Pages | Hecha |
-| 3. Técnicas avanzadas | Tablas de decisión y pairwise; pruebas bUnit y Playwright | En curso: faltan bUnit y Playwright |
+| 3. Técnicas avanzadas | Tablas de decisión y pairwise; pruebas bUnit y Playwright | Hecha |
 | 4. Opcional | Modo IA local con Ollama para proponer campos a partir de texto libre | Pendiente |

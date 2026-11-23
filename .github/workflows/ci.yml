@@ -21,6 +21,10 @@ jobs:
       - name: Compilar
         run: dotnet build --no-restore --configuration Release
 
+      # Las pruebas de extremo a extremo necesitan el navegador de Playwright y las librerías del sistema que usa.
+      - name: Instalar Chromium para Playwright
+        run: pwsh tests/Casos.E2E.Tests/bin/Release/net10.0/playwright.ps1 install --with-deps chromium
+
       - name: Ejecutar pruebas
         run: dotnet test --no-build --configuration Release
 

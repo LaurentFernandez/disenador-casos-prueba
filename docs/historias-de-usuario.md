@@ -406,3 +406,59 @@ Escenario: Menos de dos campos
 
 **Prioridad:** Media
 **Estado:** Hecha
+
+### HU-13. Comprobar los componentes y los flujos completos de la aplicación
+
+> Borrador de Claude, pendiente de que Laurent lo revise.
+
+**Historia:** Como mantenedor del proyecto quiero pruebas automáticas de los componentes de la interfaz y de los flujos completos en el navegador para que un cambio no rompa lo que ya funciona sin que me entere.
+
+**Criterios de aceptación:**
+
+```gherkin
+Escenario: Resaltar los valores probados en la Matriz
+  Dado un caso que cambia un solo campo
+  Cuando la Matriz lo muestra
+  Entonces solo la celda de ese campo aparece resaltada
+
+Escenario: Mostrar en la leyenda solo las técnicas que tienen casos
+  Dados casos sin reglas ni combinación por pares
+  Cuando se muestra la leyenda
+  Entonces no incluye la tabla de decisión ni la combinación por pares
+
+Escenario: Conservar el campo elegido en una regla
+  Dada una regla que hace obligatorio el campo "NIT"
+  Cuando renombro "NIT" a "RUT" en la hoja de campos
+  Entonces la regla sigue mostrando "NIT" como campo obligatorio
+  Y "RUT" aparece entre los campos que se pueden elegir
+
+Escenario: Cargar un ejemplo y ver sus casos en el navegador
+  Dado que abro la aplicación
+  Cuando cargo el ejemplo "Registro de usuario"
+  Entonces veo 24 casos en la Matriz
+  Y en la vista Gherkin veo un escenario por cada caso
+
+Escenario: Corregir un aviso en el navegador
+  Dado que escribo un campo entero sin mínimo ni máximo
+  Entonces veo el aviso de la fila y no se muestran casos
+  Cuando completo el mínimo y el máximo
+  Entonces aparecen los casos
+
+Escenario: Exportar desde el navegador
+  Dado que cargué un ejemplo
+  Cuando descargo el CSV
+  Entonces el archivo tiene el encabezado y una fila por caso
+
+Escenario: Cambiar el idioma en el navegador
+  Cuando elijo inglés
+  Entonces la interfaz se muestra en inglés
+  Y la elección se mantiene al recargar la página
+
+Escenario: Ejecutar las pruebas antes de publicar
+  Cuando un cambio llega a main o a un pull request
+  Entonces la integración continua ejecuta las pruebas de componentes y las de extremo a extremo
+  Y solo publica si todas pasan
+```
+
+**Prioridad:** Media
+**Estado:** Hecha

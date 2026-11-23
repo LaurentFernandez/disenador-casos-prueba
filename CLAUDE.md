@@ -10,7 +10,7 @@ Es un proyecto de portafolio de Laurent Andrés Fernandez (ingeniero de software
 
 - **Costo cero:** solo herramientas gratuitas u open source. Nada de APIs de pago. Sin IA en el núcleo; la Fase 4 opcional usaría IA local con Ollama, solo en modo local.
 - **Aplicación web** en Blazor WebAssembly con PWA, publicada gratis en GitHub Pages, sin servidor: `https://laurentfernandez.github.io/disenador-casos-prueba/`. La publican dos trabajos de `ci.yml` en cada push a `main` con las pruebas en verde: `publicar` compila y sube el paquete, y `desplegar` lo pone en GitHub Pages. La base es relativa (`<base href="./" />`) para que la misma compilación sirva en local y en la subcarpeta; no se modifica el `index.html` publicado porque rompería la verificación de integridad del service worker. El despliegue va en un trabajo aparte porque, en el mismo trabajo que sube el paquete, la API de GitHub a veces todavía no lo veía ("No artifacts named github-pages"). Si `desplegar` falla, basta con volver a ejecutar solo los trabajos fallidos (`gh run rerun <id> --failed`), que no suben otro paquete. Si alguna vez una ejecución queda con dos paquetes "github-pages" ("Multiple artifacts"), hay que borrar los sobrantes (`gh api -X DELETE repos/LaurentFernandez/disenador-casos-prueba/actions/artifacts/<id>`) antes de reintentar.
-- **.NET 10 (LTS).** Pruebas: xUnit para el motor y para la lógica de la interfaz; bUnit para componentes y Playwright para .NET (E2E) desde la Fase 3.
+- **.NET 10 (LTS).** Pruebas: xUnit para el motor y para la lógica de la interfaz, bUnit para los componentes y Playwright para .NET para las de extremo a extremo (en Chromium). Las de extremo a extremo levantan la aplicación con `dotnet run --no-build` en un puerto libre (`AplicacionEnMarcha`), una sola vez para todas, y la abren en español. El CI instala Chromium antes de `dotnet test`, así que también deciden si se publica.
 - **Interfaz en español e inglés**, con `IStringLocalizer` y archivos `.resx`: los textos están en `Recursos/Textos.resx` (español) y `Recursos/Textos.en.resx` (inglés), y se leen con la clase estática `Textos`. El idioma se fija al arrancar (el elegido antes o, la primera vez, inglés si el navegador está en inglés y español en cualquier otro caso); cambiarlo guarda la elección y recarga la página. Los nombres que escribe el usuario no se traducen y el CSV usa ";" en los dos idiomas. Las pruebas de textos fijan su idioma heredando de `PruebaEnIdioma`.
 - **Código en español:** clases, métodos, variables y nombres de pruebas, igual que los demás proyectos de Laurent.
 - **El motor (`Casos.Core`) no depende de la interfaz.** Toda la lógica vive y se prueba ahí; `Casos.Web` solo presenta.
@@ -27,7 +27,8 @@ DisenadorCasosPrueba.slnx
 src/Casos.Core/          motor (modelo en Modelo/, técnicas en Tecnicas/)
 src/Casos.Web/           interfaz Blazor WebAssembly + PWA (componentes en Componentes/, textos en Recursos/)
 tests/Casos.Core.Tests/  pruebas xUnit del motor
-tests/Casos.Web.Tests/   pruebas xUnit de la lógica de la interfaz
+tests/Casos.Web.Tests/   pruebas xUnit de la lógica de la interfaz y bUnit de sus componentes
+tests/Casos.E2E.Tests/   pruebas de extremo a extremo con Playwright
 docs/plan.md             objetivo, técnicas, arquitectura y fases
 docs/historias-de-usuario.md   requerimientos (los escribe Laurent)
 docs/diseno/maqueta.html       maqueta de la interfaz (se abre en el navegador)
@@ -42,6 +43,12 @@ dotnet test
 dotnet run --project src/Casos.Web
 ```
 
+Las pruebas de extremo a extremo necesitan el Chromium de Playwright, que se instala una vez después de compilar. En esta máquina no hay PowerShell 7, así que se usa el instalador que trae el paquete:
+
+```bash
+tests/Casos.E2E.Tests/bin/Debug/net10.0/.playwright/node/win32_x64/node.exe tests/Casos.E2E.Tests/bin/Debug/net10.0/.playwright/package/cli.js install chromium
+```
+
 ## Cómo trabajamos
 
 - **Laurent es el analista.** Escribe las historias de usuario en `docs/historias-de-usuario.md`, y cada funcionalidad nace de una historia. Si una tarea no tiene historia, pídesela o propón un borrador marcado como tal para que él lo revise.
@@ -53,16 +60,15 @@ dotnet run --project src/Casos.Web
 
 - **Fases 0, 1 y 2 terminadas.** El motor tiene el modelo de campos con sus validaciones (`Modelo/`), la partición de equivalencia (`Tecnicas/ParticionEquivalencia`) y los valores límite de enteros y de longitud de texto (`Tecnicas/ValoresLimite`).
 - **Interfaz (Fase 2).** Están la generación de casos en el motor (`GeneradorCasos`), el estilo base de la maqueta, la hoja de campos (`Componentes/HojaCampos.razor`), el nombre de la historia y las vistas Matriz, Recta y Gherkin (`Componentes/CasosGenerados.razor`; el Gherkin lo arma `GherkinCasos`), la exportación a CSV, Markdown y `.feature` (`ExportacionCasos` y `wwwroot/js/descargas.js`), el cambio de idioma (`Componentes/SelectorIdioma.razor` y `wwwroot/js/idioma.js`) y los ejemplos listos (`Componentes/EjemplosHistoria.cs`; la página pide confirmación con `confirm()` solo si se escribió algo desde la última carga). La demo está publicada en GitHub Pages, se puede instalar y funciona sin conexión gracias al service worker.
-- **Fase 3 en curso.** Las dos técnicas avanzadas están hechas, en el motor y en la interfaz:
+- **Fase 3 terminada.** Las dos técnicas avanzadas están hechas, en el motor y en la interfaz:
   - **Tabla de decisión (HU-11):** una regla dice "si un campo de lista tiene una opción, otro campo opcional pasa a ser obligatorio" (`Modelo/ReglaObligatorio`, validada por `Historia.AgregarRegla` con el enum `ErrorRegla`). `Tecnicas/TablaDecision` da 4 casos por regla, con una opción representativa para el "no". En la interfaz, las reglas se arman en `Componentes/HojaReglas.razor`.
   - **Combinación por pares (HU-12):** `Tecnicas/Pares` implementa IPO sobre los campos de lista y es determinista. Se activa con `Historia.CombinarPorPares`, que necesita al menos dos campos de lista (`PuedeCombinarPorPares`). En la interfaz, la activa la casilla de la sección "Combinación por pares" de `Pages/Home.razor`; con menos de dos listas avisa y oculta los casos, y si no, dice cuántas combinaciones salieron de las posibles. Cada caso por pares trae los campos que combina en `CasoPrueba.CamposCombinados`, que la Matriz resalta. El ejemplo "Compatibilidad" (navegador, sistema e idioma) es el único con `PorPares` en `EjemplosHistoria` y deja la casilla marcada al cargarlo; los demás la desmarcan.
   - Los casos de las dos técnicas van en las tres vistas (en la Recta solo en la tabla de casos) y en las exportaciones.
-  - Hay 64 pruebas del motor y 68 de la lógica de la interfaz.
-- **Historias:** HU-01 a HU-12 están hechas, en el motor y en la interfaz, y sus issues están cerrados. HU-01 no tuvo issue porque se hizo antes de crear el repositorio.
-- **Siguiente:** las pruebas bUnit de componentes y Playwright de extremo a extremo, que cierran la Fase 3.
-- **Por decidir:**
-  - El motor usa el valor de prueba "Opción no válida" para el caso fuera de la lista (`ParticionEquivalencia`), y en la interfaz en inglés aparece tal cual porque es un dato, no un texto de la interfaz.
-  - Si las pruebas bUnit y Playwright se registran como una historia de QA (borrador de HU-13) o como una tarea técnica sin historia.
+  - **Pruebas de componentes y de extremo a extremo (HU-13):** bUnit comprueba el resaltado de la Matriz, la leyenda y que una regla conserve el campo elegido al renombrarlo (`VistaMatrizTests`, `CasosGeneradosTests`, `HojaReglasTests`). Playwright recorre cargar un ejemplo, corregir un aviso, exportar el CSV y cambiar el idioma (`FlujosCompletosTests`).
+  - Hay 64 pruebas del motor, 73 de la interfaz (68 de lógica y 5 de componentes) y 4 de extremo a extremo.
+- **Historias:** HU-01 a HU-13 están hechas y sus issues están cerrados. HU-01 no tuvo issue porque se hizo antes de crear el repositorio. Los escenarios de HU-13 y los nuevos de HU-09 (ejemplo Compatibilidad) son borradores de Claude que Laurent tiene que revisar.
+- **Siguiente:** la Fase 4 es opcional (modo IA local con Ollama) y todavía no tiene historia.
+- **Por decidir:** el motor usa el valor de prueba "Opción no válida" para el caso fuera de la lista (`ParticionEquivalencia`), y en la interfaz en inglés aparece tal cual porque es un dato, no un texto de la interfaz.
 
 ## Fases
 
