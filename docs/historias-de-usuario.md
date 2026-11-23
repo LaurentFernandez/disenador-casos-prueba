@@ -462,3 +462,50 @@ Escenario: Ejecutar las pruebas antes de publicar
 
 **Prioridad:** Media
 **Estado:** Hecha
+
+## Fase 4. Opcional
+
+### HU-14. Proponer los campos a partir del texto de una historia (modo IA local)
+
+> Borrador de Claude, pendiente de que Laurent lo revise.
+
+**Historia:** Como analista de QA quiero que la herramienta proponga los campos a partir del texto de una historia para no tener que escribirlos uno por uno.
+
+**Criterios de aceptación:**
+
+```gherkin
+Escenario: Proponer campos a partir de una historia
+  Dado que la aplicación corre en mi equipo y Ollama está en marcha
+  Cuando escribo "Como visitante quiero registrarme con mi edad, entre 18 y 65 años, y mi nombre, de 3 a 50 caracteres"
+  Y pido proponer los campos
+  Entonces veo una propuesta con "edad" (entero, de 18 a 65) y "nombre" (texto, de 3 a 50)
+  Y la hoja no cambia hasta que acepto la propuesta
+
+Escenario: Aceptar la propuesta
+  Dada una propuesta de campos
+  Cuando la acepto
+  Entonces los campos pasan a la hoja y se generan sus casos como los de cualquier campo escrito a mano
+
+Escenario: Proteger lo que ya escribí
+  Dado que ya definí campos propios
+  Cuando acepto una propuesta
+  Entonces la herramienta pide confirmación antes de reemplazarlos
+
+Escenario: Propuesta con un error
+  Dado que la propuesta trae un texto con mínimo mayor que el máximo
+  Cuando la acepto
+  Entonces la fila muestra el aviso de siempre y no se generan casos hasta corregirla
+
+Escenario: Ollama no está disponible
+  Dado que Ollama no está en marcha en mi equipo
+  Cuando pido proponer los campos
+  Entonces la herramienta avisa que no lo encuentra y explica cómo iniciarlo
+  Y la hoja no cambia
+
+Escenario: La demo publicada no tiene el modo IA
+  Cuando abro la aplicación publicada en GitHub Pages
+  Entonces no veo la opción de proponer campos
+```
+
+**Prioridad:** Baja
+**Estado:** Pendiente
