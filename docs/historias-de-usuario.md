@@ -461,4 +461,4 @@ Escenario: Ejecutar las pruebas antes de publicar
 ```
 
 **Prioridad:** Media
-**Estado:** En desarrollo
+**Estado:** Hecha
