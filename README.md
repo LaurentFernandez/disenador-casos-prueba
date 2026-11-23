@@ -6,7 +6,7 @@ Aplicación web que genera casos de prueba a partir de historias de usuario apli
 
 **Demo:** [laurentfernandez.github.io/disenador-casos-prueba](https://laurentfernandez.github.io/disenador-casos-prueba/)
 
-> **Estado:** en construcción. Ya define los campos de una historia o carga uno de tres ejemplos, genera sus casos por partición de equivalencia y valores límite, con tablas de decisión para sus reglas de negocio y combinación por pares de sus campos de lista, los muestra como matriz, recta o Gherkin y los exporta. Funciona en español e inglés y se puede instalar y usar sin conexión. Faltan las pruebas de componentes (bUnit) y de extremo a extremo (Playwright). Ver el [plan](docs/plan.md) y las [historias de usuario](docs/historias-de-usuario.md).
+> **Estado:** en construcción. Ya define los campos de una historia o carga uno de cuatro ejemplos, genera sus casos por partición de equivalencia y valores límite, con tablas de decisión para sus reglas de negocio y combinación por pares de sus campos de lista, los muestra como matriz, recta o Gherkin y los exporta. Funciona en español e inglés y se puede instalar y usar sin conexión. Faltan las pruebas de componentes (bUnit) y de extremo a extremo (Playwright). Ver el [plan](docs/plan.md) y las [historias de usuario](docs/historias-de-usuario.md).
 
 *English:* a web app that generates test cases from user stories using formal black-box test design techniques (equivalence partitioning, boundary value analysis, decision tables and pairwise testing). Work in progress.
 
