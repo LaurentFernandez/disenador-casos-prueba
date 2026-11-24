@@ -237,7 +237,7 @@ a {
     cursor: pointer;
 }
 
-/* Agregar y quitar filas: los usan la hoja de campos y las reglas. */
+/* Agregar y quitar filas: los usan la hoja de campos y las reglas; .quitar también, el botón de empezar de nuevo. */
 .agregar {
     margin-top: var(--espacio-3);
 }
@@ -255,6 +255,12 @@ a {
 .boton--pequeno {
     padding: 0 var(--espacio-3);
     font-weight: 400;
+}
+
+.boton:disabled,
+.quitar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* Interfaz propia de Blazor (de la plantilla): aviso de error y progreso de carga. */

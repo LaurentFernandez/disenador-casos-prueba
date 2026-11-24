@@ -89,6 +89,8 @@
   <data name="Pares.Ayuda" xml:space="preserve"><value>Agrega el mínimo de casos en que cada opción de un campo de lista aparece junto a cada opción de los demás, en lugar de probar todas las combinaciones.</value></data>
   <data name="Pares.Total" xml:space="preserve"><value>Combinaciones por pares: {0} de {1:N0} posibles.</value></data>
   <data name="Historia.SinNombre" xml:space="preserve"><value>Historia sin nombre</value></data>
+  <data name="Historia.EmpezarDeNuevo" xml:space="preserve"><value>Empezar de nuevo</value></data>
+  <data name="Historia.ConfirmarEmpezar" xml:space="preserve"><value>Se borrarán la historia, los campos y las reglas que escribiste. ¿Quieres continuar?</value></data>
 
   <!-- Ejemplos listos -->
   <data name="Ejemplo.Registro" xml:space="preserve"><value>Registro de usuario</value></data>

@@ -89,6 +89,8 @@
   <data name="Pares.Ayuda" xml:space="preserve"><value>Adds the fewest cases in which each option of a list field appears with each option of the others, instead of testing every combination.</value></data>
   <data name="Pares.Total" xml:space="preserve"><value>Pairwise combinations: {0} of {1:N0} possible.</value></data>
   <data name="Historia.SinNombre" xml:space="preserve"><value>Untitled story</value></data>
+  <data name="Historia.EmpezarDeNuevo" xml:space="preserve"><value>Start over</value></data>
+  <data name="Historia.ConfirmarEmpezar" xml:space="preserve"><value>The story, fields and rules you wrote will be deleted. Do you want to continue?</value></data>
 
   <!-- Ejemplos listos -->
   <data name="Ejemplo.Registro" xml:space="preserve"><value>User sign-up</value></data>
