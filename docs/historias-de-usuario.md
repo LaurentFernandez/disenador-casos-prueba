@@ -551,3 +551,38 @@ Escenario: Empezar de nuevo
 
 **Prioridad:** Media
 **Estado:** Hecha
+
+### HU-16. Exportar e importar la definición de una historia
+
+> Borrador de Claude, pendiente de que Laurent lo revise.
+
+**Historia:** Como analista de QA quiero guardar la definición de una historia en un archivo y volver a abrirla después para tener varias historias, llevarlas a otro equipo o compartirlas con mi equipo.
+
+**Criterios de aceptación:**
+
+```gherkin
+Escenario: Exportar la historia
+  Dado que definí la historia "Registro de cliente" con sus campos, una regla y la combinación por pares
+  Cuando exporto la historia
+  Entonces descargo el archivo "registro-de-cliente.json" con todo lo que definí
+
+Escenario: Importar una historia
+  Dado que tengo el archivo de una historia exportada
+  Cuando lo importo
+  Entonces veo la historia con sus campos, su regla y la casilla como estaban
+  Y se generan sus casos
+
+Escenario: Proteger lo que ya escribí
+  Dado que ya definí campos propios
+  Cuando importo una historia
+  Entonces la herramienta pide confirmación antes de reemplazarlos
+
+Escenario: Archivo que no es una historia
+  Dado un archivo que no exportó la herramienta, o que está dañado
+  Cuando lo importo
+  Entonces la herramienta avisa que no puede leerlo
+  Y la hoja no cambia
+```
+
+**Prioridad:** Media
+**Estado:** Pendiente
