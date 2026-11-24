@@ -17,8 +17,16 @@ public abstract class PruebaEnNavegador(AplicacionEnMarcha aplicacion) : PageTes
     protected async Task AbrirAsync()
     {
         await Page.GotoAsync(aplicacion.Direccion);
-        await Expect(Page.Locator("table.hoja")).ToBeVisibleAsync(new() { Timeout = EsperaDeCarga });
+        await EsperarCargaAsync();
     }
+
+    protected async Task RecargarAsync()
+    {
+        await Page.ReloadAsync();
+        await EsperarCargaAsync();
+    }
+
+    private Task EsperarCargaAsync() => Expect(Page.Locator("table.hoja")).ToBeVisibleAsync(new() { Timeout = EsperaDeCarga });
 
     protected ILocator Boton(string nombre) => Page.GetByRole(AriaRole.Button, new() { Name = nombre, Exact = true });
 

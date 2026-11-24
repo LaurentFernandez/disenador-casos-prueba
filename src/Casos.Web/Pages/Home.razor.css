@@ -3,12 +3,20 @@
     font-size: var(--tamano-titulo);
 }
 
+.barra-historia {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--espacio-2) var(--espacio-4);
+    margin: 0 0 var(--espacio-3);
+}
+
 .ejemplos {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--espacio-2);
-    margin: 0 0 var(--espacio-3);
 }
 
 .ejemplos__etiqueta {

@@ -515,3 +515,39 @@ Escenario: La demo publicada no tiene el modo IA
 
 **Prioridad:** Baja
 **Estado:** Hecha
+
+## Mejoras después del plan
+
+### HU-15. Conservar la historia al recargar o cambiar de idioma
+
+> Borrador de Claude, pendiente de que Laurent lo revise.
+
+**Historia:** Como analista de QA quiero que la herramienta conserve la historia que estoy definiendo para no perder mi trabajo si recargo la página, cambio el idioma o la cierro por error.
+
+**Criterios de aceptación:**
+
+```gherkin
+Escenario: Recargar la página
+  Dado que definí la historia "Registro de cliente" con sus campos, una regla y la combinación por pares
+  Cuando recargo la página
+  Entonces veo la misma historia, con sus campos, su regla y la casilla como los dejé
+
+Escenario: Cambiar el idioma sin perder el trabajo
+  Dado que definí campos propios
+  Cuando cambio el idioma a inglés
+  Entonces la interfaz se muestra en inglés
+  Y los campos siguen ahí, con los nombres que escribí
+
+Escenario: Abrir sin conexión lo que dejé
+  Dado que definí una historia y cerré la aplicación
+  Cuando la abro sin conexión a internet
+  Entonces veo la historia como la dejé
+
+Escenario: Empezar de nuevo
+  Dado que tengo una historia guardada
+  Cuando elijo empezar de nuevo y lo confirmo
+  Entonces la hoja queda vacía y lo guardado se borra
+```
+
+**Prioridad:** Media
+**Estado:** Hecha

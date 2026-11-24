@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Casos.Core
+@implements IAsyncDisposable
 @inject IJSRuntime JS
 
 <PageTitle>@Textos.De("Marca")</PageTitle>
@@ -11,12 +12,15 @@
 
 <section class="seccion" aria-labelledby="campos-titulo">
     <h1 class="titulo" id="campos-titulo">@Textos.De("Pagina.CamposDeLaHistoria")</h1>
-    <div class="ejemplos" role="group" aria-labelledby="ejemplos-titulo">
-        <span class="ejemplos__etiqueta" id="ejemplos-titulo">@Textos.De("Ejemplos.Titulo")</span>
-        @foreach (var ejemplo in EjemplosHistoria.Todos())
-        {
-            <button type="button" class="boton boton--pequeno" @onclick="() => Cargar(ejemplo)">@ejemplo.Historia</button>
-        }
+    <div class="barra-historia">
+        <div class="ejemplos" role="group" aria-labelledby="ejemplos-titulo">
+            <span class="ejemplos__etiqueta" id="ejemplos-titulo">@Textos.De("Ejemplos.Titulo")</span>
+            @foreach (var ejemplo in EjemplosHistoria.Todos())
+            {
+                <button type="button" class="boton boton--pequeno" @onclick="() => Cargar(ejemplo)">@ejemplo.Historia</button>
+            }
+        </div>
+        <button type="button" class="quitar" disabled="@(!HayDatos)" @onclick="EmpezarDeNuevo">@Textos.De("Historia.EmpezarDeNuevo")</button>
     </div>
     <ProponerCampos Aceptar="AceptarPropuesta" />
     <p class="nombre-historia">
@@ -66,19 +70,72 @@
 </section>
 
 @code {
+    private const string ClaveGuardado = "historia";
+
     private readonly List<FilaCampo> filas = [new()];
     private readonly List<FilaRegla> reglas = [];
     private string nombreHistoria = "";
     private bool porPares;
     private VistaCasos vista;
 
-    // Si se escribió algo desde que se abrió la página o se cargó el último ejemplo.
+    // Si se escribió algo a mano desde que se empezó la historia o se cargó el último ejemplo. Se guarda con ella.
     private bool hayCambiosPropios;
+
+    // El módulo que guarda en el navegador. Queda en null hasta restaurar lo guardado, para no pisarlo con la hoja vacía.
+    private IJSObjectReference? almacen;
+    private string? ultimoGuardado;
 
     private bool HayDatos =>
         !string.IsNullOrWhiteSpace(nombreHistoria) || filas.Any(fila => !fila.EstaVacia) || reglas.Any(regla => !regla.EstaVacia);
 
+    protected override async Task OnInitializedAsync()
+    {
+        var modulo = await JS.InvokeAsync<IJSObjectReference>("import", "./js/almacen.js");
+        if (HistoriaGuardada.DesdeJson(await modulo.InvokeAsync<string?>("leer", ClaveGuardado)) is { } guardada)
+        {
+            nombreHistoria = guardada.Nombre;
+            Reemplazar(guardada.Filas, guardada.PorPares);
+            reglas.AddRange(guardada.Reglas);
+            hayCambiosPropios = guardada.CambiosPropios;
+        }
+
+        almacen = modulo;
+    }
+
+    // Cada cambio vuelve a dibujar la página, así que después de dibujarla se guarda lo que haya cambiado.
+    // Una hoja vacía borra lo guardado.
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (almacen is null)
+        {
+            return;
+        }
+
+        var json = HayDatos ? new HistoriaGuardada(nombreHistoria, filas, reglas, porPares, hayCambiosPropios).AJson() : null;
+        if (json == ultimoGuardado)
+        {
+            return;
+        }
+
+        ultimoGuardado = json;
+        await (json is null
+            ? almacen.InvokeVoidAsync("borrar", ClaveGuardado)
+            : almacen.InvokeVoidAsync("guardar", ClaveGuardado, json));
+    }
+
     private void MarcarCambio() => hayCambiosPropios = true;
+
+    private async Task EmpezarDeNuevo()
+    {
+        if (!await PuedeReemplazar("Historia.ConfirmarEmpezar"))
+        {
+            return;
+        }
+
+        nombreHistoria = "";
+        Reemplazar([new FilaCampo()], combinarPorPares: false);
+        hayCambiosPropios = false;
+    }
 
     private async Task Cargar(EjemplosHistoria.Ejemplo ejemplo)
     {
@@ -116,5 +173,13 @@
         filas.AddRange(nuevas);
         reglas.Clear();
         porPares = combinarPorPares;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (almacen is not null)
+        {
+            await almacen.DisposeAsync();
+        }
     }
 }
