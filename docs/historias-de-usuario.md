@@ -550,4 +550,4 @@ Escenario: Empezar de nuevo
 ```
 
 **Prioridad:** Media
-**Estado:** Pendiente
+**Estado:** Hecha
