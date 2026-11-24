@@ -585,4 +585,4 @@ Escenario: Archivo que no es una historia
 ```
 
 **Prioridad:** Media
-**Estado:** Pendiente
+**Estado:** Hecha
