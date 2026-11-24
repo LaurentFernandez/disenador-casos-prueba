@@ -1,0 +1,93 @@
+@inject ClienteOllama Ollama
+@inject NavigationManager Navegacion
+
+@* Ollama corre en el equipo del usuario y solo acepta pedidos de una aplicación local, así que la demo publicada no lo ofrece. *@
+@if (EsLocal(Navegacion.BaseUri))
+{
+    <details class="propuesta">
+        <summary>@Textos.De("Propuesta.Titulo")</summary>
+        <div class="propuesta__contenido">
+            <p class="ayuda ayuda--arriba">@Textos.De("Propuesta.Ayuda")</p>
+            <label class="propuesta__etiqueta" for="texto-historia">@Textos.De("Propuesta.Texto")</label>
+            <textarea id="texto-historia" class="propuesta__texto" rows="3" @bind="texto" @bind:event="oninput"
+                      placeholder="@Textos.De("Propuesta.EjemploTexto")"></textarea>
+            <p class="propuesta__acciones">
+                <button type="button" class="boton" disabled="@(esperando || string.IsNullOrWhiteSpace(texto))"
+                        @onclick="Proponer">@Textos.De("Propuesta.Proponer")</button>
+            </p>
+
+            <div role="status">
+                @if (esperando)
+                {
+                    <p class="estado">@Textos.De("Propuesta.Pidiendo")</p>
+                }
+                else if (propuesta?.Aviso is { } aviso)
+                {
+                    <p class="aviso">@aviso</p>
+                }
+            </div>
+
+            @if (propuesta is { Filas.Count: > 0 })
+            {
+                <p class="propuesta__titulo" id="propuesta-titulo">@Textos.De("Propuesta.Lista")</p>
+                <ul class="propuesta__campos" aria-labelledby="propuesta-titulo">
+                    @foreach (var fila in propuesta.Filas)
+                    {
+                        <li class="@(avisos.ContainsKey(fila) ? "propuesta__campo--aviso" : null)">@Descripcion(fila)</li>
+                    }
+                </ul>
+                <p class="propuesta__acciones">
+                    <button type="button" class="boton" @onclick="AceptarPropuesta">@Textos.De("Propuesta.Aceptar")</button>
+                    <button type="button" class="boton boton--pequeno" @onclick="Descartar">@Textos.De("Propuesta.Descartar")</button>
+                </p>
+            }
+        </div>
+    </details>
+}
+
+@code {
+    private string texto = "";
+    private bool esperando;
+    private ClienteOllama.Propuesta? propuesta;
+    private IReadOnlyDictionary<FilaCampo, string> avisos = new Dictionary<FilaCampo, string>();
+
+    /// <summary>
+    /// Pasa la propuesta a la hoja. Devuelve false si el usuario no quiso reemplazar lo que ya escribió.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public Func<IReadOnlyList<FilaCampo>, Task<bool>> Aceptar { get; set; } = null!;
+
+    public static bool EsLocal(string direccion) => new Uri(direccion).IsLoopback;
+
+    private async Task Proponer()
+    {
+        esperando = true;
+        propuesta = null;
+        var nueva = await Ollama.ProponerAsync(texto);
+        // Se valida igual que la hoja, para mostrar antes de aceptar lo que habría que corregir.
+        avisos = LecturaHoja.Leer(nueva.Filas, "").Avisos;
+        propuesta = nueva;
+        esperando = false;
+    }
+
+    private async Task AceptarPropuesta()
+    {
+        if (await Aceptar(propuesta!.Filas))
+        {
+            Descartar();
+        }
+    }
+
+    private void Descartar() => propuesta = null;
+
+    private string Descripcion(FilaCampo fila)
+    {
+        var detalle = avisos.GetValueOrDefault(fila) ?? TextosCaso.Reglas(fila.ACampo()!);
+        if (fila.Tipo == TipoCampo.Lista && !avisos.ContainsKey(fila))
+        {
+            detalle = $"{detalle} ({fila.Opciones})";
+        }
+
+        return string.IsNullOrEmpty(fila.Nombre) ? detalle : $"{fila.Nombre}: {detalle}";
+    }
+}

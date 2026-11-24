@@ -3,10 +3,15 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.JSInterop;
 using Casos.Web;
+using Casos.Web.Componentes;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
+
+// El modo IA local habla con Ollama en el equipo del usuario; su dirección y su modelo están en wwwroot/appsettings.json.
+var ollama = builder.Configuration.GetSection("Ollama");
+builder.Services.AddSingleton(new ClienteOllama(new HttpClient { BaseAddress = new Uri(ollama["Direccion"]!) }, ollama["Modelo"]!));
 
 var host = builder.Build();
 

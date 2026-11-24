@@ -1,0 +1,62 @@
+.propuesta {
+    --ancho-propuesta: 48rem;
+
+    margin: 0 0 var(--espacio-3);
+}
+
+.propuesta summary {
+    width: fit-content;
+    color: var(--tinta);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.propuesta__contenido {
+    display: grid;
+    gap: var(--espacio-2);
+    max-width: var(--ancho-propuesta);
+    margin-top: var(--espacio-2);
+}
+
+.propuesta__etiqueta,
+.propuesta__titulo {
+    margin: 0;
+    font-weight: 600;
+}
+
+.propuesta__texto {
+    width: 100%;
+    padding: var(--espacio-2) var(--espacio-3);
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-control);
+    font: inherit;
+    resize: vertical;
+}
+
+.propuesta__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-2);
+    margin: 0;
+}
+
+.propuesta__campos {
+    margin: 0;
+    padding-left: var(--espacio-6);
+}
+
+.propuesta__campo--aviso {
+    color: var(--invalido);
+    font-weight: 600;
+}
+
+.estado {
+    margin: 0;
+    color: var(--tenue);
+}
+
+.boton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

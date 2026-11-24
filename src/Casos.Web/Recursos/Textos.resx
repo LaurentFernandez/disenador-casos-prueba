@@ -115,6 +115,23 @@
   <data name="Ejemplos.Titulo" xml:space="preserve"><value>Ejemplos</value></data>
   <data name="Ejemplos.Confirmar" xml:space="preserve"><value>El ejemplo reemplazará la historia y los campos que escribiste. ¿Quieres continuar?</value></data>
 
+  <!-- Propuesta de campos con IA local -->
+  <data name="Propuesta.Titulo" xml:space="preserve"><value>Proponer los campos con IA local</value></data>
+  <data name="Propuesta.Ayuda" xml:space="preserve"><value>Escribe la historia y Ollama, que corre en tu equipo, propone sus campos. Revisa la propuesta antes de aceptarla. Solo aparece cuando la aplicación corre en local.</value></data>
+  <data name="Propuesta.Texto" xml:space="preserve"><value>Texto de la historia</value></data>
+  <data name="Propuesta.EjemploTexto" xml:space="preserve"><value>Ejemplo: Como visitante quiero registrarme con mi edad, entre 18 y 65 años, y mi nombre, de 3 a 50 caracteres</value></data>
+  <data name="Propuesta.Proponer" xml:space="preserve"><value>Proponer campos</value></data>
+  <data name="Propuesta.Pidiendo" xml:space="preserve"><value>Ollama está preparando la propuesta…</value></data>
+  <data name="Propuesta.Lista" xml:space="preserve"><value>Propuesta de Ollama</value></data>
+  <data name="Propuesta.Aceptar" xml:space="preserve"><value>Aceptar la propuesta</value></data>
+  <data name="Propuesta.Descartar" xml:space="preserve"><value>Descartar</value></data>
+  <data name="Propuesta.Confirmar" xml:space="preserve"><value>La propuesta reemplazará los campos que escribiste. ¿Quieres continuar?</value></data>
+  <data name="Propuesta.SinOllama" xml:space="preserve"><value>No se encontró Ollama en este equipo. Ábrelo o instálalo desde ollama.com, baja el modelo con «ollama pull {0}» y vuelve a intentarlo.</value></data>
+  <data name="Propuesta.SinModelo" xml:space="preserve"><value>Ollama no tiene el modelo «{0}». Bájalo con «ollama pull {0}» y vuelve a intentarlo.</value></data>
+  <data name="Propuesta.Fallida" xml:space="preserve"><value>No se pudo leer la propuesta de Ollama. Vuelve a intentarlo.</value></data>
+  <data name="Propuesta.SinCampos" xml:space="preserve"><value>Ollama no encontró campos en la historia. Prueba a describirlos con más detalle.</value></data>
+  <data name="Propuesta.IdiomaDeLaHistoria" xml:space="preserve"><value>La historia está en español: escribe los nombres y las opciones en español.</value><comment>No se muestra: se agrega a las instrucciones que recibe el modelo, que están en español.</comment></data>
+
   <!-- Vistas de los casos -->
   <data name="Casos.Vistas" xml:space="preserve"><value>Vista de los casos</value></data>
   <data name="Vista.Matriz" xml:space="preserve"><value>Matriz</value></data>

@@ -18,6 +18,7 @@
             <button type="button" class="boton boton--pequeno" @onclick="() => Cargar(ejemplo)">@ejemplo.Historia</button>
         }
     </div>
+    <ProponerCampos Aceptar="AceptarPropuesta" />
     <p class="nombre-historia">
         <label for="nombre-historia">@Textos.De("Pagina.NombreDeLaHistoria")</label>
         <input id="nombre-historia" @bind="nombreHistoria" @bind:after="MarcarCambio" placeholder="@Textos.De("Pagina.EjemploHistoria")" />
@@ -79,19 +80,41 @@
 
     private void MarcarCambio() => hayCambiosPropios = true;
 
-    // Solo se pregunta si hay algo escrito a mano: quien va probando un ejemplo tras otro no ve la pregunta cada vez.
     private async Task Cargar(EjemplosHistoria.Ejemplo ejemplo)
     {
-        if (hayCambiosPropios && HayDatos && !await JS.InvokeAsync<bool>("confirm", Textos.De("Ejemplos.Confirmar")))
+        if (!await PuedeReemplazar("Ejemplos.Confirmar"))
         {
             return;
         }
 
         nombreHistoria = ejemplo.Historia;
-        filas.Clear();
-        filas.AddRange(ejemplo.Filas);
-        reglas.Clear();
-        porPares = ejemplo.PorPares;
+        Reemplazar(ejemplo.Filas, ejemplo.PorPares);
         hayCambiosPropios = false;
+    }
+
+    // Los campos propuestos pasan a ser del usuario: cargar después un ejemplo vuelve a preguntar.
+    private async Task<bool> AceptarPropuesta(IReadOnlyList<FilaCampo> propuesta)
+    {
+        if (!await PuedeReemplazar("Propuesta.Confirmar"))
+        {
+            return false;
+        }
+
+        Reemplazar(propuesta, combinarPorPares: false);
+        hayCambiosPropios = true;
+        StateHasChanged();
+        return true;
+    }
+
+    // Solo se pregunta si hay algo escrito a mano: quien va probando un ejemplo tras otro no ve la pregunta cada vez.
+    private async Task<bool> PuedeReemplazar(string claveConfirmacion) =>
+        !hayCambiosPropios || !HayDatos || await JS.InvokeAsync<bool>("confirm", Textos.De(claveConfirmacion));
+
+    private void Reemplazar(IEnumerable<FilaCampo> nuevas, bool combinarPorPares)
+    {
+        filas.Clear();
+        filas.AddRange(nuevas);
+        reglas.Clear();
+        porPares = combinarPorPares;
     }
 }
