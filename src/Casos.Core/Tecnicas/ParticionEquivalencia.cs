@@ -11,7 +11,7 @@ public static class ParticionEquivalencia
     private const string ValorNoNumerico = "abc";
     private const decimal ParteDecimal = 0.5m;
 
-    // shortcut: si una opción de la lista se llama igual, este ejemplo no sería inválido; generar uno distinto si llega a pasar.
+    // La interfaz muestra este valor en su idioma; el motor solo garantiza que no sea una de las opciones.
     private const string ValorFueraDeLista = "Opción no válida";
 
     /// <summary>
@@ -63,7 +63,7 @@ public static class ParticionEquivalencia
     private static IEnumerable<ClaseEquivalencia> ClasesDeLista(CampoLista campo) =>
         campo.Opciones
             .Select(opcion => Valida(TipoClase.Opcion, opcion))
-            .Append(Invalida(TipoClase.FueraDeLista, ValorFueraDeLista));
+            .Append(Invalida(TipoClase.FueraDeLista, campo.ValorQueNoEsOpcion(ValorFueraDeLista)));
 
     private static ClaseEquivalencia Valida(TipoClase tipo, string valor) => new(tipo, true, valor);
 

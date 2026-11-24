@@ -13,4 +13,19 @@ public sealed record CampoLista(string Nombre, bool Obligatorio, IReadOnlyList<s
     public IReadOnlyList<string> Opciones { get; } = Opciones.Count > 0
         ? Opciones
         : throw new CampoInvalidoException(ErrorCampo.ListaSinOpciones, nameof(Opciones));
+
+    /// <summary>
+    /// El valor preferido si no es una de las opciones; si lo es, el mismo con un número («Opción no válida 2») hasta
+    /// que deje de serlo. No importan las mayúsculas, porque el sistema podría aceptar la opción escrita de otra forma.
+    /// </summary>
+    public string ValorQueNoEsOpcion(string preferido)
+    {
+        var valor = preferido;
+        for (var numero = 2; Opciones.Contains(valor, StringComparer.OrdinalIgnoreCase); numero++)
+        {
+            valor = $"{preferido} {numero}";
+        }
+
+        return valor;
+    }
 }
