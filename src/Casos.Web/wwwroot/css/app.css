@@ -237,12 +237,14 @@ a {
     cursor: pointer;
 }
 
-/* Agregar y quitar filas: los usan la hoja de campos y las reglas; .quitar también, el botón de empezar de nuevo. */
+/* Agregar y quitar filas: los usan la hoja de campos y las reglas. Las acciones de la historia (exportar, importar y
+   empezar de nuevo) se ven como .quitar, con aspecto de enlace, para no confundirse con los ejemplos. */
 .agregar {
     margin-top: var(--espacio-3);
 }
 
-.quitar {
+.quitar,
+.accion {
     padding: 0;
     background: none;
     border: 0;
@@ -258,9 +260,15 @@ a {
 }
 
 .boton:disabled,
-.quitar:disabled {
+.accion:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+/* El campo de archivo va oculto detrás de su etiqueta, que muestra el foco cuando se llega con el teclado. */
+input[type="file"]:focus-visible + .accion {
+    outline: var(--grosor-foco) solid var(--tinta);
+    outline-offset: 2px;
 }
 
 /* Interfaz propia de Blazor (de la plantilla): aviso de error y progreso de carga. */

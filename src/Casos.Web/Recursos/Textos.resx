@@ -90,6 +90,10 @@
   <data name="Pares.Total" xml:space="preserve"><value>Combinaciones por pares: {0} de {1:N0} posibles.</value></data>
   <data name="Historia.SinNombre" xml:space="preserve"><value>Historia sin nombre</value></data>
   <data name="Historia.EmpezarDeNuevo" xml:space="preserve"><value>Empezar de nuevo</value></data>
+  <data name="Historia.Exportar" xml:space="preserve"><value>Exportar la historia</value></data>
+  <data name="Historia.Importar" xml:space="preserve"><value>Importar una historia</value></data>
+  <data name="Historia.ConfirmarImportar" xml:space="preserve"><value>La historia importada reemplazará la historia y los campos que escribiste. ¿Quieres continuar?</value></data>
+  <data name="Historia.ArchivoIlegible" xml:space="preserve"><value>El archivo no es una historia exportada por esta herramienta, o está dañado.</value></data>
   <data name="Historia.ConfirmarEmpezar" xml:space="preserve"><value>Se borrarán la historia, los campos y las reglas que escribiste. ¿Quieres continuar?</value></data>
 
   <!-- Ejemplos listos -->
