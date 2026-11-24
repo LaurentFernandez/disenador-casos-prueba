@@ -8,7 +8,7 @@ Es un proyecto de portafolio de Laurent Andrés Fernandez (ingeniero de software
 
 ## Decisiones tomadas (no reabrir sin preguntar a Laurent)
 
-- **Costo cero:** solo herramientas gratuitas u open source. Nada de APIs de pago. Sin IA en el núcleo; la Fase 4 opcional usaría IA local con Ollama, solo en modo local.
+- **Costo cero:** solo herramientas gratuitas u open source. Nada de APIs de pago. Sin IA en el núcleo: el modo IA local (Fase 4, HU-14) solo propone filas de la hoja con Ollama, en el equipo del usuario, y aparece solo cuando la aplicación corre en `localhost`.
 - **Aplicación web** en Blazor WebAssembly con PWA, publicada gratis en GitHub Pages, sin servidor: `https://laurentfernandez.github.io/disenador-casos-prueba/`. La publican dos trabajos de `ci.yml` en cada push a `main` con las pruebas en verde: `publicar` compila y sube el paquete, y `desplegar` lo pone en GitHub Pages. La base es relativa (`<base href="./" />`) para que la misma compilación sirva en local y en la subcarpeta; no se modifica el `index.html` publicado porque rompería la verificación de integridad del service worker. El despliegue va en un trabajo aparte porque, en el mismo trabajo que sube el paquete, la API de GitHub a veces todavía no lo veía ("No artifacts named github-pages"). Si `desplegar` falla, basta con volver a ejecutar solo los trabajos fallidos (`gh run rerun <id> --failed`), que no suben otro paquete. Si alguna vez una ejecución queda con dos paquetes "github-pages" ("Multiple artifacts"), hay que borrar los sobrantes (`gh api -X DELETE repos/LaurentFernandez/disenador-casos-prueba/actions/artifacts/<id>`) antes de reintentar.
 - **.NET 10 (LTS).** Pruebas: xUnit para el motor y para la lógica de la interfaz, bUnit para los componentes y Playwright para .NET para las de extremo a extremo (en Chromium). Las de extremo a extremo levantan la aplicación con `dotnet run --no-build` en un puerto libre (`AplicacionEnMarcha`), una sola vez para todas, y la abren en español. El CI instala Chromium antes de `dotnet test`, así que también deciden si se publica.
 - **Interfaz en español e inglés**, con `IStringLocalizer` y archivos `.resx`: los textos están en `Recursos/Textos.resx` (español) y `Recursos/Textos.en.resx` (inglés), y se leen con la clase estática `Textos`. El idioma se fija al arrancar (el elegido antes o, la primera vez, inglés si el navegador está en inglés y español en cualquier otro caso); cambiarlo guarda la elección y recarga la página. Los nombres que escribe el usuario no se traducen y el CSV usa ";" en los dos idiomas. Las pruebas de textos fijan su idioma heredando de `PruebaEnIdioma`.
@@ -49,6 +49,8 @@ Las pruebas de extremo a extremo necesitan el Chromium de Playwright, que se ins
 tests/Casos.E2E.Tests/bin/Debug/net10.0/.playwright/node/win32_x64/node.exe tests/Casos.E2E.Tests/bin/Debug/net10.0/.playwright/package/cli.js install chromium
 ```
 
+El modo IA local necesita Ollama en marcha con el modelo de `wwwroot/appsettings.json`. En esta máquina Ollama está instalado (con `winget`, en `%LOCALAPPDATA%\Programs\Ollama`) y tiene `llama3.2`. Ninguna prueba lo necesita.
+
 ## Cómo trabajamos
 
 - **Laurent es el analista.** Escribe las historias de usuario en `docs/historias-de-usuario.md`, y cada funcionalidad nace de una historia. Si una tarea no tiene historia, pídesela o propón un borrador marcado como tal para que él lo revise.
@@ -65,9 +67,14 @@ tests/Casos.E2E.Tests/bin/Debug/net10.0/.playwright/node/win32_x64/node.exe test
   - **Combinación por pares (HU-12):** `Tecnicas/Pares` implementa IPO sobre los campos de lista y es determinista. Se activa con `Historia.CombinarPorPares`, que necesita al menos dos campos de lista (`PuedeCombinarPorPares`). En la interfaz, la activa la casilla de la sección "Combinación por pares" de `Pages/Home.razor`; con menos de dos listas avisa y oculta los casos, y si no, dice cuántas combinaciones salieron de las posibles. Cada caso por pares trae los campos que combina en `CasoPrueba.CamposCombinados`, que la Matriz resalta. El ejemplo "Compatibilidad" (navegador, sistema e idioma) es el único con `PorPares` en `EjemplosHistoria` y deja la casilla marcada al cargarlo; los demás la desmarcan.
   - Los casos de las dos técnicas van en las tres vistas (en la Recta solo en la tabla de casos) y en las exportaciones.
   - **Pruebas de componentes y de extremo a extremo (HU-13):** bUnit comprueba el resaltado de la Matriz, la leyenda y que una regla conserve el campo elegido al renombrarlo (`VistaMatrizTests`, `CasosGeneradosTests`, `HojaReglasTests`). Playwright recorre cargar un ejemplo, corregir un aviso, exportar el CSV y cambiar el idioma (`FlujosCompletosTests`).
-  - Hay 64 pruebas del motor, 73 de la interfaz (68 de lógica y 5 de componentes) y 4 de extremo a extremo.
-- **Historias:** HU-01 a HU-13 están hechas y sus issues están cerrados. HU-01 no tuvo issue porque se hizo antes de crear el repositorio. Los escenarios de HU-13 y los nuevos de HU-09 (ejemplo Compatibilidad) son borradores de Claude que Laurent tiene que revisar.
-- **Siguiente:** la Fase 4 es opcional (modo IA local con Ollama) y todavía no tiene historia.
+- **Fase 4 terminada (opcional).** El modo IA local (HU-14) propone los campos a partir del texto de una historia:
+  - `Componentes/ClienteOllama` pide a Ollama los campos con un esquema JSON fijo y temperatura 0, y convierte la respuesta en filas. La dirección y el modelo (`llama3.2`) están en `wwwroot/appsettings.json`. Una respuesta que no se entiende, Ollama apagado o el modelo sin bajar dan un aviso, no un error.
+  - Las instrucciones del modelo están probadas con `llama3.2` en historias en español y en inglés, y llevan el idioma de la interfaz para que no traduzca la historia. Si se cambian, hay que volver a probarlas con historias reales: un ejemplo con números hizo que el modelo copiara esos números.
+  - `Componentes/ProponerCampos.razor` es una sección plegable que solo aparece en `localhost` (Ollama además rechaza otros orígenes). Muestra la propuesta con los avisos de la hoja, y aceptarla reemplaza los campos, con confirmación si había campos propios.
+  - Las pruebas usan `OllamaSimulado`; ninguna necesita Ollama.
+- **Pruebas:** 64 del motor, 90 de la interfaz (79 de lógica y 11 de componentes) y 4 de extremo a extremo.
+- **Historias:** HU-01 a HU-14 están hechas. HU-01 no tuvo issue porque se hizo antes de crear el repositorio. Los escenarios de HU-13, HU-14 y los nuevos de HU-09 (ejemplo Compatibilidad) son borradores de Claude que Laurent tiene que revisar.
+- **Siguiente:** las cinco fases del plan están hechas. Lo que siga sale de historias nuevas de Laurent.
 - **Por decidir:** el motor usa el valor de prueba "Opción no válida" para el caso fuera de la lista (`ParticionEquivalencia`), y en la interfaz en inglés aparece tal cual porque es un dato, no un texto de la interfaz.
 
 ## Fases
