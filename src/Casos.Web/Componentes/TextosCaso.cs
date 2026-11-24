@@ -16,6 +16,15 @@ public static class TextosCaso
 
     public static string Vacio => Textos.De("Valor.Vacio");
 
+    /// <summary>
+    /// El valor de un campo en un caso, como se muestra y se exporta. El de una opción fuera de la lista no es un dato
+    /// que se escriba sino una descripción, así que sale en el idioma de la interfaz y nunca como una de las opciones.
+    /// </summary>
+    public static string Dato(CasoPrueba caso, Campo campo) =>
+        caso.ClaseProbada == TipoClase.FueraDeLista && caso.CampoProbado == campo && campo is CampoLista lista
+            ? lista.ValorQueNoEsOpcion(Textos.De("Valor.FueraDeLista"))
+            : caso.Datos[campo.Nombre];
+
     public static string Descripcion(CasoPrueba caso)
     {
         // Una combinación por pares se describe con las opciones que junta, por ejemplo «Chrome · Windows · español».
@@ -42,9 +51,11 @@ public static class TextosCaso
 
     public static string ValorProbado(CasoPrueba caso) => caso switch
     {
-        { CamposCombinados: { } combinados } => string.Join(Separador, combinados.Select(campo => DatoDe(caso, campo.Nombre))),
-        { Regla: { } regla, CampoProbado: { } campo } => $"{DatoDe(caso, regla.CampoCondicion)}{Separador}{DatoDe(caso, campo.Nombre)}",
-        { CampoProbado: { } campo } => DatoDe(caso, campo.Nombre),
+        { CamposCombinados: { } combinados } => string.Join(Separador, combinados.Select(campo => DatoDe(caso, campo))),
+        // El campo de la condición siempre lleva una de sus opciones, así que se lee tal cual.
+        { Regla: { } regla, CampoProbado: { } campo } =>
+            $"{regla.CampoCondicion}: {Valor(caso.Datos[regla.CampoCondicion])}{Separador}{DatoDe(caso, campo)}",
+        { CampoProbado: { } campo } => DatoDe(caso, campo),
         _ => Textos.De("Caso.ValoresPorDefecto"),
     };
 
@@ -156,7 +167,7 @@ public static class TextosCaso
             caso.Datos[regla.CampoCondicion],
             campo.Nombre);
 
-    private static string DatoDe(CasoPrueba caso, string campo) => $"{campo}: {Valor(caso.Datos[campo])}";
+    private static string DatoDe(CasoPrueba caso, Campo campo) => $"{campo.Nombre}: {Valor(Dato(caso, campo))}";
 
     // En un texto el rango es de longitud; la clave sale del nombre de la posición.
     private static string DescripcionLimite(Campo campo, PosicionLimite posicion) =>

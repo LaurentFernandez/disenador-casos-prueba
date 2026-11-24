@@ -43,7 +43,7 @@ public sealed record DiagramaRecta(
         foreach (var caso in casos.Where(caso =>
             caso.Tecnica is not (Tecnica.TablaDecision or Tecnica.Pares) && (caso.CampoProbado is null || caso.CampoProbado == campo)))
         {
-            var valor = caso.Datos[campo.Nombre];
+            var valor = TextosCaso.Dato(caso, campo);
             if (ValorEnRecta(campo, valor) is { } numero)
             {
                 puntos.Add((numero, caso.Tecnica, caso.Codigo));

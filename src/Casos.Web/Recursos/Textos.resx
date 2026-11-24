@@ -182,6 +182,7 @@
   <data name="Resumen.RechazadoUno" xml:space="preserve"><value>{0} se rechaza</value></data>
   <data name="Resumen.RechazadoVarios" xml:space="preserve"><value>{0} se rechazan</value></data>
   <data name="Valor.Vacio" xml:space="preserve"><value>vacío</value></data>
+  <data name="Valor.FueraDeLista" xml:space="preserve"><value>Opción no válida</value></data>
   <data name="Clase.Valida" xml:space="preserve"><value>válido</value></data>
   <data name="Clase.Invalida" xml:space="preserve"><value>inválido</value></data>
   <data name="Clase.TextoCorto" xml:space="preserve"><value>{0} de {1}</value></data>

@@ -28,7 +28,7 @@ public static class GherkinCasos
         for (var indice = 0; indice < historia.Campos.Count; indice++)
         {
             var campo = historia.Campos[indice];
-            lineas.Add(Paso(indice == 0 ? "Gherkin.Cuando" : "Gherkin.Y", Accion(campo, caso.Datos[campo.Nombre])));
+            lineas.Add(Paso(indice == 0 ? "Gherkin.Cuando" : "Gherkin.Y", Accion(campo, TextosCaso.Dato(caso, campo))));
         }
 
         lineas.Add(Paso("Gherkin.Entonces", Textos.De("Gherkin.Sistema", ConMinuscula(TextosCaso.Resultado(caso)))));

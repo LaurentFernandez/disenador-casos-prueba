@@ -118,6 +118,34 @@ public class TextosTests() : PruebaEnIdioma("en")
         Assert.Equal("Pairwise combination", TextosCaso.NombreLargoTecnica(Tecnica.Pares));
     }
 
+    [Fact]
+    public void ValorFueraDeLaLista_EnIngles_EsInvalidOptionEnTodasPartesComoEnHU08()
+    {
+        var casos = GeneradorCasos.Generar(historia);
+        var tipoDeCliente = historia.Campos[2];
+        var fueraDeLista = casos.Single(caso => caso.ClaseProbada == TipoClase.FueraDeLista);
+
+        Assert.Equal("Invalid option", TextosCaso.Dato(fueraDeLista, tipoDeCliente));
+        Assert.Contains(DiagramaRecta.Crear(tipoDeCliente, casos).Fichas, ficha => ficha is { Texto: "Invalid option", Valida: false });
+        Assert.Equal("customer type: Invalid option", TextosCaso.ValorProbado(fueraDeLista));
+        Assert.Contains("And I choose \"Invalid option\" in customer type", GherkinCasos.Escenario(historia, fueraDeLista));
+        foreach (var archivo in new[] { ExportacionCasos.Csv(historia, casos), ExportacionCasos.Markdown(historia, casos) })
+        {
+            Assert.Contains("Invalid option", archivo.Contenido);
+            Assert.DoesNotContain("Opción no válida", archivo.Contenido);
+        }
+    }
+
+    [Fact]
+    public void ValorFueraDeLaLista_ListaConUnaOpcionLlamadaAsi_LeAgregaUnNumero()
+    {
+        var revision = new Historia("Review");
+        revision.AgregarCampo(new CampoLista("status", true, ["Valid option", "Invalid option"]));
+        var fueraDeLista = GeneradorCasos.Generar(revision).Single(caso => caso.ClaseProbada == TipoClase.FueraDeLista);
+
+        Assert.Equal("Invalid option 2", TextosCaso.Dato(fueraDeLista, revision.Campos[0]));
+    }
+
     private static IEnumerable<string> ClavesDe(ResourceManager recursos, CultureInfo cultura) =>
         recursos.GetResourceSet(cultura, createIfNotExists: true, tryParents: false)!
             .Cast<DictionaryEntry>()
