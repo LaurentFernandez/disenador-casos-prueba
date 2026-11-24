@@ -508,4 +508,4 @@ Escenario: La demo publicada no tiene el modo IA
 ```
 
 **Prioridad:** Baja
-**Estado:** Pendiente
+**Estado:** Hecha

@@ -6,7 +6,7 @@ Aplicación web que genera casos de prueba a partir de historias de usuario apli
 
 **Demo:** [laurentfernandez.github.io/disenador-casos-prueba](https://laurentfernandez.github.io/disenador-casos-prueba/)
 
-> **Estado:** en construcción. Ya define los campos de una historia o carga uno de cuatro ejemplos, genera sus casos por partición de equivalencia y valores límite, con tablas de decisión para sus reglas de negocio y combinación por pares de sus campos de lista, los muestra como matriz, recta o Gherkin y los exporta. Funciona en español e inglés y se puede instalar y usar sin conexión. Tiene pruebas del motor, de los componentes y de extremo a extremo en el navegador. Ver el [plan](docs/plan.md) y las [historias de usuario](docs/historias-de-usuario.md).
+> **Estado:** en construcción. Ya define los campos de una historia o carga uno de cuatro ejemplos, genera sus casos por partición de equivalencia y valores límite, con tablas de decisión para sus reglas de negocio y combinación por pares de sus campos de lista, los muestra como matriz, recta o Gherkin y los exporta. Funciona en español e inglés y se puede instalar y usar sin conexión. Tiene pruebas del motor, de los componentes y de extremo a extremo en el navegador. Cuando corre en el equipo, puede proponer los campos a partir del texto de una historia con IA local (Ollama). Ver el [plan](docs/plan.md) y las [historias de usuario](docs/historias-de-usuario.md).
 
 *English:* a web app that generates test cases from user stories using formal black-box test design techniques (equivalence partitioning, boundary value analysis, decision tables and pairwise testing). Work in progress.
 
@@ -14,6 +14,7 @@ Aplicación web que genera casos de prueba a partir de historias de usuario apli
 
 - .NET 10 y Blazor WebAssembly (aplicación instalable como PWA, sin servidor)
 - xUnit para las pruebas, bUnit para los componentes y Playwright para .NET para las pruebas de extremo a extremo
+- Ollama (opcional y solo en local) para proponer los campos con un modelo abierto
 - GitHub Actions para compilar y probar en cada cambio, y publicar en GitHub Pages lo que llega a `main`
 
 ## Estructura
@@ -50,6 +51,20 @@ Después:
 dotnet test                                 # ejecutar todas las pruebas
 dotnet run --project src/Casos.Web          # abrir la aplicación en local
 ```
+
+## Modo IA local (opcional)
+
+Con la aplicación corriendo en el equipo, la sección «Proponer los campos con IA local» pide a [Ollama](https://ollama.com) los campos que menciona el texto de una historia. La propuesta se revisa antes de aceptarla, pasa por las mismas validaciones que una fila escrita a mano, y los casos los sigue generando el motor. El texto no sale del equipo, y la demo publicada no muestra esta sección.
+
+1. Instala Ollama y baja el modelo:
+
+   ```bash
+   ollama pull llama3.2
+   ```
+
+2. Abre la aplicación con `dotnet run --project src/Casos.Web` y despliega la sección.
+
+El modelo y la dirección de Ollama se cambian en `src/Casos.Web/wwwroot/appsettings.json`.
 
 ## Autor
 

@@ -31,7 +31,7 @@ Una aplicación web que genere casos de prueba a partir de historias de usuario 
 
 ## Herramientas (todas gratuitas)
 
-.NET 10 (LTS), Blazor WebAssembly, xUnit, bUnit, Playwright para .NET, GitHub Actions y GitHub Pages.
+.NET 10 (LTS), Blazor WebAssembly, xUnit, bUnit, Playwright para .NET, GitHub Actions y GitHub Pages. Para el modo IA local opcional, Ollama con un modelo abierto (`llama3.2`), que corre en el equipo del usuario.
 
 ## Fases
 
@@ -41,4 +41,4 @@ Una aplicación web que genere casos de prueba a partir de historias de usuario 
 | 1. Motor | Modelo de campos, partición de equivalencia y valores límite, con pruebas | Hecha |
 | 2. Interfaz | Formulario de campos, tabla de resultados, Gherkin, exportaciones, español e inglés, publicación en GitHub Pages | Hecha |
 | 3. Técnicas avanzadas | Tablas de decisión y pairwise; pruebas bUnit y Playwright | Hecha |
-| 4. Opcional | Modo IA local con Ollama para proponer campos a partir de texto libre | Pendiente |
+| 4. Opcional | Modo IA local con Ollama para proponer campos a partir de texto libre | Hecha |
