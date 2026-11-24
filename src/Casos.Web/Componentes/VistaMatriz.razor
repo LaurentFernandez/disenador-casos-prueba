@@ -31,7 +31,7 @@
                     </td>
                     @foreach (var campo in Campos)
                     {
-                        var valor = caso.Datos[campo.Nombre];
+                        var valor = TextosCaso.Dato(caso, campo);
                         // Uno por pares prueba los campos que combina; el que tiene todos los valores por defecto, todos los campos a
                         // la vez, y el de una regla, sus dos campos.
                         var probado = caso.CamposCombinados?.Contains(campo)

@@ -81,4 +81,12 @@ public class ParticionEquivalenciaTests
             new(TipoClase.Vacio, false, ""),
         }, clases);
     }
+
+    [Fact]
+    public void Generar_ListaConUnaOpcionLlamadaComoElValorInvalido_ElValorFueraDeLaListaNoEsEsaOpcion()
+    {
+        var clases = ParticionEquivalencia.Generar(new CampoLista("estado", true, ["Opción válida", "Opción no válida"]));
+
+        Assert.Equal("Opción no válida 2", Assert.Single(clases, clase => clase.Tipo == TipoClase.FueraDeLista).ValorEjemplo);
+    }
 }

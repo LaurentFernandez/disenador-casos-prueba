@@ -86,7 +86,7 @@ public static class ExportacionCasos
         caso.Codigo,
         TextosCaso.Descripcion(caso),
         TextosCaso.NombreLargoTecnica(caso.Tecnica),
-        .. historia.Campos.Select(campo => valorVisible(caso.Datos[campo.Nombre])),
+        .. historia.Campos.Select(campo => valorVisible(TextosCaso.Dato(caso, campo))),
         TextosCaso.Resultado(caso),
     ];
 

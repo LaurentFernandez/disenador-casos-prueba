@@ -60,4 +60,14 @@ public class CamposTests
 
         Assert.Equal(ErrorCampo.ListaSinOpciones, excepcion.Error);
     }
+
+    [Theory]
+    [InlineData(new[] { "Persona", "Empresa" }, "Opción no válida")]
+    [InlineData(new[] { "Persona", "Opción no válida" }, "Opción no válida 2")]
+    [InlineData(new[] { "OPCIÓN NO VÁLIDA" }, "Opción no válida 2")]
+    [InlineData(new[] { "Opción no válida", "opción no válida 2" }, "Opción no válida 3")]
+    public void CampoLista_ValorQueNoEsOpcion_AgregaUnNumeroSiElPreferidoYaEsUnaOpcion(string[] opciones, string esperado)
+    {
+        Assert.Equal(esperado, new CampoLista("tipo de cliente", true, opciones).ValorQueNoEsOpcion("Opción no válida"));
+    }
 }

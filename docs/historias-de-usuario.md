@@ -296,6 +296,12 @@ Escenario: Idioma inicial por defecto
   Dado que abro la aplicación por primera vez
   Y mi navegador no está en español ni en inglés
   Entonces la interfaz se muestra en español
+
+Escenario: Valor fuera de la lista en inglés
+  Dado que la interfaz está en inglés
+  Y un campo de lista "customer type" con las opciones Individual y Company
+  Cuando veo el caso de una opción fuera de la lista
+  Entonces su valor es "Invalid option" en la matriz, en la recta, en Gherkin y en las exportaciones
 ```
 
 **Prioridad:** Media

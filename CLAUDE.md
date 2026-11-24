@@ -14,7 +14,7 @@ Es un proyecto de portafolio de Laurent Andrés Fernandez (ingeniero de software
 - **Interfaz en español e inglés**, con `IStringLocalizer` y archivos `.resx`: los textos están en `Recursos/Textos.resx` (español) y `Recursos/Textos.en.resx` (inglés), y se leen con la clase estática `Textos`. El idioma se fija al arrancar (el elegido antes o, la primera vez, inglés si el navegador está en inglés y español en cualquier otro caso); cambiarlo guarda la elección y recarga la página. Los nombres que escribe el usuario no se traducen y el CSV usa ";" en los dos idiomas. Las pruebas de textos fijan su idioma heredando de `PruebaEnIdioma`.
 - **Código en español:** clases, métodos, variables y nombres de pruebas, igual que los demás proyectos de Laurent.
 - **El motor (`Casos.Core`) no depende de la interfaz.** Toda la lógica vive y se prueba ahí; `Casos.Web` solo presenta.
-- **El motor no devuelve textos para mostrar:** devuelve tipos (por ejemplo, los enums `TipoClase` y `ErrorCampo`) y la interfaz arma la descripción o el aviso en español o inglés.
+- **El motor no devuelve textos para mostrar:** devuelve tipos (por ejemplo, los enums `TipoClase` y `ErrorCampo`) y la interfaz arma la descripción o el aviso en español o inglés. Lo mismo pasa con el valor de una opción fuera de la lista: el motor marca el caso con `TipoClase.FueraDeLista`, y la interfaz lo muestra en su idioma ("Opción no válida" o "Invalid option") con `TextosCaso.Dato`, que usan todas las vistas y las exportaciones. `CampoLista.ValorQueNoEsOpcion` evita que ese valor coincida con una de las opciones: si coincide, le agrega un número.
 - **Textos neutros:** los nombres de los campos los escribe el usuario, así que los textos de los casos evitan el género gramatical ("Edad sin valor", "Rechaza el valor de edad") y un texto largo se describe por su longitud ("un texto de 26 caracteres").
 - **Casos en vivo:** los casos se generan cada vez que cambia la hoja de campos, sin botón. Si alguna fila tiene un aviso, no se muestran casos hasta corregirla. La longitud máxima de un texto es 10 000 caracteres (`CampoTexto.LongitudMaximaPermitida`).
 - **Repositorio:** `github.com/LaurentFernandez/disenador-casos-prueba`, rama `main`. Público.
@@ -72,10 +72,9 @@ El modo IA local necesita Ollama en marcha con el modelo de `wwwroot/appsettings
   - Las instrucciones del modelo están probadas con `llama3.2` en historias en español y en inglés, y llevan el idioma de la interfaz para que no traduzca la historia. Si se cambian, hay que volver a probarlas con historias reales: un ejemplo con números hizo que el modelo copiara esos números.
   - `Componentes/ProponerCampos.razor` es una sección plegable que solo aparece en `localhost` (Ollama además rechaza otros orígenes). Muestra la propuesta con los avisos de la hoja, y aceptarla reemplaza los campos, con confirmación si había campos propios.
   - Las pruebas usan `OllamaSimulado`; ninguna necesita Ollama.
-- **Pruebas:** 64 del motor, 90 de la interfaz (79 de lógica y 11 de componentes) y 4 de extremo a extremo.
-- **Historias:** HU-01 a HU-14 están hechas. HU-01 no tuvo issue porque se hizo antes de crear el repositorio. Los escenarios de HU-13, HU-14 y los nuevos de HU-09 (ejemplo Compatibilidad) son borradores de Claude que Laurent tiene que revisar.
+- **Pruebas:** 69 del motor, 92 de la interfaz (81 de lógica y 11 de componentes) y 4 de extremo a extremo.
+- **Historias:** HU-01 a HU-14 están hechas. HU-01 no tuvo issue porque se hizo antes de crear el repositorio. Son borradores de Claude que Laurent tiene que revisar los escenarios de HU-13 y HU-14, los nuevos de HU-09 (ejemplo Compatibilidad) y el nuevo de HU-08 (valor fuera de la lista en inglés).
 - **Siguiente:** las cinco fases del plan están hechas. Lo que siga sale de historias nuevas de Laurent.
-- **Por decidir:** el motor usa el valor de prueba "Opción no válida" para el caso fuera de la lista (`ParticionEquivalencia`), y en la interfaz en inglés aparece tal cual porque es un dato, no un texto de la interfaz.
 
 ## Fases
 
