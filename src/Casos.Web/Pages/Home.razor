@@ -20,8 +20,18 @@
                 <button type="button" class="boton boton--pequeno" @onclick="() => Cargar(ejemplo)">@ejemplo.Historia</button>
             }
         </div>
-        <button type="button" class="quitar" disabled="@(!HayDatos)" @onclick="EmpezarDeNuevo">@Textos.De("Historia.EmpezarDeNuevo")</button>
+        <div class="acciones-historia">
+            <button type="button" class="accion" disabled="@(!HayDatos)" @onclick="Exportar">@Textos.De("Historia.Exportar")</button>
+            @* El campo de archivo queda oculto detrás de su etiqueta, que se ve como las otras acciones. *@
+            <InputFile id="importar-historia" class="visualmente-oculto" accept=".json,application/json" OnChange="Importar" />
+            <label class="accion" for="importar-historia">@Textos.De("Historia.Importar")</label>
+            <button type="button" class="accion" disabled="@(!HayDatos)" @onclick="EmpezarDeNuevo">@Textos.De("Historia.EmpezarDeNuevo")</button>
+        </div>
     </div>
+    @if (avisoArchivo is not null)
+    {
+        <p class="aviso aviso--historia" role="alert">@avisoArchivo</p>
+    }
     <ProponerCampos Aceptar="AceptarPropuesta" />
     <p class="nombre-historia">
         <label for="nombre-historia">@Textos.De("Pagina.NombreDeLaHistoria")</label>
@@ -85,18 +95,22 @@
     private IJSObjectReference? almacen;
     private string? ultimoGuardado;
 
+    private IJSObjectReference? descargas;
+
+    // Por qué no se pudo importar el último archivo; se borra con el siguiente cambio.
+    private string? avisoArchivo;
+
     private bool HayDatos =>
         !string.IsNullOrWhiteSpace(nombreHistoria) || filas.Any(fila => !fila.EstaVacia) || reglas.Any(regla => !regla.EstaVacia);
+
+    private HistoriaGuardada Actual => new(nombreHistoria, filas, reglas, porPares, hayCambiosPropios);
 
     protected override async Task OnInitializedAsync()
     {
         var modulo = await JS.InvokeAsync<IJSObjectReference>("import", "./js/almacen.js");
         if (HistoriaGuardada.DesdeJson(await modulo.InvokeAsync<string?>("leer", ClaveGuardado)) is { } guardada)
         {
-            nombreHistoria = guardada.Nombre;
-            Reemplazar(guardada.Filas, guardada.PorPares);
-            reglas.AddRange(guardada.Reglas);
-            hayCambiosPropios = guardada.CambiosPropios;
+            Abrir(guardada, guardada.CambiosPropios);
         }
 
         almacen = modulo;
@@ -111,7 +125,7 @@
             return;
         }
 
-        var json = HayDatos ? new HistoriaGuardada(nombreHistoria, filas, reglas, porPares, hayCambiosPropios).AJson() : null;
+        var json = HayDatos ? Actual.AJson() : null;
         if (json == ultimoGuardado)
         {
             return;
@@ -123,7 +137,47 @@
             : almacen.InvokeVoidAsync("guardar", ClaveGuardado, json));
     }
 
-    private void MarcarCambio() => hayCambiosPropios = true;
+    private void MarcarCambio()
+    {
+        hayCambiosPropios = true;
+        avisoArchivo = null;
+    }
+
+    private async Task Exportar()
+    {
+        var archivo = ArchivoHistoria.Crear(Actual);
+        descargas ??= await JS.InvokeAsync<IJSObjectReference>("import", "./js/descargas.js");
+        await descargas.InvokeVoidAsync("descargar", archivo.Nombre, archivo.Tipo, archivo.Contenido);
+    }
+
+    private async Task Importar(InputFileChangeEventArgs evento)
+    {
+        if (await LeerArchivo(evento.File) is not { } importada)
+        {
+            avisoArchivo = Textos.De("Historia.ArchivoIlegible");
+            return;
+        }
+
+        if (await PuedeReemplazar("Historia.ConfirmarImportar"))
+        {
+            // Lo importado es trabajo propio: cargar después un ejemplo vuelve a preguntar.
+            Abrir(importada, cambiosPropios: true);
+        }
+    }
+
+    // OpenReadStream falla con un archivo más grande que el máximo, que tampoco puede ser una historia exportada.
+    private static async Task<HistoriaGuardada?> LeerArchivo(IBrowserFile archivo)
+    {
+        try
+        {
+            using var lector = new StreamReader(archivo.OpenReadStream(ArchivoHistoria.TamanoMaximo));
+            return ArchivoHistoria.Leer(await lector.ReadToEndAsync());
+        }
+        catch (IOException)
+        {
+            return null;
+        }
+    }
 
     private async Task EmpezarDeNuevo()
     {
@@ -167,19 +221,31 @@
     private async Task<bool> PuedeReemplazar(string claveConfirmacion) =>
         !hayCambiosPropios || !HayDatos || await JS.InvokeAsync<bool>("confirm", Textos.De(claveConfirmacion));
 
+    private void Abrir(HistoriaGuardada historia, bool cambiosPropios)
+    {
+        nombreHistoria = historia.Nombre;
+        Reemplazar(historia.Filas, historia.PorPares);
+        reglas.AddRange(historia.Reglas);
+        hayCambiosPropios = cambiosPropios;
+    }
+
     private void Reemplazar(IEnumerable<FilaCampo> nuevas, bool combinarPorPares)
     {
         filas.Clear();
         filas.AddRange(nuevas);
         reglas.Clear();
         porPares = combinarPorPares;
+        avisoArchivo = null;
     }
 
     public async ValueTask DisposeAsync()
     {
-        if (almacen is not null)
+        foreach (var modulo in new[] { almacen, descargas })
         {
-            await almacen.DisposeAsync();
+            if (modulo is not null)
+            {
+                await modulo.DisposeAsync();
+            }
         }
     }
 }

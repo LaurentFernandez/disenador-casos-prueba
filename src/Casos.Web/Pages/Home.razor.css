@@ -12,11 +12,20 @@
     margin: 0 0 var(--espacio-3);
 }
 
-.ejemplos {
+.ejemplos,
+.acciones-historia {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--espacio-2);
+}
+
+.acciones-historia {
+    column-gap: var(--espacio-4);
+}
+
+.aviso--historia {
+    margin: 0 0 var(--espacio-3);
 }
 
 .ejemplos__etiqueta {
