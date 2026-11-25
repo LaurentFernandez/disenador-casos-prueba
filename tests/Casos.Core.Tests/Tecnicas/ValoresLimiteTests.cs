@@ -59,4 +59,34 @@ public class ValoresLimiteTests
 
         Assert.Equal(new long[] { 0, 1, 9, 10, 11 }, longitudes);
     }
+
+    [Fact]
+    public void GenerarFechas_FechaDeHU17_DevuelveCadaExtremoConElDiaAnteriorYElSiguiente()
+    {
+        var fechas = ValoresLimite.GenerarFechas(new CampoFecha("fecha de reserva", true, new DateOnly(2026, 1, 1), new DateOnly(2026, 12, 31)));
+
+        Assert.Equal(
+            new[] { "2025-12-31", "2026-01-01", "2026-01-02", "2026-12-30", "2026-12-31", "2027-01-01" },
+            fechas.Select(fecha => fecha.ToString("yyyy-MM-dd")));
+    }
+
+    [Fact]
+    public void GenerarFechas_FinDeFebreroDeUnAnioBisiesto_CuentaEl29()
+    {
+        var fechas = ValoresLimite.GenerarFechas(new CampoFecha("fecha", true, new DateOnly(2024, 2, 28), new DateOnly(2024, 3, 1)));
+
+        Assert.Equal(
+            new[] { "2024-02-27", "2024-02-28", "2024-02-29", "2024-03-01", "2024-03-02" },
+            fechas.Select(fecha => fecha.ToString("yyyy-MM-dd")));
+    }
+
+    [Fact]
+    public void GenerarFechas_ExtremosDelCalendario_NoSeSaleDeEl()
+    {
+        var fechas = ValoresLimite.GenerarFechas(new CampoFecha("fecha", true, DateOnly.MinValue, DateOnly.MaxValue));
+
+        Assert.Equal(DateOnly.MinValue, fechas[0]);
+        Assert.Equal(DateOnly.MaxValue, fechas[^1]);
+        Assert.Equal(4, fechas.Count);
+    }
 }

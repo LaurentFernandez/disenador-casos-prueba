@@ -106,6 +106,13 @@ public static class GeneradorCasos
                 texto,
                 ClaseDeLongitud(texto, longitud),
                 PosicionDe(longitud, texto.LongitudMinima, texto.LongitudMaxima))),
+        // Las fechas se comparan por su número de día, igual que un entero.
+        CampoFecha fecha => ValoresLimite.GenerarFechas(fecha)
+            .Select(dia => new Cambio(
+                Tecnica.ValoresLimite,
+                fecha,
+                ClaseDelLimite(dia.DayNumber, fecha.Minimo.DayNumber, fecha.Maximo.DayNumber, Ejemplos.Fecha(dia)),
+                PosicionDe(dia.DayNumber, fecha.Minimo.DayNumber, fecha.Maximo.DayNumber))),
         // Una lista no tiene rango, así que no tiene valores límite.
         _ => [],
     };

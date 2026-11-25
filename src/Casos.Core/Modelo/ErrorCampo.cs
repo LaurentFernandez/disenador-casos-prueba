@@ -22,4 +22,7 @@ public enum ErrorCampo
 
     /// <summary>El mínimo de un entero es mayor que el máximo.</summary>
     RangoInvalido,
+
+    /// <summary>La fecha mínima es posterior a la máxima.</summary>
+    RangoDeFechasInvalido,
 }

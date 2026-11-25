@@ -61,6 +61,23 @@ public class CamposTests
         Assert.Equal(ErrorCampo.ListaSinOpciones, excepcion.Error);
     }
 
+    [Fact]
+    public void CampoFecha_MinimoPosteriorAlMaximo_IndicaRangoDeFechasInvalidoComoEnHU17()
+    {
+        var excepcion = Assert.Throws<CampoInvalidoException>(() =>
+            new CampoFecha("fecha de reserva", true, new DateOnly(2026, 12, 31), new DateOnly(2026, 1, 1)));
+
+        Assert.Equal(ErrorCampo.RangoDeFechasInvalido, excepcion.Error);
+    }
+
+    [Fact]
+    public void CampoFecha_MinimoIgualAlMaximo_SeCrea()
+    {
+        var dia = new DateOnly(2026, 6, 15);
+
+        Assert.Equal(dia, new CampoFecha("fecha de entrega", true, dia, dia).Maximo);
+    }
+
     [Theory]
     [InlineData(new[] { "Persona", "Empresa" }, "Opción no válida")]
     [InlineData(new[] { "Persona", "Opción no válida" }, "Opción no válida 2")]

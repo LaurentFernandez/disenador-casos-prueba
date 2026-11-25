@@ -83,6 +83,40 @@ public class ParticionEquivalenciaTests
     }
 
     [Fact]
+    public void Generar_FechaDeHU17_DevuelveLasClasesConSuValorDeEjemplo()
+    {
+        var clases = ParticionEquivalencia.Generar(new CampoFecha("fecha de reserva", true, new DateOnly(2026, 1, 1), new DateOnly(2026, 12, 31)));
+
+        Assert.Equal(new ClaseEquivalencia[]
+        {
+            new(TipoClase.DentroDelRango, true, "2026-07-02"),
+            new(TipoClase.MenorQueMinimo, false, "2025-12-31"),
+            new(TipoClase.MayorQueMaximo, false, "2027-01-01"),
+            new(TipoClase.FechaInexistente, false, "2026-02-29"),
+            new(TipoClase.NoEsFecha, false, "abc"),
+            new(TipoClase.Vacio, false, ""),
+        }, clases);
+    }
+
+    [Fact]
+    public void Generar_FechaConMinimoEnUnAnioBisiesto_LaFechaQueNoExisteEsEl30DeFebrero()
+    {
+        var clases = ParticionEquivalencia.Generar(new CampoFecha("fecha", false, new DateOnly(2024, 3, 1), new DateOnly(2025, 3, 1)));
+
+        Assert.Equal("2024-02-30", Assert.Single(clases, clase => clase.Tipo == TipoClase.FechaInexistente).ValorEjemplo);
+        Assert.True(Assert.Single(clases, clase => clase.Tipo == TipoClase.Vacio).EsValida);
+    }
+
+    [Fact]
+    public void Generar_FechaEnLosExtremosDelCalendario_NoDevuelveFechasFueraDeEl()
+    {
+        var clases = ParticionEquivalencia.Generar(new CampoFecha("fecha", true, DateOnly.MinValue, DateOnly.MaxValue));
+
+        Assert.DoesNotContain(clases, clase => clase.Tipo is TipoClase.MenorQueMinimo or TipoClase.MayorQueMaximo);
+        Assert.Equal("0001-02-29", Assert.Single(clases, clase => clase.Tipo == TipoClase.FechaInexistente).ValorEjemplo);
+    }
+
+    [Fact]
     public void Generar_ListaConUnaOpcionLlamadaComoElValorInvalido_ElValorFueraDeLaListaNoEsEsaOpcion()
     {
         var clases = ParticionEquivalencia.Generar(new CampoLista("estado", true, ["Opción válida", "Opción no válida"]));
