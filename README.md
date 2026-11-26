@@ -6,9 +6,33 @@ Aplicación web que genera casos de prueba a partir de historias de usuario apli
 
 **Demo:** [laurentfernandez.github.io/disenador-casos-prueba](https://laurentfernandez.github.io/disenador-casos-prueba/)
 
-> **Estado:** en construcción. Ya define los campos de una historia (enteros, textos, listas y fechas) o carga uno de cuatro ejemplos, genera sus casos por partición de equivalencia y valores límite, con tablas de decisión para sus reglas de negocio y combinación por pares de sus campos de lista, los muestra como matriz, recta o Gherkin y los exporta. Funciona en español e inglés, se puede instalar y usar sin conexión, conserva la historia en el navegador al recargar o cambiar de idioma, y la exporta e importa como archivo. Tiene pruebas del motor, de los componentes y de extremo a extremo en el navegador. Cuando corre en el equipo, puede proponer los campos a partir del texto de una historia con IA local (Ollama). Ver el [plan](docs/plan.md) y las [historias de usuario](docs/historias-de-usuario.md).
+> **Estado:** terminado. Las cinco fases del [plan](docs/plan.md) están hechas, y cada funcionalidad nació de una de las [historias de usuario](docs/historias-de-usuario.md).
 
-*English:* a web app that generates test cases from user stories using formal black-box test design techniques (equivalence partitioning, boundary value analysis, decision tables and pairwise testing). Work in progress.
+## Qué hace
+
+- Define los campos de una historia (enteros, textos, listas y fechas) o carga uno de cuatro ejemplos.
+- Genera sus casos por partición de equivalencia y valores límite, con tablas de decisión para sus reglas de negocio y combinación por pares de sus campos de lista.
+- Los muestra como matriz, como recta de partición o en Gherkin, y los exporta a CSV, Markdown y `.feature`.
+- Funciona en español e inglés, se puede instalar y usar sin conexión, conserva la historia en el navegador y la exporta e importa como archivo.
+- Cuando corre en el equipo, puede proponer los campos a partir del texto de una historia con IA local (Ollama).
+
+## Capturas
+
+La hoja de campos del ejemplo «Carrito de compras»:
+
+![Hoja de campos con cantidad, cupón y medio de pago](docs/capturas/hoja.png)
+
+Sus casos en la vista Matriz, con una regla de negocio que agrega su tabla de decisión. Las celdas resaltadas son los valores que prueba cada caso:
+
+![Matriz de casos con su técnica, sus datos y el resultado esperado](docs/capturas/matriz.png)
+
+La vista Recta dibuja las clases de cada campo y marca los valores de partición y los valores límite:
+
+![Rectas de partición de cantidad, cupón y medio de pago junto a la tabla de casos](docs/capturas/recta.png)
+
+## English
+
+A web app that generates test cases from user stories using formal black-box test design techniques (ISTQB): equivalence partitioning, boundary value analysis, decision tables and pairwise testing. Each case shows the technique that produced it, and the cases can be viewed as a matrix, as a partition line or in Gherkin, and exported to CSV, Markdown and `.feature`. The app runs entirely in the browser (Blazor WebAssembly), works offline, is available in Spanish and English, and is covered by unit, component and end-to-end tests. Finished.
 
 ## Tecnologías
 
@@ -27,7 +51,7 @@ tests/
   Casos.Core.Tests/  pruebas unitarias del motor
   Casos.Web.Tests/   pruebas de la lógica y de los componentes de la interfaz
   Casos.E2E.Tests/   pruebas de extremo a extremo en Chromium
-docs/                plan e historias de usuario
+docs/                plan, historias de usuario y capturas
 ```
 
 ## Cómo ejecutarlo

@@ -38,6 +38,7 @@ tests/Casos.E2E.Tests/   pruebas de extremo a extremo con Playwright
 docs/plan.md             objetivo, técnicas, arquitectura y fases
 docs/historias-de-usuario.md   requerimientos (los escribe Laurent)
 docs/diseno/maqueta.html       maqueta de la interfaz (se abre en el navegador)
+docs/capturas/           capturas de la demo publicada que muestra el README
 .github/workflows/ci.yml compila y prueba en cada push a main y en cada PR; publica en GitHub Pages lo que llega a main
 ```
 
