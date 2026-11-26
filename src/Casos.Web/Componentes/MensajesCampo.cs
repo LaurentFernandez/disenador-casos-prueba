@@ -14,6 +14,8 @@ public static class MensajesCampo
 
     public static string FaltaLongitud => Textos.De("Aviso.FaltaLongitud");
 
+    public static string FaltaFechas => Textos.De("Aviso.FaltaFechas");
+
     public static string De(ErrorCampo error) => error switch
     {
         ErrorCampo.NombreRepetido => Textos.De("Aviso.NombreRepetido"),
@@ -22,6 +24,7 @@ public static class MensajesCampo
         ErrorCampo.LongitudNegativa => Textos.De("Aviso.LongitudNegativa"),
         ErrorCampo.LongitudExcesiva => Textos.De("Aviso.LongitudExcesiva", CampoTexto.LongitudMaximaPermitida),
         ErrorCampo.RangoInvalido => Textos.De("Aviso.RangoInvalido"),
+        ErrorCampo.RangoDeFechasInvalido => Textos.De("Aviso.RangoDeFechasInvalido"),
         _ => throw new ArgumentOutOfRangeException(nameof(error), error, null),
     };
 }

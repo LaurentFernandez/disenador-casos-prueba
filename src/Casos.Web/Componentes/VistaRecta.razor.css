@@ -150,6 +150,11 @@
     border-bottom: 1px solid var(--borde);
 }
 
+/* Con este ancho, una fecha (2026-01-01) entra en una línea en lugar de cortarse en el guion. */
+.tabla-casos .dato-probado {
+    min-width: 8rem;
+}
+
 .tabla-casos thead th {
     color: var(--tenue);
     font-family: var(--fuente-titulos);

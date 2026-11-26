@@ -82,6 +82,39 @@ public class TextosCasoTests() : PruebaEnIdioma("es")
         Assert.Equal("Combinaciones por pares: 0 de 100.000.000.000.000.000.000 posibles.", TextosCaso.TotalPares(historia, []));
     }
 
+    [Fact]
+    public void Reglas_CampoFecha_DiceSuRangoDeFechas()
+    {
+        Assert.Equal("Fecha, obligatorio, del 2026-01-01 al 2026-12-31", TextosCaso.Reglas(FechaDeReserva()));
+    }
+
+    [Fact]
+    public void Descripcion_CasosDeUnaFecha_DicenSuClaseOSuLimiteComoEnHU17()
+    {
+        var historia = new Historia("Reserva");
+        historia.AgregarCampo(FechaDeReserva());
+
+        Assert.Equal(
+            new[]
+            {
+                "Todos los valores válidos",
+                "Fecha de reserva anterior al 2026-01-01",
+                "Fecha de reserva posterior al 2026-12-31",
+                "Fecha de reserva que no existe en el calendario",
+                "Fecha de reserva que no es una fecha",
+                "Fecha de reserva sin valor",
+                "Fecha de reserva el día antes del mínimo",
+                "Fecha de reserva en el mínimo",
+                "Fecha de reserva el día después del mínimo",
+                "Fecha de reserva el día antes del máximo",
+                "Fecha de reserva en el máximo",
+                "Fecha de reserva el día después del máximo",
+            },
+            GeneradorCasos.Generar(historia).Select(TextosCaso.Descripcion));
+    }
+
+    private static CampoFecha FechaDeReserva() => new("fecha de reserva", true, new DateOnly(2026, 1, 1), new DateOnly(2026, 12, 31));
+
     private static IReadOnlyList<CasoPrueba> CasosPorPares() =>
         GeneradorCasos.Generar(HistoriaPorPares()).Where(caso => caso.Tecnica == Tecnica.Pares).ToList();
 

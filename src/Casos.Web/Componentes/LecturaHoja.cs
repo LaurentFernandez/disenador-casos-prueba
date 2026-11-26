@@ -73,7 +73,12 @@ public sealed record LecturaHoja(
             var campo = fila.ACampo();
             if (campo is null)
             {
-                return fila.Tipo == TipoCampo.Texto ? MensajesCampo.FaltaLongitud : MensajesCampo.FaltaRango;
+                return fila.Tipo switch
+                {
+                    TipoCampo.Texto => MensajesCampo.FaltaLongitud,
+                    TipoCampo.Fecha => MensajesCampo.FaltaFechas,
+                    _ => MensajesCampo.FaltaRango,
+                };
             }
 
             historia.AgregarCampo(campo);

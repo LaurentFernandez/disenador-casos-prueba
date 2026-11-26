@@ -13,6 +13,7 @@ public class HistoriaGuardadaTests
                 new() { Nombre = "tipo de cliente", Tipo = TipoCampo.Lista, Opciones = "Persona, Empresa" },
                 new() { Nombre = "NIT", Tipo = TipoCampo.Texto, Obligatorio = false, Minimo = 9, Maximo = 10 },
                 new() { Nombre = "canal", Tipo = TipoCampo.Lista, Opciones = "Web, Tienda" },
+                new() { Nombre = "fecha de visita", Tipo = TipoCampo.Fecha, Obligatorio = false, FechaMinima = new DateOnly(2026, 1, 1), FechaMaxima = new DateOnly(2026, 12, 31) },
             ],
             [new() { CampoCondicion = "tipo de cliente", Opcion = "Empresa", CampoObligatorio = "NIT" }],
             PorPares: true,
@@ -33,7 +34,7 @@ public class HistoriaGuardadaTests
     [InlineData("")]
     [InlineData("no es JSON")]
     [InlineData("{}")]
-    [InlineData("""{"nombre":"Registro","filas":[{"nombre":"fecha","tipo":"Fecha"}]}""")]
+    [InlineData("""{"nombre":"Registro","filas":[{"nombre":"hora","tipo":"Hora"}]}""")]
     public void DesdeJson_NadaGuardadoOQueNoSeEntiende_DevuelveNull(string? json)
     {
         Assert.Null(HistoriaGuardada.DesdeJson(json));
@@ -52,6 +53,6 @@ public class HistoriaGuardadaTests
         Assert.True(Assert.Single(restaurada.Reglas).EstaVacia);
     }
 
-    private static IEnumerable<(string, TipoCampo, bool, int?, int?, string)> DatosDe(IEnumerable<FilaCampo> filas) =>
-        filas.Select(fila => (fila.Nombre, fila.Tipo, fila.Obligatorio, fila.Minimo, fila.Maximo, fila.Opciones));
+    private static IEnumerable<(string, TipoCampo, bool, int?, int?, DateOnly?, DateOnly?, string)> DatosDe(IEnumerable<FilaCampo> filas) =>
+        filas.Select(fila => (fila.Nombre, fila.Tipo, fila.Obligatorio, fila.Minimo, fila.Maximo, fila.FechaMinima, fila.FechaMaxima, fila.Opciones));
 }

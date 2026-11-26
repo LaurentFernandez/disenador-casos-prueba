@@ -25,12 +25,14 @@ public sealed record DiagramaRecta(
     public sealed record Banda(double Desde, double Hasta, bool Valida, string Nombre);
 
     /// <summary>
-    /// Un valor probado sobre la recta, con los códigos de los casos que lo usan.
+    /// Un valor probado sobre la recta, con los códigos de los casos que lo usan y el texto de su etiqueta: el número o,
+    /// en una fecha, la fecha.
     /// </summary>
-    public sealed record Marca(double Posicion, long Valor, Tecnica Tecnica, IReadOnlyList<string> Codigos);
+    public sealed record Marca(double Posicion, long Valor, Tecnica Tecnica, IReadOnlyList<string> Codigos, string Texto);
 
     /// <summary>
-    /// Un valor que no es un punto de la recta: una opción de una lista, un decimal, un texto o el vacío.
+    /// Un valor que no es un punto de la recta: una opción de una lista, un decimal, un texto, una fecha que no existe o
+    /// el vacío.
     /// </summary>
     public sealed record Ficha(string Texto, bool Valida, IReadOnlyList<string> Codigos);
 
@@ -54,12 +56,17 @@ public sealed record DiagramaRecta(
             }
         }
 
-        var posiciones = Posiciones(puntos.Select(punto => punto.Valor));
+        var posiciones = Posiciones(puntos.Select(punto => punto.Valor), pasoFijo: campo is CampoFecha);
         var marcas = puntos
             .GroupBy(punto => (punto.Valor, punto.Tecnica))
             .OrderBy(grupo => grupo.Key.Valor)
             .ThenBy(grupo => grupo.Key.Tecnica)
-            .Select(grupo => new Marca(posiciones[grupo.Key.Valor], grupo.Key.Valor, grupo.Key.Tecnica, grupo.Select(punto => punto.Codigo).ToArray()))
+            .Select(grupo => new Marca(
+                posiciones[grupo.Key.Valor],
+                grupo.Key.Valor,
+                grupo.Key.Tecnica,
+                grupo.Select(punto => punto.Codigo).ToArray(),
+                TextoDeMarca(campo, grupo.Key.Valor)))
             .ToArray();
         var fichasAgrupadas = fichas
             .GroupBy(ficha => (ficha.Texto, ficha.Valida))
@@ -74,10 +81,16 @@ public sealed record DiagramaRecta(
         // En un texto la recta es la longitud, y el vacío es la longitud 0.
         CampoTexto => valor.Length,
         CampoEntero when long.TryParse(valor, NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out var numero) => numero,
+        // En una fecha la recta es el número de día; una fecha que no existe no se puede leer y va en las fichas.
+        CampoFecha when DateOnly.TryParseExact(valor, CampoFecha.Formato, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dia) => dia.DayNumber,
         _ => null,
     };
 
-    private static Dictionary<long, double> Posiciones(IEnumerable<long> valores)
+    private static string TextoDeMarca(Campo campo, long valor) =>
+        campo is CampoFecha ? TextosCaso.Fecha(DateOnly.FromDayNumber((int)valor)) : valor.ToString(CultureInfo.InvariantCulture);
+
+    // Con paso fijo, todos los valores quedan a la misma distancia: las etiquetas de las fechas son largas y se encimarían.
+    private static Dictionary<long, double> Posiciones(IEnumerable<long> valores, bool pasoFijo)
     {
         var ordenados = valores.Distinct().Order().ToList();
         var unidades = new Dictionary<long, long>();
@@ -86,7 +99,7 @@ public sealed record DiagramaRecta(
         {
             if (indice > 0)
             {
-                recorrido += Math.Min(ordenados[indice] - ordenados[indice - 1], SaltoMaximo);
+                recorrido += pasoFijo ? SaltoMaximo : Math.Min(ordenados[indice] - ordenados[indice - 1], SaltoMaximo);
             }
 
             unidades[ordenados[indice]] = recorrido;
@@ -130,6 +143,27 @@ public sealed record DiagramaRecta(
                 var finValido = Borde(texto.LongitudMaxima, texto.LongitudMaxima + 1L);
                 bandas.Add(new Banda(desde, finValido, true, TextosCaso.Rango(texto.LongitudMinima, texto.LongitudMaxima)));
                 bandas.Add(new Banda(finValido, 1, false, TextosCaso.MasDe(texto.LongitudMaxima)));
+                return bandas;
+            }
+            case CampoFecha fecha:
+            {
+                long minimo = fecha.Minimo.DayNumber;
+                long maximo = fecha.Maximo.DayNumber;
+                // En un extremo del calendario no hay día anterior o siguiente, y la banda de ese lado no existe.
+                var bajo = posiciones.ContainsKey(minimo - 1) ? Borde(minimo - 1, minimo) : 0;
+                var alto = posiciones.ContainsKey(maximo + 1) ? Borde(maximo, maximo + 1) : 1;
+                var bandas = new List<Banda>();
+                if (bajo > 0)
+                {
+                    bandas.Add(new Banda(0, bajo, false, TextosCaso.AntesDelRango));
+                }
+
+                bandas.Add(new Banda(bajo, alto, true, TextosCaso.RangoDeFechas(fecha.Minimo, fecha.Maximo)));
+                if (alto < 1)
+                {
+                    bandas.Add(new Banda(alto, 1, false, TextosCaso.DespuesDelRango));
+                }
+
                 return bandas;
             }
             default:

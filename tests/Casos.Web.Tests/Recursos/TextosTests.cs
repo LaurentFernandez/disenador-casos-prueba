@@ -146,6 +146,36 @@ public class TextosTests() : PruebaEnIdioma("en")
         Assert.Equal("Invalid option 2", TextosCaso.Dato(fueraDeLista, revision.Campos[0]));
     }
 
+    [Fact]
+    public void CampoFecha_EnIngles_DescribeSusCasosYUsaSuPasoGherkin()
+    {
+        var reserva = new Historia("Booking");
+        reserva.AgregarCampo(new CampoFecha("booking date", true, new DateOnly(2026, 1, 1), new DateOnly(2026, 12, 31)));
+        var casos = GeneradorCasos.Generar(reserva);
+        var inexistente = casos.Single(caso => caso.ClaseProbada == TipoClase.FechaInexistente);
+        var anterior = casos.First(caso => caso.ClaseProbada == TipoClase.MenorQueMinimo);
+
+        Assert.Equal("Date, required, 2026-01-01 to 2026-12-31", TextosCaso.Reglas(reserva.Campos[0]));
+        Assert.Equal("Booking date before 2026-01-01", TextosCaso.Descripcion(anterior));
+        Assert.Equal("Booking date that does not exist in the calendar", TextosCaso.Descripcion(inexistente));
+        Assert.Equal("Booking date the day after the maximum", TextosCaso.Descripcion(casos[^1]));
+        Assert.EndsWith(
+            "When I enter \"2026-02-29\" in booking date\n    Then the system rejects the booking date value",
+            GherkinCasos.Escenario(reserva, inexistente));
+    }
+
+    [Fact]
+    public void AvisosDeFecha_EnIngles_DicenQueFaltanLasFechasOQueElRangoEstaAlReves()
+    {
+        var sinFechas = new FilaCampo { Nombre = "booking date", Tipo = TipoCampo.Fecha };
+        var alReves = new FilaCampo { Nombre = "return date", Tipo = TipoCampo.Fecha, FechaMinima = new DateOnly(2026, 2, 1), FechaMaxima = new DateOnly(2026, 1, 1) };
+
+        var lectura = LecturaHoja.Leer([sinFechas, alReves], "");
+
+        Assert.Equal("Choose the minimum and the maximum date.", lectura.Avisos[sinFechas]);
+        Assert.Equal("The minimum date cannot be after the maximum date.", lectura.Avisos[alReves]);
+    }
+
     private static IEnumerable<string> ClavesDe(ResourceManager recursos, CultureInfo cultura) =>
         recursos.GetResourceSet(cultura, createIfNotExists: true, tryParents: false)!
             .Cast<DictionaryEntry>()

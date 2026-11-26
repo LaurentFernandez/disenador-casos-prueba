@@ -11,6 +11,7 @@ public class ArchivoHistoriaTests() : PruebaEnIdioma("es")
             new() { Nombre = "tipo de cliente", Tipo = TipoCampo.Lista, Opciones = "Persona, Empresa" },
             new() { Nombre = "NIT", Tipo = TipoCampo.Texto, Obligatorio = false, Minimo = 9, Maximo = 10 },
             new() { Nombre = "canal", Tipo = TipoCampo.Lista, Opciones = "Web, Tienda" },
+            new() { Nombre = "fecha de visita", Tipo = TipoCampo.Fecha, Obligatorio = false, FechaMinima = new DateOnly(2026, 1, 1), FechaMaxima = new DateOnly(2026, 12, 31) },
         ],
         [new() { CampoCondicion = "tipo de cliente", Opcion = "Empresa", CampoObligatorio = "NIT" }],
         PorPares: true,
@@ -55,7 +56,7 @@ public class ArchivoHistoriaTests() : PruebaEnIdioma("es")
     [InlineData("""{"formato":"otra-herramienta","version":1,"historia":{"nombre":"x","filas":[]}}""")]
     [InlineData("""{"formato":"disenador-casos-prueba/historia","version":2,"historia":{"nombre":"x","filas":[]}}""")]
     [InlineData("""{"formato":"disenador-casos-prueba/historia","version":1,"historia":"x"}""")]
-    [InlineData("""{"formato":"disenador-casos-prueba/historia","version":1,"historia":{"filas":[{"tipo":"Fecha"}]}}""")]
+    [InlineData("""{"formato":"disenador-casos-prueba/historia","version":1,"historia":{"filas":[{"tipo":"Hora"}]}}""")]
     public void Leer_ArchivoQueNoEsUnaHistoriaExportada_DevuelveNullComoEnHU16(string texto)
     {
         Assert.Null(ArchivoHistoria.Leer(texto));
@@ -67,6 +68,6 @@ public class ArchivoHistoriaTests() : PruebaEnIdioma("es")
         Assert.Null(ArchivoHistoria.Leer(RegistroDeCliente().AJson()));
     }
 
-    private static IEnumerable<(string, TipoCampo, bool, int?, int?, string)> DatosDe(IEnumerable<FilaCampo> filas) =>
-        filas.Select(fila => (fila.Nombre, fila.Tipo, fila.Obligatorio, fila.Minimo, fila.Maximo, fila.Opciones));
+    private static IEnumerable<(string, TipoCampo, bool, int?, int?, DateOnly?, DateOnly?, string)> DatosDe(IEnumerable<FilaCampo> filas) =>
+        filas.Select(fila => (fila.Nombre, fila.Tipo, fila.Obligatorio, fila.Minimo, fila.Maximo, fila.FechaMinima, fila.FechaMaxima, fila.Opciones));
 }

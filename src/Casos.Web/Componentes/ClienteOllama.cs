@@ -44,7 +44,8 @@ public sealed class ClienteOllama(HttpClient http, string modelo)
                     properties = new
                     {
                         nombre = new { type = "string" },
-                        tipo = new { type = "string", @enum = Enum.GetNames<TipoCampo>() },
+                        // El modo IA todavía no propone fechas (HU-17): sus instrucciones solo explican estos tres tipos.
+                        tipo = new { type = "string", @enum = new[] { nameof(TipoCampo.Entero), nameof(TipoCampo.Texto), nameof(TipoCampo.Lista) } },
                         obligatorio = new { type = "boolean" },
                         minimo = new { type = new[] { "integer", "null" } },
                         maximo = new { type = new[] { "integer", "null" } },
