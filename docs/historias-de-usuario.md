@@ -619,4 +619,4 @@ Escenario: Rango al revés
 ```
 
 **Prioridad:** Media
-**Estado:** Pendiente
+**Estado:** Hecha
