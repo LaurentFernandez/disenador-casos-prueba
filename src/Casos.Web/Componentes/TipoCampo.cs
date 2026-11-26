@@ -8,4 +8,5 @@ public enum TipoCampo
     Entero,
     Texto,
     Lista,
+    Fecha,
 }

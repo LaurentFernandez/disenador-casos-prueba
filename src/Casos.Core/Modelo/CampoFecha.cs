@@ -6,6 +6,11 @@ namespace Casos.Core.Modelo;
 public sealed record CampoFecha(string Nombre, bool Obligatorio, DateOnly Minimo, DateOnly Maximo)
     : Campo(Nombre, Obligatorio)
 {
+    /// <summary>
+    /// ISO 8601, en cultura invariante: el mismo formato en los dos idiomas y el que usa el selector de fecha del navegador.
+    /// </summary>
+    public const string Formato = "yyyy-MM-dd";
+
     // Propiedades sin init para que una expresión with no pueda saltarse la validación.
     public DateOnly Minimo { get; } = Minimo <= Maximo
         ? Minimo

@@ -124,6 +124,43 @@ public class DiagramaRectaTests() : PruebaEnIdioma("es")
         Assert.DoesNotContain(diagrama.Fichas.SelectMany(ficha => ficha.Codigos), codigosDePares.Contains);
     }
 
+    [Fact]
+    public void Crear_CampoFecha_DibujaSusBandasYMarcaLasFechasConSuTexto()
+    {
+        var diagrama = DiagramaDe(new CampoFecha("fecha de reserva", true, new DateOnly(2026, 1, 1), new DateOnly(2026, 12, 31)));
+
+        Assert.Equal(
+            new[] { ("antes", false), ("del 2026-01-01 al 2026-12-31", true), ("después", false) },
+            diagrama.Bandas.Select(banda => (banda.Nombre, banda.Valida)));
+        Assert.Equal(new[] { "2025-12-31", "2026-07-02", "2027-01-01" }, TextosDe(diagrama, Tecnica.ParticionEquivalencia));
+        Assert.Equal(
+            new[] { "2025-12-31", "2026-01-01", "2026-01-02", "2026-12-30", "2026-12-31", "2027-01-01" },
+            TextosDe(diagrama, Tecnica.ValoresLimite));
+        Assert.Equal(
+            new[] { ("2026-02-29", false), ("abc", false), ("vacío", false) },
+            diagrama.Fichas.Select(ficha => (ficha.Texto, ficha.Valida)));
+    }
+
+    [Fact]
+    public void Crear_CampoFecha_DejaLasFechasALaMismaDistanciaParaQueSusEtiquetasNoSeEncimen()
+    {
+        var diagrama = DiagramaDe(new CampoFecha("fecha de reserva", true, new DateOnly(2026, 1, 1), new DateOnly(2026, 12, 31)));
+        var posiciones = diagrama.Marcas.Select(marca => marca.Posicion).Distinct().Order().ToList();
+
+        Assert.Single(posiciones.Zip(posiciones.Skip(1), (izquierda, derecha) => Math.Round(derecha - izquierda, 9)).Distinct());
+    }
+
+    [Fact]
+    public void Crear_CampoFechaEnLosExtremosDelCalendario_SoloDibujaElRango()
+    {
+        var diagrama = DiagramaDe(new CampoFecha("fecha", true, DateOnly.MinValue, DateOnly.MaxValue));
+
+        Assert.Equal(("del 0001-01-01 al 9999-12-31", true), diagrama.Bandas.Select(banda => (banda.Nombre, banda.Valida)).Single());
+    }
+
+    private static IEnumerable<string> TextosDe(DiagramaRecta diagrama, Tecnica tecnica) =>
+        diagrama.Marcas.Where(marca => marca.Tecnica == tecnica).Select(marca => marca.Texto);
+
     private static DiagramaRecta DiagramaDe(Campo campo)
     {
         var historia = new Historia("Registro de usuario");

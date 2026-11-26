@@ -91,7 +91,7 @@ public class ClienteOllamaTests() : PruebaEnIdioma("es")
     [Theory]
     [InlineData("no es JSON")]
     [InlineData("{}")]
-    [InlineData("""{"campos":[{"nombre":"edad","tipo":"Fecha","obligatorio":true}]}""")]
+    [InlineData("""{"campos":[{"nombre":"hora de llegada","tipo":"Hora","obligatorio":true}]}""")]
     public async Task ProponerAsync_RespuestaQueNoSeEntiende_AvisaQueNoSePudoLeer(string contenido)
     {
         var propuesta = await OllamaSimulado.QueResponde(contenido).Cliente().ProponerAsync(HistoriaDeHU14);

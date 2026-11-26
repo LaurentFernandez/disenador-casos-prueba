@@ -130,6 +130,42 @@ public class LecturaHojaTests() : PruebaEnIdioma("es")
         Assert.False(lectura.Historia.PorPares);
     }
 
+    [Fact]
+    public void Leer_FechaSinElegirLasFechas_AvisaQueFaltan()
+    {
+        var fila = new FilaCampo { Nombre = "fecha de reserva", Tipo = TipoCampo.Fecha, Minimo = 1, Maximo = 2 };
+
+        var lectura = LecturaHoja.Leer([fila], Historia);
+
+        Assert.Equal("Elige la fecha mínima y la máxima.", lectura.Avisos[fila]);
+    }
+
+    [Fact]
+    public void Leer_FechaConElRangoAlReves_AvisaYOcultaLosCasosComoEnHU17()
+    {
+        var fila = Fecha("fecha de reserva", new DateOnly(2026, 12, 31), new DateOnly(2026, 1, 1));
+
+        var lectura = LecturaHoja.Leer([fila], Historia);
+
+        Assert.True(lectura.TieneAvisos);
+        Assert.Equal("La fecha mínima no puede ser posterior a la máxima.", lectura.Avisos[fila]);
+        Assert.Empty(lectura.Historia.Campos);
+    }
+
+    [Fact]
+    public void Leer_FechaValida_AgregaElCampoDeFecha()
+    {
+        var lectura = LecturaHoja.Leer([Fecha("fecha de reserva", new DateOnly(2026, 1, 1), new DateOnly(2026, 12, 31))], Historia);
+
+        Assert.Empty(lectura.Avisos);
+        Assert.Equal(
+            new CampoFecha("fecha de reserva", true, new DateOnly(2026, 1, 1), new DateOnly(2026, 12, 31)),
+            Assert.Single(lectura.Historia.Campos));
+    }
+
+    private static FilaCampo Fecha(string nombre, DateOnly desde, DateOnly hasta) =>
+        new() { Nombre = nombre, Tipo = TipoCampo.Fecha, FechaMinima = desde, FechaMaxima = hasta };
+
     private static List<FilaCampo> FilasDeCliente() =>
     [
         Entero("edad", 18, 65),

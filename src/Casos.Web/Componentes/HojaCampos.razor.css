@@ -2,9 +2,10 @@
     --ancho-campo: 13rem;
     --ancho-tipo: 9rem;
     --ancho-obligatorio: 7rem;
-    --ancho-numero: 6.5rem;
+    /* Las columnas de mínimo y máximo también llevan el selector de fecha, más ancho que un número. */
+    --ancho-numero: 8rem;
     --ancho-quitar: 6rem;
-    --ancho-minimo-hoja: 760px;
+    --ancho-minimo-hoja: 820px;
 
     width: 100%;
     min-width: var(--ancho-minimo-hoja);
@@ -61,6 +62,11 @@
 
 .celda--numero {
     text-align: right;
+}
+
+/* El selector de fecha del navegador necesita casi todo el ancho de la columna. */
+.celda--fecha {
+    padding-inline: var(--espacio-2);
 }
 
 .hoja input[type="checkbox"] {

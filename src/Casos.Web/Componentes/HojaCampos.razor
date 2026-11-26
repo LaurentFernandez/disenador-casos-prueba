@@ -54,6 +54,12 @@
                                    aria-label="@Textos.De("Hoja.OpcionesDelCampo", numero)" />
                         </td>
                     }
+                    else if (fila.Tipo == TipoCampo.Fecha)
+                    {
+                        <td><input type="date" class="celda celda--fecha" @bind="fila.FechaMinima" @bind:after="AvisarCambio" aria-label="@Textos.De("Hoja.MinimoDelCampo", numero)" /></td>
+                        <td><input type="date" class="celda celda--fecha" @bind="fila.FechaMaxima" @bind:after="AvisarCambio" aria-label="@Textos.De("Hoja.MaximoDelCampo", numero)" /></td>
+                        <td class="no-aplica"><span class="visualmente-oculto">@Textos.De("Hoja.NoAplica")</span></td>
+                    }
                     else
                     {
                         <td><input type="number" class="celda celda--numero" @bind="fila.Minimo" @bind:after="AvisarCambio" aria-label="@Textos.De("Hoja.MinimoDelCampo", numero)" /></td>

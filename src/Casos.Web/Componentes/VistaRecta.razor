@@ -40,7 +40,7 @@
                                     var x = X(marca.Posicion);
                                     var esParticion = marca.Tecnica == Tecnica.ParticionEquivalencia;
                                     <g class="@ConResaltado("marca", marca.Codigos)">
-                                        <text x="@Svg(x)" y="@(esParticion ? YEtiquetaParticion : YEtiquetaLimite)" text-anchor="middle">@marca.Valor</text>
+                                        <text x="@Svg(x)" y="@(esParticion ? YEtiquetaParticion : YEtiquetaLimite)" text-anchor="middle">@marca.Texto</text>
                                         @if (esParticion)
                                         {
                                             <circle cx="@Svg(x)" cy="@YCentro" r="@Radio"></circle>

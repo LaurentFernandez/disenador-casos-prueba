@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Numerics;
 using Casos.Core.Modelo;
 using Casos.Web.Recursos;
@@ -115,9 +116,23 @@ public static class TextosCaso
             CampoEntero entero => Textos.De("Reglas.Entero", obligatorio, Rango(entero.Minimo, entero.Maximo)),
             CampoTexto texto => Textos.De("Reglas.Texto", obligatorio, Rango(texto.LongitudMinima, texto.LongitudMaxima)),
             CampoLista lista => Textos.De("Reglas.Lista", obligatorio, Cantidad(lista.Opciones.Count, "Opciones.Una", "Opciones.Varias")),
+            CampoFecha fecha => Textos.De("Reglas.Fecha", obligatorio, RangoDeFechas(fecha.Minimo, fecha.Maximo)),
             _ => obligatorio,
         };
     }
+
+    /// <summary>
+    /// Una fecha como la escribe el motor en los casos: «2026-01-01».
+    /// </summary>
+    public static string Fecha(DateOnly fecha) => fecha.ToString(CampoFecha.Formato, CultureInfo.InvariantCulture);
+
+    public static string RangoDeFechas(DateOnly desde, DateOnly hasta) =>
+        desde == hasta ? Fecha(desde) : Textos.De("Rango.Fechas", Fecha(desde), Fecha(hasta));
+
+    // Nombres de las bandas de la recta que quedan fuera del rango de una fecha; las fechas van en las marcas.
+    public static string AntesDelRango => Textos.De("Rango.Antes");
+
+    public static string DespuesDelRango => Textos.De("Rango.Despues");
 
     public static string MenorQue(long minimo) => Textos.De("Rango.MenorQue", minimo);
 
@@ -150,6 +165,10 @@ public static class TextosCaso
             (TipoClase.MayorQueMaximo, CampoEntero entero) => $"{nombre} {MayorQue(entero.Maximo)}",
             (TipoClase.MenorQueMinimo, CampoTexto texto) => Textos.De("Clase.TextoCorto", nombre, RangoDeCaracteres(1, texto.LongitudMinima - 1)),
             (TipoClase.MayorQueMaximo, CampoTexto texto) => Textos.De("Clase.TextoLargo", nombre, MasDe(texto.LongitudMaxima)),
+            (TipoClase.MenorQueMinimo, CampoFecha fecha) => Textos.De("Clase.FechaAnterior", nombre, Fecha(fecha.Minimo)),
+            (TipoClase.MayorQueMaximo, CampoFecha fecha) => Textos.De("Clase.FechaPosterior", nombre, Fecha(fecha.Maximo)),
+            (TipoClase.FechaInexistente, _) => Textos.De("Clase.FechaInexistente", nombre),
+            (TipoClase.NoEsFecha, _) => Textos.De("Clase.NoEsFecha", nombre),
             (TipoClase.ConDecimales, _) => Textos.De("Clase.ConDecimales", nombre),
             (TipoClase.NoEsNumero, _) => Textos.De("Clase.NoEsNumero", nombre),
             (TipoClase.Opcion, _) => $"{nombre}: {valor}",
@@ -169,12 +188,20 @@ public static class TextosCaso
 
     private static string DatoDe(CasoPrueba caso, Campo campo) => $"{campo.Nombre}: {Valor(Dato(caso, campo))}";
 
-    // En un texto el rango es de longitud; la clave sale del nombre de la posición.
-    private static string DescripcionLimite(Campo campo, PosicionLimite posicion) =>
-        Textos.De($"Limite.{(campo is CampoTexto ? "Texto" : "Entero")}.{posicion}", ConMayuscula(campo.Nombre));
+    // En un texto el rango es de longitud y en una fecha, de días; la clave sale del tipo y del nombre de la posición.
+    private static string DescripcionLimite(Campo campo, PosicionLimite posicion)
+    {
+        var tipo = campo switch
+        {
+            CampoTexto => "Texto",
+            CampoFecha => "Fecha",
+            _ => "Entero",
+        };
+        return Textos.De($"Limite.{tipo}.{posicion}", ConMayuscula(campo.Nombre));
+    }
 
     private static string ValoresDe(DiagramaRecta diagrama, Tecnica tecnica) =>
-        string.Join(", ", diagrama.Marcas.Where(marca => marca.Tecnica == tecnica).Select(marca => marca.Valor));
+        string.Join(", ", diagrama.Marcas.Where(marca => marca.Tecnica == tecnica).Select(marca => marca.Texto));
 
     private static string RangoDeCaracteres(int desde, int hasta) =>
         desde == hasta ? Caracteres(desde) : Textos.De("Rango.Caracteres", desde, Caracteres(hasta));
