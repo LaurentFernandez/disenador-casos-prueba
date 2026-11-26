@@ -586,3 +586,37 @@ Escenario: Archivo que no es una historia
 
 **Prioridad:** Media
 **Estado:** Hecha
+
+### HU-17. Generar casos para un campo de fecha
+
+> Borrador de Claude, pendiente de que Laurent lo revise.
+
+**Historia:** Como analista de QA quiero definir campos de fecha con su rango para obtener sus clases de equivalencia y sus valores límite sin calcular las fechas a mano.
+
+**Criterios de aceptación:**
+
+```gherkin
+Escenario: Clases de equivalencia de una fecha
+  Dado el campo "fecha de reserva", de tipo fecha y obligatorio, del 2026-01-01 al 2026-12-31
+  Cuando genero los casos
+  Entonces hay un caso válido con una fecha dentro del rango
+  Y hay casos inválidos para una fecha anterior al mínimo, una posterior al máximo, una fecha que no existe, un valor que no es una fecha y el campo vacío
+
+Escenario: Valores límite de una fecha
+  Dado el mismo campo
+  Cuando genero los casos
+  Entonces los valores límite son 2025-12-31, 2026-01-01, 2026-01-02, 2026-12-30, 2026-12-31 y 2027-01-01
+
+Escenario: Fecha que no existe
+  Dado el mismo campo
+  Cuando genero los casos
+  Entonces el caso de la fecha que no existe usa 2026-02-29, porque 2026 no es bisiesto
+
+Escenario: Rango al revés
+  Dado un campo de fecha con el mínimo posterior al máximo
+  Entonces la fila avisa que el mínimo no puede ser posterior al máximo
+  Y no se generan casos hasta corregirla
+```
+
+**Prioridad:** Media
+**Estado:** Pendiente

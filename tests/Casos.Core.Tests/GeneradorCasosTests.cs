@@ -178,6 +178,43 @@ public class GeneradorCasosTests
     }
 
     [Fact]
+    public void Generar_CampoFecha_DevuelveSusClasesYSusLimitesConCodigosConsecutivos()
+    {
+        var casos = GeneradorCasos.Generar(HistoriaCon(new CampoFecha("fecha de reserva", true, new DateOnly(2026, 1, 1), new DateOnly(2026, 12, 31))));
+
+        Assert.Equal(new (string, Tecnica, string, TipoClase?, PosicionLimite?, bool)[]
+        {
+            ("CP-001", ParticionEquivalencia, "2026-07-02", null, null, true),
+            ("CP-002", ParticionEquivalencia, "2025-12-31", MenorQueMinimo, null, false),
+            ("CP-003", ParticionEquivalencia, "2027-01-01", MayorQueMaximo, null, false),
+            ("CP-004", ParticionEquivalencia, "2026-02-29", FechaInexistente, null, false),
+            ("CP-005", ParticionEquivalencia, "abc", NoEsFecha, null, false),
+            ("CP-006", ParticionEquivalencia, "", Vacio, null, false),
+            ("CP-007", ValoresLimite, "2025-12-31", MenorQueMinimo, DebajoDelMinimo, false),
+            ("CP-008", ValoresLimite, "2026-01-01", DentroDelRango, EnElMinimo, true),
+            ("CP-009", ValoresLimite, "2026-01-02", DentroDelRango, EncimaDelMinimo, true),
+            ("CP-010", ValoresLimite, "2026-12-30", DentroDelRango, DebajoDelMaximo, true),
+            ("CP-011", ValoresLimite, "2026-12-31", DentroDelRango, EnElMaximo, true),
+            ("CP-012", ValoresLimite, "2027-01-01", MayorQueMaximo, EncimaDelMaximo, false),
+        }, casos.Select(caso => (caso.Codigo, caso.Tecnica, caso.Datos["fecha de reserva"], caso.ClaseProbada, caso.Posicion, caso.EsValido)));
+    }
+
+    [Fact]
+    public void Generar_ReglaQueHaceObligatoriaUnaFecha_UsaUnaFechaValidaYElVacio()
+    {
+        var historia = HistoriaCon(
+            new CampoLista("tipo de envío", true, ["Normal", "Programado"]),
+            new CampoFecha("fecha de entrega", false, new DateOnly(2026, 1, 1), new DateOnly(2026, 1, 31)));
+        historia.AgregarRegla(new ReglaObligatorio("tipo de envío", "Programado", "fecha de entrega"));
+
+        var tabla = GeneradorCasos.Generar(historia).Where(caso => caso.Tecnica == TablaDecision).ToList();
+
+        Assert.Equal(
+            new[] { ("Programado", "", false), ("Programado", "2026-01-16", true) },
+            tabla.Where(caso => caso.Datos["tipo de envío"] == "Programado").Select(caso => (caso.Datos["tipo de envío"], caso.Datos["fecha de entrega"], caso.EsValido)));
+    }
+
+    [Fact]
     public void Generar_HistoriaSinCampos_NoDevuelveCasos()
     {
         Assert.Empty(GeneradorCasos.Generar(new Historia("Registro de usuario")));

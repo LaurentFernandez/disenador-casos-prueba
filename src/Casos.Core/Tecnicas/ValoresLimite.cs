@@ -38,4 +38,13 @@ public static class ValoresLimite
         Generar(campo.LongitudMinima, campo.LongitudMaxima)
             .Where(longitud => longitud >= 0)
             .ToArray();
+
+    /// <summary>
+    /// Devuelve las fechas a probar para un campo de fecha, día por día, sin salir del calendario.
+    /// </summary>
+    public static IReadOnlyList<DateOnly> GenerarFechas(CampoFecha campo) =>
+        Generar(campo.Minimo.DayNumber, campo.Maximo.DayNumber)
+            .Where(dia => dia >= DateOnly.MinValue.DayNumber && dia <= DateOnly.MaxValue.DayNumber)
+            .Select(dia => DateOnly.FromDayNumber((int)dia))
+            .ToArray();
 }

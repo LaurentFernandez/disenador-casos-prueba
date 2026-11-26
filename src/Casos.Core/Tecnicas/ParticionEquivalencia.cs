@@ -9,6 +9,7 @@ namespace Casos.Core.Tecnicas;
 public static class ParticionEquivalencia
 {
     private const string ValorNoNumerico = "abc";
+    private const string ValorQueNoEsFecha = "abc";
     private const decimal ParteDecimal = 0.5m;
 
     // La interfaz muestra este valor en su idioma; el motor solo garantiza que no sea una de las opciones.
@@ -24,6 +25,7 @@ public static class ParticionEquivalencia
             CampoEntero entero => ClasesDeEntero(entero),
             CampoTexto texto => ClasesDeTexto(texto),
             CampoLista lista => ClasesDeLista(lista),
+            CampoFecha fecha => ClasesDeFecha(fecha),
             _ => throw new ArgumentException($"Tipo de campo no soportado: {campo.GetType().Name}.", nameof(campo)),
         };
 
@@ -59,6 +61,31 @@ public static class ParticionEquivalencia
 
         yield return Invalida(TipoClase.MayorQueMaximo, Ejemplos.TextoDe(maximo + 1));
     }
+
+    private static IEnumerable<ClaseEquivalencia> ClasesDeFecha(CampoFecha campo)
+    {
+        int minimo = campo.Minimo.DayNumber;
+        int maximo = campo.Maximo.DayNumber;
+
+        yield return Valida(TipoClase.DentroDelRango, Ejemplos.Fecha(DateOnly.FromDayNumber(minimo + (maximo - minimo) / 2)));
+
+        // Con el rango en un extremo del calendario no hay un día anterior o siguiente que se pueda escribir.
+        if (campo.Minimo > DateOnly.MinValue)
+        {
+            yield return Invalida(TipoClase.MenorQueMinimo, Ejemplos.Fecha(campo.Minimo.AddDays(-1)));
+        }
+
+        if (campo.Maximo < DateOnly.MaxValue)
+        {
+            yield return Invalida(TipoClase.MayorQueMaximo, Ejemplos.Fecha(campo.Maximo.AddDays(1)));
+        }
+
+        yield return Invalida(TipoClase.FechaInexistente, FechaInexistente(campo.Minimo.Year));
+        yield return Invalida(TipoClase.NoEsFecha, ValorQueNoEsFecha);
+    }
+
+    // El 29 de febrero solo existe en los años bisiestos; el 30, nunca.
+    private static string FechaInexistente(int año) => $"{año:D4}-02-{(DateTime.IsLeapYear(año) ? 30 : 29)}";
 
     private static IEnumerable<ClaseEquivalencia> ClasesDeLista(CampoLista campo) =>
         campo.Opciones
