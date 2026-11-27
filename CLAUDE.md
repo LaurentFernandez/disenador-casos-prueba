@@ -81,8 +81,9 @@ El modo IA local necesita Ollama en marcha con el modelo de `wwwroot/appsettings
   - Las pruebas usan `OllamaSimulado`; ninguna necesita Ollama.
 - **Mejoras después del plan.** HU-15: la historia se conserva al recargar, cambiar de idioma o abrir sin conexión. HU-16: se exporta e importa como archivo. HU-17: campos de fecha. Las tres están en "Decisiones tomadas".
 - **Pruebas:** 79 del motor, 120 de la interfaz (109 de lógica y 11 de componentes) y 10 de extremo a extremo.
-- **Historias:** HU-01 a HU-17 están hechas. HU-01 no tuvo issue porque se hizo antes de crear el repositorio. Son borradores de Claude que Laurent tiene que revisar los escenarios de HU-13 a HU-17, los nuevos de HU-09 (ejemplo Compatibilidad) y el nuevo de HU-08 (valor fuera de la lista en inglés).
-- **Siguiente:** las cinco fases del plan están hechas. Lo que siga sale de historias nuevas de Laurent.
+- **Historias:** HU-01 a HU-17 están hechas. HU-01 no tuvo issue porque se hizo antes de crear el repositorio. Laurent aceptó los escenarios que redactó Claude (HU-13 a HU-17 y los nuevos de HU-08 y HU-09), así que ya no llevan marca de borrador.
+- **Cierre:** la versión v1.0.0 está publicada en GitHub, el README tiene capturas de la demo (`docs/capturas/`) y el proyecto está enlazado desde el portafolio de Laurent.
+- **Siguiente:** el proyecto está terminado. Lo que siga sale de historias nuevas de Laurent.
 
 ## Fases
 

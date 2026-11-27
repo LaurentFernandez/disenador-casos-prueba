@@ -415,8 +415,6 @@ Escenario: Menos de dos campos
 
 ### HU-13. Comprobar los componentes y los flujos completos de la aplicación
 
-> Borrador de Claude, pendiente de que Laurent lo revise.
-
 **Historia:** Como mantenedor del proyecto quiero pruebas automáticas de los componentes de la interfaz y de los flujos completos en el navegador para que un cambio no rompa lo que ya funciona sin que me entere.
 
 **Criterios de aceptación:**
@@ -473,8 +471,6 @@ Escenario: Ejecutar las pruebas antes de publicar
 
 ### HU-14. Proponer los campos a partir del texto de una historia (modo IA local)
 
-> Borrador de Claude, pendiente de que Laurent lo revise.
-
 **Historia:** Como analista de QA quiero que la herramienta proponga los campos a partir del texto de una historia para no tener que escribirlos uno por uno.
 
 **Criterios de aceptación:**
@@ -520,8 +516,6 @@ Escenario: La demo publicada no tiene el modo IA
 
 ### HU-15. Conservar la historia al recargar o cambiar de idioma
 
-> Borrador de Claude, pendiente de que Laurent lo revise.
-
 **Historia:** Como analista de QA quiero que la herramienta conserve la historia que estoy definiendo para no perder mi trabajo si recargo la página, cambio el idioma o la cierro por error.
 
 **Criterios de aceptación:**
@@ -553,8 +547,6 @@ Escenario: Empezar de nuevo
 **Estado:** Hecha
 
 ### HU-16. Exportar e importar la definición de una historia
-
-> Borrador de Claude, pendiente de que Laurent lo revise.
 
 **Historia:** Como analista de QA quiero guardar la definición de una historia en un archivo y volver a abrirla después para tener varias historias, llevarlas a otro equipo o compartirlas con mi equipo.
 
@@ -588,8 +580,6 @@ Escenario: Archivo que no es una historia
 **Estado:** Hecha
 
 ### HU-17. Generar casos para un campo de fecha
-
-> Borrador de Claude, pendiente de que Laurent lo revise.
 
 **Historia:** Como analista de QA quiero definir campos de fecha con su rango para obtener sus clases de equivalencia y sus valores límite sin calcular las fechas a mano.
 
